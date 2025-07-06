@@ -335,6 +335,13 @@
         }
     </style>
 </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sacred Cart</title>
+</head>
 <body>
     <div class="cart-container">
         <div class="sacred-header">
@@ -344,57 +351,13 @@
 
         <div class="cart-items-container">
             <div id="cartItems">
-                <!-- Sample cart items for demonstration -->
-                <div class="cart-item">
-                    <img src="https://via.placeholder.com/80x80/FFD700/000000?text=🕉️" alt="Sacred Item" class="item-image">
-                    <div class="item-details">
-                        <h3 class="item-name">Divine Brass Diya</h3>
-                        <p class="item-description">Traditional handcrafted brass diya for sacred ceremonies</p>
-                        <p class="item-price">₹299</p>
-                    </div>
-                    <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="changeQuantity(1, -1)">-</button>
-                        <span class="quantity-number" id="qty-1">2</span>
-                        <button class="quantity-btn" onclick="changeQuantity(1, 1)">+</button>
-                    </div>
-                    <button class="remove-btn" onclick="removeItem(1)">Remove</button>
-                </div>
-
-                <div class="cart-item">
-                    <img src="https://via.placeholder.com/80x80/FF8C00/000000?text=🌺" alt="Sacred Item" class="item-image">
-                    <div class="item-details">
-                        <h3 class="item-name">Sacred Incense Sticks</h3>
-                        <p class="item-description">Premium sandalwood incense for meditation and prayers</p>
-                        <p class="item-price">₹150</p>
-                    </div>
-                    <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="changeQuantity(2, -1)">-</button>
-                        <span class="quantity-number" id="qty-2">1</span>
-                        <button class="quantity-btn" onclick="changeQuantity(2, 1)">+</button>
-                    </div>
-                    <button class="remove-btn" onclick="removeItem(2)">Remove</button>
-                </div>
-
-                <div class="cart-item">
-                    <img src="https://via.placeholder.com/80x80/9932CC/000000?text=📿" alt="Sacred Item" class="item-image">
-                    <div class="item-details">
-                        <h3 class="item-name">Rudraksha Mala</h3>
-                        <p class="item-description">108 beads genuine Rudraksha mala for spiritual practice</p>
-                        <p class="item-price">₹799</p>
-                    </div>
-                    <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="changeQuantity(3, -1)">-</button>
-                        <span class="quantity-number" id="qty-3">1</span>
-                        <button class="quantity-btn" onclick="changeQuantity(3, 1)">+</button>
-                    </div>
-                    <button class="remove-btn" onclick="removeItem(3)">Remove</button>
-                </div>
+                <!-- Cart items will be loaded dynamically -->
             </div>
         </div>
 
         <div class="total-section">
             <div class="total-label">Sacred Total</div>
-            <div class="total-amount" id="totalAmount">₹1,247</div>
+            <div class="total-amount" id="totalAmount">₹0</div>
         </div>
 
         <div class="action-buttons">
@@ -403,13 +366,77 @@
         </div>
     </div>
 
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
-        // Sample cart data
-        let cartItems = [
-            { id: 1, name: 'Divine Brass Diya', price: 299, quantity: 2 },
-            { id: 2, name: 'Sacred Incense Sticks', price: 150, quantity: 1 },
-            { id: 3, name: 'Rudraksha Mala', price: 799, quantity: 1 }
-        ];
+        // Check authentication on page load
+        function checkAuthentication() {
+            const authToken = localStorage.getItem('authToken');
+            if (!authToken) {
+                alert('Please login to access your cart');
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Get user info from token (simplified)
+        function getUserFromToken() {
+            const authToken = localStorage.getItem('authToken');
+            if (authToken) {
+                try {
+                    // In real implementation, decode JWT token
+                    const userData = JSON.parse(localStorage.getItem('userData'));
+                    return userData ? userData.userId : 'user_' + Date.now();
+                } catch (e) {
+                    return 'user_' + Date.now();
+                }
+            }
+            return null;
+        }
+
+        // Load cart items from localStorage (added from main.html)
+        let cartItems = [];
+
+        function loadCartItems() {
+            const savedCart = localStorage.getItem('cartItems');
+            if (savedCart) {
+                cartItems = JSON.parse(savedCart);
+            }
+            renderCartItems();
+        }
+
+        function renderCartItems() {
+            const cartContainer = document.getElementById('cartItems');
+            
+            if (cartItems.length === 0) {
+                showEmptyCart();
+                return;
+            }
+
+            cartContainer.innerHTML = '';
+            
+            cartItems.forEach(item => {
+                const cartItemElement = document.createElement('div');
+                cartItemElement.className = 'cart-item';
+                cartItemElement.innerHTML = `
+                    <img src="${item.image || 'https://via.placeholder.com/80x80/FFD700/000000?text=🕉️'}" alt="${item.name}" class="item-image">
+                    <div class="item-details">
+                        <h3 class="item-name">${item.name}</h3>
+                        <p class="item-description">${item.description || 'Sacred item for spiritual practice'}</p>
+                        <p class="item-price">₹${item.price}</p>
+                    </div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="changeQuantity(${item.id}, -1)">-</button>
+                        <span class="quantity-number" id="qty-${item.id}">${item.quantity}</span>
+                        <button class="quantity-btn" onclick="changeQuantity(${item.id}, 1)">+</button>
+                    </div>
+                    <button class="remove-btn" onclick="removeItem(${item.id})">Remove</button>
+                `;
+                cartContainer.appendChild(cartItemElement);
+            });
+            
+            updateTotal();
+        }
 
         function changeQuantity(itemId, change) {
             const item = cartItems.find(item => item.id === itemId);
@@ -420,32 +447,41 @@
                     return;
                 }
                 document.getElementById(`qty-${itemId}`).textContent = item.quantity;
+                saveCartToStorage();
                 updateTotal();
             }
         }
 
         function removeItem(itemId) {
             cartItems = cartItems.filter(item => item.id !== itemId);
+            saveCartToStorage();
             
-            // Remove the item from DOM
+            // Remove the item from DOM with animation
             const itemElement = document.querySelector(`#qty-${itemId}`).closest('.cart-item');
-            itemElement.style.transform = 'translateX(-100%)';
-            itemElement.style.opacity = '0';
-            
-            setTimeout(() => {
-                itemElement.remove();
-                updateTotal();
+            if (itemElement) {
+                itemElement.style.transform = 'translateX(-100%)';
+                itemElement.style.opacity = '0';
+                itemElement.style.transition = 'all 0.3s ease';
                 
-                // Show empty cart if no items
-                if (cartItems.length === 0) {
-                    showEmptyCart();
-                }
-            }, 300);
+                setTimeout(() => {
+                    itemElement.remove();
+                    updateTotal();
+                    
+                    // Show empty cart if no items
+                    if (cartItems.length === 0) {
+                        showEmptyCart();
+                    }
+                }, 300);
+            }
         }
 
         function updateTotal() {
             const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             document.getElementById('totalAmount').textContent = `₹${total.toLocaleString()}`;
+        }
+
+        function saveCartToStorage() {
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
         }
 
         function showEmptyCart() {
@@ -456,6 +492,7 @@
                     <button class="checkout-btn" onclick="goBack()">Continue Sacred Shopping</button>
                 </div>
             `;
+            document.getElementById('totalAmount').textContent = '₹0';
         }
 
         function checkout() {
@@ -464,18 +501,139 @@
                 return;
             }
             
-            alert('Proceeding to sacred checkout... 🙏');
-            // Add your checkout logic here
+            const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const orderId = 'ORDER_' + Date.now();
+            
+            // Razorpay configuration
+            const options = {
+                key: 'rzp_test_your_key_here', // Replace with your Razorpay Test Key
+                amount: total * 100, // Amount in paise (multiply by 100)
+                currency: 'INR',
+                order_id: orderId,
+                name: 'Sacred Cart',
+                description: 'Sacred Items Purchase',
+                image: 'https://via.placeholder.com/100x100/FFD700/000000?text=🕉️',
+                handler: function (response) {
+                    // Payment successful
+                    handlePaymentSuccess(response, orderId, total);
+                },
+                prefill: {
+                    name: getUserName(),
+                    email: getUserEmail(),
+                    contact: getUserContact()
+                },
+                notes: {
+                    address: 'Sacred Cart Store'
+                },
+                theme: {
+                    color: '#FFD700'
+                },
+                modal: {
+                    ondismiss: function() {
+                        // Payment cancelled
+                        console.log('Payment cancelled by user');
+                    }
+                }
+            };
+            
+            // Open Razorpay checkout
+            const rzp = new Razorpay(options);
+            rzp.open();
+        }
+
+        function handlePaymentSuccess(paymentResponse, orderId, total) {
+            // Create order data with payment details
+            const orderData = {
+                orderId: orderId,
+                items: [...cartItems],
+                total: total,
+                timestamp: new Date().toISOString(),
+                userId: getUserFromToken(),
+                status: 'confirmed',
+                paymentId: paymentResponse.razorpay_payment_id,
+                paymentSignature: paymentResponse.razorpay_signature || '',
+                paymentMethod: 'razorpay'
+            };
+            
+            // Save to user's order history for userDetails.html
+            let userOrders = JSON.parse(localStorage.getItem('userOrders')) || [];
+            userOrders.push(orderData);
+            localStorage.setItem('userOrders', JSON.stringify(userOrders));
+            
+            // Save current order for immediate access
+            localStorage.setItem('currentOrder', JSON.stringify(orderData));
+            
+            // Clear cart after successful payment
+            cartItems = [];
+            localStorage.removeItem('cartItems');
+            
+            alert('Payment successful! 🙏\nOrder ID: ' + orderId + '\nPayment ID: ' + paymentResponse.razorpay_payment_id);
+            
+            // Redirect to user details page
+            window.location.href = 'userDetails.html';
+        }
+
+        function getUserName() {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            return userData ? userData.name : 'Sacred User';
+        }
+
+        function getUserEmail() {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            return userData ? userData.email : 'user@sacred.com';
+        }
+
+        function getUserContact() {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            return userData ? userData.contact : '9999999999';
         }
 
         function goBack() {
-            // Replace with your actual navigation logic
-            alert('Returning to sacred shopping... 🛍️');
-            // window.location.href = 'index.html';
+            window.location.href = 'main.html';
         }
 
-        // Initialize total on page load
-        updateTotal();
+        // Add item to cart (function to be called from main.html)
+        function addToCart(item) {
+            const existingItem = cartItems.find(cartItem => cartItem.id === item.id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cartItems.push({
+                    ...item,
+                    quantity: 1
+                });
+            }
+            
+            saveCartToStorage();
+            renderCartItems();
+        }
+
+        // Function to get cart count (for main.html to show cart badge)
+        function getCartCount() {
+            return cartItems.reduce((count, item) => count + item.quantity, 0);
+        }
+
+        // Initialize cart on page load
+        window.onload = function() {
+            if (checkAuthentication()) {
+                loadCartItems();
+            }
+        };
+
+        // Handle page visibility to sync cart across tabs
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                loadCartItems();
+            }
+        });
+
+        // Listen for storage changes to sync cart across tabs
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'cartItems') {
+                loadCartItems();
+            }
+        });
     </script>
 </body>
 </html>
