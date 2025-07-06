@@ -426,22 +426,20 @@
     //     ];
 
 
-        let products = [];
+    let products = [];
 
 async function fetchProducts() {
     try {
-        const response = await fetch('/api/get-items');
+        const response = await fetch('https://narvang-backend.onrender.com/api/get-items');
         if (!response.ok) throw new Error('Failed to fetch items');
 
-        const data = await response.json();
-        products = data;  // API returns array
-        renderProducts(); // Renders after fetching
+        products = await response.json(); // 👈 Directly store in products
+        renderProducts();
     } catch (error) {
         console.error('Error fetching products:', error);
         showNotification('Failed to load items. Try again later.', 'error');
     }
 }
-
 
 
 
@@ -566,7 +564,7 @@ function renderProducts() {
     alert(`🕉️ Divine Checkout\n\nCustomer: ${userName}\nEmail: ${userEmail}\nTotal: ₹${total.toLocaleString()}\nItems: ${cartCount}\n\nMay Maa Durga bless your purchase!\n\nRedirecting to payment...`);
 
  
-    fetch('https://your-api.com/place-order', {
+    fetch('https://narvang-backend.onrender.com/place-order', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -850,7 +848,7 @@ function checkout() {
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
    
-    fetch('https://your-api.com/place-order', {
+    fetch('https://narvang-backend.onrender.com/place-order', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
