@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Sacred Cart</title>
+    <title>NavRang | Cart</title>
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
@@ -361,7 +362,7 @@
         </div>
 
         <div class="action-buttons">
-            <button class="checkout-btn" onclick="checkout()">🙏 Proceed to Sacred Checkout</button>
+            <button class="checkout-btn" onclick="goToCheckout()">🙏 Proceed to Sacred Checkout</button>
             <button class="back-btn" onclick="goBack()">⬅ Continue Sacred Shopping</button>
         </div>
     </div>
@@ -591,6 +592,14 @@
         function goBack() {
             window.location.href = 'main.html';
         }
+function goToCheckout() {
+    if (cartItems.length === 0) {
+        alert('Your cart is empty.');
+        return;
+    }
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    window.location.href = 'checkout.html';
+}
 
         // Add item to cart (function to be called from main.html)
         function addToCart(item) {
