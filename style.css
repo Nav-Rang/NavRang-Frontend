@@ -797,7 +797,7 @@
            gap: 10px;
        }
        
-       .login-btn, .signup-btn {
+       .login-btn, .signup-btn, .retry-btn{
            padding: 10px 20px;
            border: none;
            border-radius: 25px;
@@ -821,9 +821,13 @@
            background: var(--day9-purple);
            color: white;
        }
+       .retry-btn {
+           background: var(--day9-purple);
+           color: white;
+       }
        
        .signup-btn:hover {
-           background: var(--day6-red);
+           background: rgb(87, 165, 84);
        }
        
        .user-info {

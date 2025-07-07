@@ -369,31 +369,58 @@
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
-        // Check authentication on page load
-        function checkAuthentication() {
-            const authToken = localStorage.getItem('authToken');
-            if (!authToken) {
-                alert('Please login to access your cart');
-                window.location.href = 'index.html';
-                return false;
-            }
-            return true;
-        }
 
-        // Get user info from token (simplified)
-        function getUserFromToken() {
-            const authToken = localStorage.getItem('authToken');
-            if (authToken) {
-                try {
-                    // In real implementation, decode JWT token
-                    const userData = JSON.parse(localStorage.getItem('userData'));
-                    return userData ? userData.userId : 'user_' + Date.now();
-                } catch (e) {
-                    return 'user_' + Date.now();
-                }
-            }
-            return null;
-        }
+
+
+
+
+
+// Uncomment This For Production
+        // // Check authentication on page load
+        // function checkAuthentication() {
+        //     const authToken = localStorage.getItem('authToken');
+        //     if (!authToken) {
+        //         alert('Please login to access your cart');
+        //         window.location.href = 'index.html';
+        //         return false;
+        //     }
+        //     return true;
+        // }
+
+        // // Get user info from token (simplified)
+        // function getUserFromToken() {
+        //     const authToken = localStorage.getItem('authToken');
+        //     if (authToken) {
+        //         try {
+        //             // In real implementation, decode JWT token
+        //             localStorage.setItem('userData', JSON.stringify({
+  //  name: userData.name,
+  //  email: userData.email,
+  //  contact: userData.phone,
+ //   userId: 'user_' + Date.now()
+// }));
+
+        //             return userData ? userData.userId : 'user_' + Date.now();
+        //         } catch (e) {
+        //             return 'user_' + Date.now();
+        //         }
+        //     }
+        //     return null;
+        // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // Load cart items from localStorage (added from main.html)
         let cartItems = [];

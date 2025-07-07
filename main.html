@@ -47,10 +47,11 @@
                 </div>
                 
                 <!-- Cart Icon -->
-                <button class="cart-icon user-only" onclick="toggleCart()" style="display: none;">
-                    Cart 🛒
-                    <span class="cart-count">0</span>
-                </button>
+               <!-- Cart Icon -->
+<a href="cart.html" class="cart-icon user-only" style="display: none;">
+    🛒 Cart <span class="cart-count">0</span>
+</a>
+
             </div>
         </nav>
     </div>
@@ -236,53 +237,42 @@ function setupEventListeners() {
 function checkUserLogin() {
     const userLoggedIn = localStorage.getItem('userLoggedIn');
     const userName = localStorage.getItem('userName');
-    const userEmail = localStorage.getItem('userEmail');
     const authToken = localStorage.getItem('authToken');
 
     if (userLoggedIn === 'true' && authToken) {
-        updateUIForLoggedInUser(userName, userEmail);
+        updateUIForLoggedInUser(userName);
     } else {
         updateUIForGuestUser();
     }
 }
 
-function updateUIForLoggedInUser(userName, userEmail) {
-    // Hide auth buttons
+function updateUIForLoggedInUser(userName) {
     const authButtons = document.querySelector('.auth-buttons');
     if (authButtons) authButtons.style.display = 'none';
-    
-    // Show user info
+
     const userInfo = document.querySelector('.user-info');
     if (userInfo) {
         userInfo.style.display = 'flex';
-        
-        // Update user details
-        const displayName = userName || 'Sacred Soul';
-        const initial = displayName.charAt(0).toUpperCase();
-        
-        const userNameDisplay = document.getElementById('userNameDisplay');
+
         const userInitial = document.getElementById('userInitial');
-        
-        if (userNameDisplay) userNameDisplay.textContent = displayName;
-        if (userInitial) userInitial.textContent = initial;
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        if (userInitial) userInitial.textContent = userName?.charAt(0).toUpperCase() || 'S';
+        if (userNameDisplay) userNameDisplay.textContent = userName || 'Sacred Soul';
     }
-    
-    // Show user-only features
+
     showUserFeatures();
 }
 
 function updateUIForGuestUser() {
-    // Show auth buttons
     const authButtons = document.querySelector('.auth-buttons');
     if (authButtons) authButtons.style.display = 'flex';
-    
-    // Hide user info
+
     const userInfo = document.querySelector('.user-info');
     if (userInfo) userInfo.style.display = 'none';
-    
-    // Hide user-only features
+
     hideUserFeatures();
 }
+
 
 function showUserFeatures() {
     const userOnlyElements = document.querySelectorAll('.user-only');
@@ -443,6 +433,15 @@ function renderErrorState() {
 
 
 // CART MANAGEMENT
+
+function goToCartPage() {
+    const userLoggedIn = localStorage.getItem('userLoggedIn');
+    if (userLoggedIn === 'true') {
+        window.location.href = 'cart.html';
+    } else {
+        showNotification('Please login to view your cart.', 'error');
+    }
+}
 
 
 function addToCart(productId) {
