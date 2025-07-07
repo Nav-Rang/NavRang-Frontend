@@ -20,7 +20,6 @@
             --day7-blue: #4169E1;
             --day8-pink: #FF69B4;
             --day9-purple: #9932CC;
-
             --gradient-primary: linear-gradient(135deg, var(--day1-yellow), var(--day4-orange), var(--day6-red));
             --gradient-secondary: linear-gradient(135deg, var(--day7-blue), var(--day9-purple), var(--day8-pink));
             --gradient-divine: linear-gradient(45deg, var(--day1-yellow), var(--day2-green), var(--day4-orange), var(--day6-red), var(--day7-blue), var(--day8-pink), var(--day9-purple));
@@ -245,14 +244,6 @@
             align-items: center;
             padding: 1rem 0;
             border-bottom: 1px solid rgba(240, 240, 240, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .summary-item:hover {
-            background: rgba(153, 50, 204, 0.02);
-            margin: 0 -1rem;
-            padding: 1rem;
-            border-radius: 10px;
         }
 
         .summary-item:last-child {
@@ -263,30 +254,32 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+            flex-grow: 1;
+            min-width: 0;
         }
 
-        .item-icon {
+        .item-icon-img {
             width: 50px;
             height: 50px;
-            background: var(--gradient-primary);
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
-            transition: all 0.3s ease;
+            object-fit: cover;
+            flex-shrink: 0;
         }
 
-        .item-icon:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(255, 140, 0, 0.4);
+        .item-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
         }
 
         .item-name {
             font-weight: 600;
             color: var(--day9-purple);
             font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .item-quantity {
@@ -296,9 +289,10 @@
 
         .item-price {
             font-weight: 700;
-            color: #FFFFFF !important;
-            font-size: 1.1rem;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            color: var(--day6-red);
+            font-size: 1rem;
+            text-align: right;
+            margin-left: 1rem;
         }
 
         .total-section {
@@ -864,8 +858,8 @@
                 itemsHTML += `
                     <div class="summary-item">
                         <div class="item-info">
-                            <div class="item-icon">${item.image || '🛍️'}</div>
-                            <div>
+                            <img src="${item.image}" alt="${item.name}" class="item-icon-img">
+                            <div class="item-details">
                                 <div class="item-name">${item.name}</div>
                                 <div class="item-quantity">Qty: ${item.quantity}</div>
                             </div>
