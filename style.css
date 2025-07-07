@@ -829,6 +829,9 @@
        .signup-btn:hover {
            background: rgb(87, 165, 84);
        }
+       .retry-btn:hover {
+           background: rgb(141, 41, 124);
+       }
        
        .user-info {
            display: flex;
