@@ -109,7 +109,6 @@
     }
 
         .sacred-logo {
-            /* font-family: 'Playfair Display', serif; */
             font-size: 2.5rem;
             font-weight: 800;
             margin-bottom: 1rem;
@@ -154,7 +153,6 @@
         }
 
         .form-title {
-            /* font-family: 'Playfair Display', serif; */
             font-size: 2rem;
             font-weight: 900;
             color: var(--day9-purple);
@@ -425,7 +423,6 @@
                     Account created successfully! Redirecting to main page...
                 </div>
 
-                <!-- Step 1: Email Input -->
                 <div class="step-container active" id="emailStep">
                     <form id="emailForm">
                         <div class="form-group">
@@ -437,7 +434,6 @@
                     </form>
                 </div>
 
-                <!-- Step 2: OTP Verification -->
                 <div class="step-container" id="otpStep">
                     <div class="otp-container">
                         <div class="otp-message" id="otpMessage">
@@ -455,7 +451,6 @@
                     </div>
                 </div>
 
-                <!-- Step 3: Personal Details -->
                 <div class="step-container" id="detailsStep">
                     <form id="detailsForm">
                         <div class="form-group">
@@ -487,37 +482,27 @@
     </div>
 
     <script>
-        let currentStep = 1; // 1: email, 2: otp, 3: details
+        let currentStep = 1; 
         let userData = {};
 
-        // Email validation
         function validateEmail(email) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
         }
 
-        // Name validation
         function validateName(name) {
             return name.trim().length >= 2;
         }
 
-        // Phone validation (10 digits)
         function validatePhone(phone) {
             const phoneRegex = /^[6-9]\d{9}$/;
             return phoneRegex.test(phone);
         }
 
-        // Generate AuthToken
-        function generateAuthToken() {
-            return 'auth_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
-        }
-
-        // Show/hide loading
         function showLoading(show) {
             document.getElementById('loading').classList.toggle('active', show);
         }
 
-        // Switch between steps
         function switchStep(step) {
             document.querySelectorAll('.step-container').forEach(container => {
                 container.classList.remove('active');
@@ -534,22 +519,8 @@
             currentStep = step;
         }
 
-        // Send OTP to email
         async function sendOTP(email) {
             try {
-                // Mock API call - replace with actual backend endpoint
-                // await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
-                
-                // // For testing purposes, always return success with status 200
-                // console.log('Sending OTP to:', email);
-                // return { 
-                //     success: true, 
-                //     message: 'OTP sent successfully',
-                //     status: 200
-                // };
-                
-                
-                
                 const response = await fetch('https://navrang-backend.onrender.com/api/sendOTP', {
                     method: 'POST',
                     headers: {
@@ -560,23 +531,12 @@
                 
                 const data = await response.json();
                 
-                if (response.status === 200) {
-                    return { 
-                        success: true, 
-                        message: data.message,
-                        status: response.status
-                    };
-                } else {
-                    return { 
-                        success: false, 
-                        message: data.message || 'Failed to send OTP',
-                        status: response.status
-                    };
-                }
-           
-                
+                return { 
+                    success: response.ok, 
+                    message: data.message || (response.ok ? 'OTP sent successfully' : 'Failed to send OTP'),
+                    status: response.status
+                };
             } catch (error) {
-                console.error('Error sending OTP:', error);
                 return { 
                     success: false, 
                     message: 'Network error. Please try again.',
@@ -584,102 +544,71 @@
                 };
             }
         }
-
-        let countdown = 60;
-const timerSpan = document.getElementById("timer");
-const resendBtn = document.getElementById("resendOtpBtn");
-
-function startResendTimer() {
-    resendBtn.disabled = true;
-    timerSpan.textContent = `(${countdown}s)`;
-    
-    const interval = setInterval(() => {
-        countdown--;
-        timerSpan.textContent = `(${countdown}s)`;
-        if (countdown <= 0) {
-            clearInterval(interval);
-            resendBtn.disabled = false;
-            timerSpan.textContent = '';
-            countdown = 60; // Reset timer
-        }
-    }, 1000);
-}
-
-
-        // Verify OTP
+       
        async function verifyOTP(email, otp) {
-    try {
-        const response = await fetch('https://navrang-backend.onrender.com/api/verifyOTP', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email: email, otp: otp })
-        });
+            try {
+                const response = await fetch('https://navrang-backend.onrender.com/api/verifyOTP', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email, otp: otp })
+                });
 
-        const data = await response.json();
+                const data = await response.json();
 
-        if (response.ok && data.token) {
-            return {
-                success: true,
-                message: data.message || 'OTP verified successfully',
-                authToken: data.token,
-                status: response.status
-            };
-        } else {
-            return {
-                success: false,
-                message: data.message || 'Invalid OTP',
-                status: response.status
-            };
+                if (response.ok && data.token) {
+                    return {
+                        success: true,
+                        message: data.message || 'OTP verified successfully',
+                        authToken: data.token,
+                        status: response.status
+                    };
+                } else {
+                    return {
+                        success: false,
+                        message: data.message || 'Invalid OTP',
+                        status: response.status
+                    };
+                }
+            } catch (error) {
+                return {
+                    success: false,
+                    message: 'Network error. Please try again.',
+                    status: 500
+                };
+            }
         }
 
-    } catch (error) {
-        console.error('Error verifying OTP:', error);
-        return {
-            success: false,
-            message: 'Network error. Please try again.',
-            status: 500
-        };
-    }
-}
+        async function createUser(userData) {
+            try {
+                const response = await fetch('https://navrang-backend.onrender.com/api/update-user-details', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${userData.authToken}`
+                    },
+                    body: JSON.stringify({
+                        email: userData.email,
+                        name: userData.name,
+                        phone: userData.phone
+                    })
+                });
+                
+                const data = await response.json();
 
-
-      // Function to create or update user details after OTP verification
-async function createUser(userData) {
-    try {
-        // Send PATCH request to backend with user data
-        const response = await fetch('https://navrang-backend.onrender.com/api/update-user-details', {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${userData.authToken}` // Token from OTP verification
-            },
-            body: JSON.stringify({
-                email: userData.email,
-                name: userData.name,
-                phone: userData.phone
-            })
-        });
-        console.log('Sending user data with token:', userData);
-
-
-        const data = await response.json();
-
-        if (response.ok) {
-            return { success: true, message: data.message };
-        } else {
-            return { success: false, message: data.message || 'Failed to create account' };
+                return { 
+                    success: response.ok, 
+                    message: data.message || (response.ok ? 'User details updated successfully' : 'Failed to create account') 
+                };
+            } catch (error) {
+                return { 
+                    success: false, 
+                    message: 'Network error. Please try again.' 
+                };
+            }
         }
 
-    } catch (error) {
-        console.error('Error creating user:', error);
-        return { success: false, message: 'Network error. Please try again.' };
-    }
-}
-
-
-        // OTP Input handling
         function setupOTPInputs() {
             const otpInputs = document.querySelectorAll('.otp-input');
             
@@ -706,7 +635,6 @@ async function createUser(userData) {
             });
         }
 
-        // Check if OTP is complete
         function checkOTPComplete() {
             const otp = getOTPValue();
             if (otp.length === 6) {
@@ -714,55 +642,46 @@ async function createUser(userData) {
             }
         }
 
-        // Get OTP value
         function getOTPValue() {
             const otpInputs = document.querySelectorAll('.otp-input');
             return Array.from(otpInputs).map(input => input.value).join('');
         }
 
-        // Clear OTP inputs
         function clearOTPInputs() {
             document.querySelectorAll('.otp-input').forEach(input => {
                 input.value = '';
             });
         }
 
-       // Handle OTP verification (FULL FIXED VERSION)
-async function handleOTPVerification(otp) {
-    showLoading(true);
+        async function handleOTPVerification(otp) {
+            showLoading(true);
 
-    const result = await verifyOTP(userData.email, otp);
+            const result = await verifyOTP(userData.email, otp);
 
-    showLoading(false);
+            showLoading(false);
 
-    if (result.success && result.status === 200 && result.authToken) {
-        document.getElementById('otpMessage').innerHTML = '✅ OTP verified successfully!';
-        document.getElementById('otpMessage').style.background = 'linear-gradient(135deg, #d4edda, #c3e6cb)';
-        document.getElementById('otpMessage').style.color = 'var(--day2-green)';
+            if (result.success && result.authToken) {
+                document.getElementById('otpMessage').innerHTML = '✅ OTP verified successfully!';
+                document.getElementById('otpMessage').style.background = 'linear-gradient(135deg, #d4edda, #c3e6cb)';
+                document.getElementById('otpMessage').style.color = 'var(--day2-green)';
 
-        // Store authToken
-        userData.authToken = result.authToken;
+                userData.authToken = result.authToken;
+                localStorage.setItem('authToken', result.authToken);
+                localStorage.setItem('userEmail', userData.email);
 
-        // Store in localStorage
-        localStorage.setItem('authToken', result.authToken);
-        localStorage.setItem('userEmail', userData.email);
+                setTimeout(() => {
+                    switchStep(3);
+                }, 1500);
 
-        setTimeout(() => {
-            switchStep(3);
-        }, 1500);
+            } else {
+                document.getElementById('otpMessage').innerHTML = '❌ OTP verification failed. Please check the OTP and try again.';
+                document.getElementById('otpMessage').style.background = 'linear-gradient(135deg, #f8d7da, #f5c6cb)';
+                document.getElementById('otpMessage').style.color = 'var(--day6-red)';
+                clearOTPInputs();
+                document.querySelector('.otp-input').focus();
+            }
+        }
 
-    } else {
-        // 👇 This is the FIXED block
-        document.getElementById('otpMessage').innerHTML = '❌ OTP verification failed. Please check the OTP and try again.';
-        document.getElementById('otpMessage').style.background = 'linear-gradient(135deg, #f8d7da, #f5c6cb)';
-        document.getElementById('otpMessage').style.color = 'var(--day6-red)';
-        clearOTPInputs();
-        document.querySelector('.otp-input').focus();
-    }
-}
-
-
-        // Resend OTP
         async function resendOTP() {
             if (!userData.email) {
                 alert('Please enter your email first');
@@ -784,14 +703,12 @@ async function handleOTPVerification(otp) {
             }
         }
 
-        // Email form submission
         document.getElementById('emailForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const email = document.getElementById('email').value.trim();
             const emailInput = document.getElementById('email');
             
-            // Reset error state
             emailInput.classList.remove('error');
             
             if (!validateEmail(email)) {
@@ -806,17 +723,14 @@ async function handleOTPVerification(otp) {
             
             showLoading(false);
             
-            // Only proceed to OTP step if status is 200
-            if (result.success && result.status === 200) {
+            if (result.success) {
                 switchStep(2);
                 document.querySelector('.otp-input').focus();
             } else {
-                // Show error message if status is not 200
                 alert(result.message || 'Failed to send OTP. Please try again.');
             }
         });
 
-        // Details form submission
         document.getElementById('detailsForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -826,7 +740,6 @@ async function handleOTPVerification(otp) {
             const nameInput = document.getElementById('name');
             const phoneInput = document.getElementById('phone');
             
-            // Reset error states
             nameInput.classList.remove('error');
             phoneInput.classList.remove('error');
             
@@ -859,13 +772,11 @@ async function handleOTPVerification(otp) {
                 document.getElementById('successMessage').classList.add('active');
                 document.getElementById('detailsStep').style.display = 'none';
                 
-                // Store user session with authToken
                 localStorage.setItem('userLoggedIn', 'true');
                 localStorage.setItem('userName', userData.name);
                 localStorage.setItem('userEmail', userData.email);
                 localStorage.setItem('authToken', userData.authToken);
                 
-                // Redirect to main page
                 setTimeout(() => {
                     window.location.href = 'main.html';
                 }, 2000);
@@ -874,7 +785,6 @@ async function handleOTPVerification(otp) {
             }
         });
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             setupOTPInputs();
         });

@@ -9,18 +9,16 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
         :root {
-            /* Navratri 9 Sacred Colors */
-            --day1-yellow: #FFD700;      /* Shailaputri - Yellow */
-            --day2-green: #228B22;       /* Brahmacharini - Green */
-            --day3-grey: #708090;        /* Chandraghanta - Grey */
-            --day4-orange: #FF8C00;      /* Kushmanda - Orange */
-            --day5-white: #FFFFFF;       /* Skandamata - White */
-            --day6-red: #DC143C;         /* Katyayani - Red */
-            --day7-blue: #4169E1;        /* Kalaratri - Royal Blue */
-            --day8-pink: #FF69B4;        /* Mahagauri - Pink */
-            --day9-purple: #9932CC;      /* Siddhidatri - Purple */
+            --day1-yellow: #FFD700;
+            --day2-green: #228B22;
+            --day3-grey: #708090;
+            --day4-orange: #FF8C00;
+            --day5-white: #FFFFFF;
+            --day6-red: #DC143C;
+            --day7-blue: #4169E1;
+            --day8-pink: #FF69B4;
+            --day9-purple: #9932CC;
             
-            /* Divine Premium Gradients */
             --gradient-primary: linear-gradient(135deg, var(--day1-yellow), var(--day4-orange), var(--day6-red));
             --gradient-secondary: linear-gradient(135deg, var(--day7-blue), var(--day9-purple), var(--day8-pink));
             --gradient-divine: linear-gradient(45deg, var(--day1-yellow), var(--day2-green), var(--day4-orange), var(--day6-red), var(--day7-blue), var(--day8-pink), var(--day9-purple));
@@ -43,7 +41,6 @@
             position: relative;
         }
 
-        /* Sacred Cart Container */
         .cart-container {
             position: relative;
             z-index: 1;
@@ -52,7 +49,6 @@
             padding: 2rem;
         }
 
-        /* Sacred Header */
         .sacred-header {
             text-align: center;
             margin-bottom: 3rem;
@@ -101,7 +97,6 @@
             opacity: 0.8;
         }
 
-        /* Cart Items Container */
         .cart-items-container {
             background: white;
             border-radius: 15px;
@@ -111,7 +106,6 @@
             border: 1px solid #e0e0e0;
         }
 
-        /* Cart Item */
         .cart-item {
             display: flex;
             align-items: center;
@@ -215,7 +209,6 @@
             transform: scale(1.05);
         }
 
-        /* Total Section */
         .total-section {
             background: white;
             border: 2px solid var(--day9-purple);
@@ -240,7 +233,6 @@
             color: var(--day6-red);
         }
 
-        /* Action Buttons */
         .action-buttons {
             display: flex;
             gap: 1.5rem;
@@ -285,7 +277,6 @@
             transform: translateY(-2px);
         }
 
-        /* Empty Cart State */
         .empty-cart {
             text-align: center;
             padding: 4rem 2rem;
@@ -303,7 +294,6 @@
             margin-bottom: 2rem;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .cart-container {
                 padding: 1rem;
@@ -336,13 +326,6 @@
         }
     </style>
 </head>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sacred Cart</title>
-</head>
 <body>
     <div class="cart-container">
         <div class="sacred-header">
@@ -352,7 +335,6 @@
 
         <div class="cart-items-container">
             <div id="cartItems">
-                <!-- Cart items will be loaded dynamically -->
             </div>
         </div>
 
@@ -367,63 +349,19 @@
         </div>
     </div>
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
-
-
-
-
-
-
-// Uncomment This For Production
-        // // Check authentication on page load
-        // function checkAuthentication() {
-        //     const authToken = localStorage.getItem('authToken');
-        //     if (!authToken) {
-        //         alert('Please login to access your cart');
-        //         window.location.href = 'index.html';
-        //         return false;
-        //     }
-        //     return true;
-        // }
-
-        // // Get user info from token (simplified)
-        // function getUserFromToken() {
-        //     const authToken = localStorage.getItem('authToken');
-        //     if (authToken) {
-        //         try {
-        //             // In real implementation, decode JWT token
-        //             localStorage.setItem('userData', JSON.stringify({
-  //  name: userData.name,
-  //  email: userData.email,
-  //  contact: userData.phone,
- //   userId: 'user_' + Date.now()
-// }));
-
-        //             return userData ? userData.userId : 'user_' + Date.now();
-        //         } catch (e) {
-        //             return 'user_' + Date.now();
-        //         }
-        //     }
-        //     return null;
-        // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // Load cart items from localStorage (added from main.html)
         let cartItems = [];
+
+        function checkAuthentication() {
+            const authToken = localStorage.getItem('authToken');
+            const userLoggedIn = localStorage.getItem('userLoggedIn');
+            if (!authToken || userLoggedIn !== 'true') {
+                alert('Please login to access your cart');
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
 
         function loadCartItems() {
             const savedCart = localStorage.getItem('cartItems');
@@ -432,26 +370,15 @@
             }
             renderCartItems();
         }
-
-        function checkAuthentication() {
-    return localStorage.getItem('userLoggedIn') === 'true';
-}
-
-window.onload = function() {
-    loadCartItems();
-};
-
-
+        
         function renderCartItems() {
             const cartContainer = document.getElementById('cartItems');
-            
             if (cartItems.length === 0) {
                 showEmptyCart();
                 return;
             }
 
             cartContainer.innerHTML = '';
-            
             cartItems.forEach(item => {
                 const cartItemElement = document.createElement('div');
                 cartItemElement.className = 'cart-item';
@@ -463,20 +390,19 @@ window.onload = function() {
                         <p class="item-price">₹${item.price}</p>
                     </div>
                     <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="changeQuantity(${item.id}, -1)">-</button>
+                        <button class="quantity-btn" onclick="changeQuantity('${item.id}', -1)">-</button>
                         <span class="quantity-number" id="qty-${item.id}">${item.quantity}</span>
-                        <button class="quantity-btn" onclick="changeQuantity(${item.id}, 1)">+</button>
+                        <button class="quantity-btn" onclick="changeQuantity('${item.id}', 1)">+</button>
                     </div>
-                    <button class="remove-btn" onclick="removeItem(${item.id})">Remove</button>
+                    <button class="remove-btn" onclick="removeItem('${item.id}')">Remove</button>
                 `;
                 cartContainer.appendChild(cartItemElement);
             });
-            
             updateTotal();
         }
 
         function changeQuantity(itemId, change) {
-            const item = cartItems.find(item => item.id === itemId);
+            const item = cartItems.find(item => item.id.toString() === itemId.toString());
             if (item) {
                 item.quantity += change;
                 if (item.quantity <= 0) {
@@ -490,21 +416,16 @@ window.onload = function() {
         }
 
         function removeItem(itemId) {
-            cartItems = cartItems.filter(item => item.id !== itemId);
+            cartItems = cartItems.filter(item => item.id.toString() !== itemId.toString());
             saveCartToStorage();
-            
-            // Remove the item from DOM with animation
             const itemElement = document.querySelector(`#qty-${itemId}`).closest('.cart-item');
             if (itemElement) {
                 itemElement.style.transform = 'translateX(-100%)';
                 itemElement.style.opacity = '0';
                 itemElement.style.transition = 'all 0.3s ease';
-                
                 setTimeout(() => {
                     itemElement.remove();
                     updateTotal();
-                    
-                    // Show empty cart if no items
                     if (cartItems.length === 0) {
                         showEmptyCart();
                     }
@@ -527,153 +448,35 @@ window.onload = function() {
                     <div class="empty-cart-icon">🛒</div>
                     <div class="empty-cart-text">Your sacred cart is empty</div>
                     <button class="checkout-btn" onclick="goBack()">Continue Sacred Shopping</button>
-                </div>
-            `;
+                </div>`;
             document.getElementById('totalAmount').textContent = '₹0';
-        }
-
-        function checkout() {
-            if (cartItems.length === 0) {
-                alert('Your cart is empty. Please add some items first!');
-                return;
-            }
-            
-            const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const orderId = 'ORDER_' + Date.now();
-            
-            // Razorpay configuration
-            const options = {
-                key: 'rzp_test_your_key_here', // Replace with your Razorpay Test Key
-                amount: total * 100, // Amount in paise (multiply by 100)
-                currency: 'INR',
-                order_id: orderId,
-                name: 'Sacred Cart',
-                description: 'Sacred Items Purchase',
-                image: 'https://via.placeholder.com/100x100/FFD700/000000?text=🕉️',
-                handler: function (response) {
-                    // Payment successful
-                    handlePaymentSuccess(response, orderId, total);
-                },
-                prefill: {
-                    name: getUserName(),
-                    email: getUserEmail(),
-                    contact: getUserContact()
-                },
-                notes: {
-                    address: 'Sacred Cart Store'
-                },
-                theme: {
-                    color: '#FFD700'
-                },
-                modal: {
-                    ondismiss: function() {
-                        // Payment cancelled
-                        console.log('Payment cancelled by user');
-                    }
-                }
-            };
-            
-            // Open Razorpay checkout
-            const rzp = new Razorpay(options);
-            rzp.open();
-        }
-
-        function handlePaymentSuccess(paymentResponse, orderId, total) {
-            // Create order data with payment details
-            const orderData = {
-                orderId: orderId,
-                items: [...cartItems],
-                total: total,
-                timestamp: new Date().toISOString(),
-                userId: getUserFromToken(),
-                status: 'confirmed',
-                paymentId: paymentResponse.razorpay_payment_id,
-                paymentSignature: paymentResponse.razorpay_signature || '',
-                paymentMethod: 'razorpay'
-            };
-            
-            // Save to user's order history for userDetails.html
-            let userOrders = JSON.parse(localStorage.getItem('userOrders')) || [];
-            userOrders.push(orderData);
-            localStorage.setItem('userOrders', JSON.stringify(userOrders));
-            
-            // Save current order for immediate access
-            localStorage.setItem('currentOrder', JSON.stringify(orderData));
-            
-            // Clear cart after successful payment
-            cartItems = [];
-            localStorage.removeItem('cartItems');
-            
-            alert('Payment successful! 🙏\nOrder ID: ' + orderId + '\nPayment ID: ' + paymentResponse.razorpay_payment_id);
-            
-            // Redirect to user details page
-            window.location.href = 'userDetails.html';
-        }
-
-        function getUserName() {
-            const userData = JSON.parse(localStorage.getItem('userData'));
-            return userData ? userData.name : 'Sacred User';
-        }
-
-        function getUserEmail() {
-            const userData = JSON.parse(localStorage.getItem('userData'));
-            return userData ? userData.email : 'user@sacred.com';
-        }
-
-        function getUserContact() {
-            const userData = JSON.parse(localStorage.getItem('userData'));
-            return userData ? userData.contact : '9999999999';
         }
 
         function goBack() {
             window.location.href = 'main.html';
         }
-function goToCheckout() {
-    if (cartItems.length === 0) {
-        alert('Your cart is empty.');
-        return;
-    }
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-    window.location.href = 'checkout.html';
-}
 
-        // Add item to cart (function to be called from main.html)
-        function addToCart(item) {
-            const existingItem = cartItems.find(cartItem => cartItem.id === item.id);
-            
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cartItems.push({
-                    ...item,
-                    quantity: 1
-                });
+        function goToCheckout() {
+            if (cartItems.length === 0) {
+                alert('Your cart is empty.');
+                return;
             }
-            
-            saveCartToStorage();
-            renderCartItems();
+            saveCartToStorage(); 
+            window.location.href = 'userDetails.html';
         }
 
-        // Function to get cart count (for main.html to show cart badge)
-        function getCartCount() {
-            return cartItems.reduce((count, item) => count + item.quantity, 0);
-        }
-
-        // Initialize cart on page load
         window.onload = function() {
             if (checkAuthentication()) {
                 loadCartItems();
             }
         };
 
-        // Handle page visibility to sync cart across tabs
         document.addEventListener('visibilitychange', function() {
             if (!document.hidden) {
                 loadCartItems();
             }
         });
 
-        // Listen for storage changes to sync cart across tabs
         window.addEventListener('storage', function(e) {
             if (e.key === 'cartItems') {
                 loadCartItems();

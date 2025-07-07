@@ -11,27 +11,16 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
         :root {
-            /* Navratri 9 Sacred Colors */
             --day1-yellow: #FFD700;
-            /* Shailaputri - Yellow */
             --day2-green: #228B22;
-            /* Brahmacharini - Green */
             --day3-grey: #708090;
-            /* Chandraghanta - Grey */
             --day4-orange: #FF8C00;
-            /* Kushmanda - Orange */
             --day5-white: #FFFFFF;
-            /* Skandamata - White */
             --day6-red: #DC143C;
-            /* Katyayani - Red */
             --day7-blue: #4169E1;
-            /* Kalaratri - Royal Blue */
             --day8-pink: #FF69B4;
-            /* Mahagauri - Pink */
             --day9-purple: #9932CC;
-            /* Siddhidatri - Purple */
 
-            /* Divine Premium Gradients */
             --gradient-primary: linear-gradient(135deg, var(--day1-yellow), var(--day4-orange), var(--day6-red));
             --gradient-secondary: linear-gradient(135deg, var(--day7-blue), var(--day9-purple), var(--day8-pink));
             --gradient-divine: linear-gradient(45deg, var(--day1-yellow), var(--day2-green), var(--day4-orange), var(--day6-red), var(--day7-blue), var(--day8-pink), var(--day9-purple));
@@ -53,7 +42,6 @@
             overflow-x: hidden;
         }
 
-        /* Sacred Background Animation */
         body::before {
             content: '';
             position: fixed;
@@ -77,7 +65,6 @@
             }
         }
 
-        /* Main Container */
         .checkout-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -87,7 +74,6 @@
             gap: 2rem;
         }
 
-        /* Sacred Header */
         .sacred-header {
             text-align: center;
             margin-bottom: 3rem;
@@ -147,7 +133,6 @@
             text-shadow: 0 2px 10px rgba(153, 50, 204, 0.1);
         }
 
-        /* Form Section */
         .form-section {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -230,7 +215,6 @@
             resize: vertical;
         }
 
-        /* Order Summary */
         .order-summary {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -365,11 +349,9 @@
             color: #FFFFFF !important;
         }
 
-        /* Payment Methods */
         .payment-methods {
             margin-top: 2rem;
             display: none;
-            /* Initially hidden */
         }
 
         .payment-methods.show {
@@ -469,7 +451,6 @@
             font-size: 1.1rem;
         }
 
-        /* Action Buttons */
         .action-buttons {
             display: flex;
             gap: 1rem;
@@ -536,7 +517,6 @@
             box-shadow: 0 5px 20px rgba(153, 50, 204, 0.3);
         }
 
-        /* Progress Steps */
         .progress-steps {
             display: flex;
             justify-content: center;
@@ -573,7 +553,6 @@
             box-shadow: 0 5px 15px rgba(34, 139, 34, 0.3);
         }
 
-        /* Loading Spinner */
         .loading-spinner {
             display: none;
             width: 20px;
@@ -591,7 +570,6 @@
             }
         }
 
-        /* Empty cart styling */
         .empty-cart {
             text-align: center;
             padding: 3rem 2rem;
@@ -600,7 +578,6 @@
             font-size: 1.1rem;
         }
 
-        /* Error Message */
         .error-message {
             background: rgba(220, 20, 60, 0.1);
             border: 2px solid rgba(220, 20, 60, 0.3);
@@ -615,7 +592,6 @@
             display: block;
         }
 
-        /* Success Message */
         .success-message {
             background: rgba(34, 139, 34, 0.1);
             border: 2px solid rgba(34, 139, 34, 0.3);
@@ -630,7 +606,6 @@
             display: block;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .checkout-container {
                 grid-template-columns: 1fr;
@@ -709,7 +684,6 @@
             <div class="error-message" id="errorMessage"></div>
             <div class="success-message" id="successMessage"></div>
 
-            <!-- ADDRESS FORM -->
             <div id="addressForm">
                 <h2 class="section-title">
                     <span>🏠</span>
@@ -717,21 +691,9 @@
                 </h2>
 
                 <form id="addressFormElement">
-                    <!-- <div class="form-group">
-                        <label class="form-label" for="fullName">Full Name *</label>
-                        <input type="text" id="fullName" name="fullName" class="form-input"
-                            placeholder="Enter your full name" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="email">Email Address *</label>
-                        <input type="email" id="email" name="email" class="form-input"
-                            placeholder="Enter your email address" required>
-                    </div> -->
-
                     <div class="form-group">
                         <label class="form-label" for="building">Building/ Flat no. *</label>
-                        <input type="tel" id="building" name="building" class="form-input"
+                        <input type="text" id="building" name="building" class="form-input"
                             placeholder="Enter you building/ flat no." required>
                     </div>
 
@@ -740,12 +702,6 @@
                         <textarea id="address" name="address" class="form-input textarea-input"
                             placeholder="Enter your complete address" required></textarea>
                     </div>
-
-                    <!-- <div class="form-group">
-                        <label class="form-label" for="lane">Lane/Street</label>
-                        <input type="text" id="lane" name="lane" class="form-input"
-                            placeholder="Enter lane or street name">
-                    </div> -->
 
                     <div class="form-group">
                         <label class="form-label" for="nearTo">Near To (Landmark)</label>
@@ -783,7 +739,6 @@
                 </form>
             </div>
 
-            <!-- PAYMENT FORM -->
             <div id="paymentForm" style="display: none;">
                 <h2 class="section-title">
                     <span>💳</span>
@@ -806,7 +761,7 @@
 
                 <div class="action-buttons">
                     <button type="button" class="secondary-btn" onclick="goBackToAddress()">⬅ Back to Address</button>
-                    <button type="button" class="primary-btn" onclick="placeOrder()">
+                    <button type="button" class="primary-btn" onclick="placeOrder(event)">
                         🙏 Place Sacred Order
                         <span class="loading-spinner"></span>
                     </button>
@@ -821,7 +776,6 @@
             </h2>
 
             <div id="orderItems">
-                <!-- Dynamic cart items will be populated here -->
             </div>
 
             <div class="total-section">
@@ -832,7 +786,6 @@
     </div>
 
     <script>
-        // Check authentication
         function checkAuth() {
             const token = localStorage.getItem('authToken');
             if (!token) {
@@ -843,33 +796,24 @@
             return true;
         }
 
-        // Initialize cart from localStorage
         let cart = getCartItems();
-
-        // Delivery charges
-        const deliveryCharges = 99;
-
-        // API Configuration
-        const API_BASE_URL = 'https://narvang-backend.onrender.com/api';
-
-        // User address data
+        const deliveryCharges = 0; 
+        const API_BASE_URL = 'https://navrang-backend.onrender.com/api';
         let userAddress = {};
+        let currentOrderId = null;
 
-        // Razorpay configuration
         const razorpayOptions = {
-            key: 'rzp_test_wLxVTVeMK5c4nU', // Replace with your Razorpay key
+            key: 'rzp_test_wLxVTVeMK5c4nU', 
             currency: 'INR',
             name: 'NavRang',
             description: 'Thank you for shopping with us.',
             image: 'https://res.cloudinary.com/dm26lxw7u/image/upload/v1751809395/items/k5wv5gzeuoinymlgu0nx.jpg'
         };
 
-        // Show/hide error and success messages
         function showMessage(message, type = 'error') {
             const errorEl = document.getElementById('errorMessage');
             const successEl = document.getElementById('successMessage');
 
-            // Hide both messages first
             errorEl.classList.remove('show');
             successEl.classList.remove('show');
 
@@ -881,14 +825,12 @@
                 successEl.classList.add('show');
             }
 
-            // Auto-hide after 5 seconds
             setTimeout(() => {
                 errorEl.classList.remove('show');
                 successEl.classList.remove('show');
             }, 5000);
         }
 
-        // Show/hide loading spinner
         function toggleLoading(button, show = true) {
             const spinner = button.querySelector('.loading-spinner');
             if (spinner) {
@@ -897,15 +839,12 @@
             button.disabled = show;
         }
 
-        // Initialize page
         function initializePage() {
             if (!checkAuth()) return;
-
             displayOrderSummary();
             setupEventListeners();
         }
 
-        // Display order summary
         function displayOrderSummary() {
             const orderItemsContainer = document.getElementById('orderItems');
             const totalAmountEl = document.getElementById('totalAmount');
@@ -922,41 +861,24 @@
             cart.forEach(item => {
                 const itemTotal = item.price * item.quantity;
                 subtotal += itemTotal;
-
                 itemsHTML += `
-            <div class="summary-item">
-                <div class="item-info">
-                    <div class="item-icon">${item.image}</div>
-                    <div>
-                        <div class="item-name">${item.name}</div>
-                        <div class="item-quantity">Qty: ${item.quantity}</div>
-                    </div>
-                </div>
-                <div class="item-price">₹${itemTotal.toLocaleString()}</div>
-            </div>
-        `;
+                    <div class="summary-item">
+                        <div class="item-info">
+                            <div class="item-icon">${item.image || '🛍️'}</div>
+                            <div>
+                                <div class="item-name">${item.name}</div>
+                                <div class="item-quantity">Qty: ${item.quantity}</div>
+                            </div>
+                        </div>
+                        <div class="item-price">₹${itemTotal.toLocaleString()}</div>
+                    </div>`;
             });
 
-            // Add delivery charges
             const grandTotal = subtotal + deliveryCharges;
-
-            itemsHTML += `
-        <div class="summary-item">
-            <div class="item-info">
-                <div class="item-icon">🚚</div>
-                <div>
-                    <div class="item-name">Delivery Charges</div>
-                </div>
-            </div>
-            <div class="item-price">₹${deliveryCharges}</div>
-        </div>
-    `;
-
             orderItemsContainer.innerHTML = itemsHTML;
             totalAmountEl.textContent = `₹${grandTotal.toLocaleString()}`;
         }
 
-        // Setup event listeners
         function setupEventListeners() {
             const addressForm = document.getElementById('addressFormElement');
             if (addressForm) {
@@ -964,15 +886,12 @@
             }
         }
 
-        // Handle address form submission
         async function handleAddressSubmit(event) {
             event.preventDefault();
-
             const button = event.target.querySelector('.primary-btn');
             toggleLoading(button, true);
 
             try {
-                // Get form data
                 const formData = new FormData(event.target);
                 const addressData = {
                     building: formData.get('building'),
@@ -983,368 +902,180 @@
                     state: formData.get('state')
                 };
 
-                // Validate required fields
-                const requiredFields = ['fullName', 'email', 'phoneNumber', 'address', 'pinCode', 'city', 'state'];
-                const missingFields = requiredFields.filter(field => !addressData[field] || addressData[field].trim() === '');
-
-                if (missingFields.length > 0) {
-                    throw new Error(`Please fill in all required fields: ${missingFields.join(', ')}`);
+                const requiredFields = ['building', 'address', 'pinCode', 'city', 'state'];
+                if (requiredFields.some(field => !addressData[field] || !addressData[field].trim())) {
+                    throw new Error('Please fill in all required address fields.');
                 }
-
-                // Validate email format
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(addressData.email)) {
-                    throw new Error('Please enter a valid email address');
-                }
-
-                // Validate phone number (basic validation)
-                const phoneRegex = /^[0-9]{10}$/;
-                if (!phoneRegex.test(addressData.phoneNumber.replace(/\s+/g, ''))) {
-                    throw new Error('Please enter a valid 10-digit phone number');
-                }
-
-                // Validate pin code (basic validation)
-                const pinRegex = /^[0-9]{6}$/;
-                if (!pinRegex.test(addressData.pinCode)) {
-                    throw new Error('Please enter a valid 6-digit pin code');
-                }
-
-                // Save address to backend
+                
                 await saveAddressToBackend(addressData);
-
-                // Store address data locally
                 userAddress = addressData;
-
-                // Show success message
                 showMessage('Address saved successfully!', 'success');
-
-                // Move to payment step
-                setTimeout(() => {
-                    showPaymentForm();
-                }, 1000);
+                setTimeout(showPaymentForm, 1000);
 
             } catch (error) {
-                console.error('Address submission error:', error);
                 showMessage(error.message || 'Failed to save address. Please try again.');
             } finally {
                 toggleLoading(button, false);
             }
         }
 
-        // Save address to backend
         async function saveAddressToBackend(addressData) {
             const token = localStorage.getItem('authToken');
+            if (!token) throw new Error('Authentication token not found');
 
-            if (!token) {
-                throw new Error('Authentication token not found');
-            }
+            const response = await fetch(`${API_BASE_URL}/update-address`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(addressData)
+            });
 
-            try {
-                const response = await fetch(`${API_BASE_URL}/address`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(addressData)
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-                }
-
-                const result = await response.json();
-                console.log('Address saved successfully:', result);
-                return result;
-
-            } catch (error) {
-                console.error('Backend save error:', error);
-                if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                    throw new Error('Network error. Please check your connection and try again.');
-                }
-                throw error;
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             }
         }
 
-        // Show payment form
         function showPaymentForm() {
-            // Hide address form
             document.getElementById('addressForm').style.display = 'none';
-
-            // Show payment form
             document.getElementById('paymentForm').style.display = 'block';
-
-            // Update progress steps
             document.getElementById('step-address').classList.remove('active');
             document.getElementById('step-address').classList.add('completed');
             document.getElementById('step-payment').classList.add('active');
-
-            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Go back to address form
         function goBackToAddress() {
-            // Show address form
             document.getElementById('addressForm').style.display = 'block';
-
-            // Hide payment form
             document.getElementById('paymentForm').style.display = 'none';
-
-            // Update progress steps
             document.getElementById('step-payment').classList.remove('active');
             document.getElementById('step-address').classList.remove('completed');
             document.getElementById('step-address').classList.add('active');
-
-            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Select payment method
         function selectPayment(event, method) {
-            // Remove selected class from all options
-            document.querySelectorAll('.payment-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-
-            // Add selected class to clicked option
+            document.querySelectorAll('.payment-option').forEach(option => option.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
-
-            // Update radio button
             event.currentTarget.querySelector('.payment-radio').checked = true;
         }
 
-        // Go back to cart
         function goBack() {
-            if (confirm('Are you sure you want to go back to cart? Your progress will be lost.')) {
-                window.location.href = 'cart.html';
-            }
+            window.location.href = 'main.html';
         }
 
-        // Get cart items from URL parameters or localStorage
         function getCartItems() {
-            // First try to get from URL parameters (if coming from cart.html)
-            const urlParams = new URLSearchParams(window.location.search);
-            const cartFromUrl = urlParams.get('cart');
-
-            if (cartFromUrl) {
-                try {
-                    return JSON.parse(decodeURIComponent(cartFromUrl));
-                } catch (error) {
-                    console.error('Error parsing cart from URL:', error);
-                }
-            }
-
-            // Fallback to localStorage
-            const cartFromStorage = localStorage.getItem('cart');
-            if (cartFromStorage) {
-                try {
-                    return JSON.parse(cartFromStorage);
-                } catch (error) {
-                    console.error('Error parsing cart from localStorage:', error);
-                }
-            }
-
-            // Return demo data if no cart found
-            return [
-                { id: 1, name: "Shailaputri Divine Lehenga", price: 12999, image: "🥻", quantity: 1 },
-                { id: 3, name: "Chandraghanta Royal Jewelry", price: 15999, image: "💎", quantity: 1 },
-                { id: 5, name: "Skandamata White Dupatta", price: 3999, image: "🧣", quantity: 2 }
-            ];
+            const cartFromStorage = localStorage.getItem('cartItems');
+            return cartFromStorage ? JSON.parse(cartFromStorage) : [];
         }
 
-        // Place order
-        async function placeOrder() {
+        async function placeOrder(event) {
             const button = event.target;
             toggleLoading(button, true);
 
             try {
-                // Check if address is saved
-                if (!userAddress.fullName) {
+                if (Object.keys(userAddress).length === 0) {
                     throw new Error('Please complete the address form first');
                 }
 
-                // Get selected payment method
                 const selectedPayment = document.querySelector('input[name="payment"]:checked');
-                if (!selectedPayment) {
-                    throw new Error('Please select a payment method');
-                }
-
-                const paymentMethod = selectedPayment.value;
-
-                // Calculate total
-                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                const total = subtotal + deliveryCharges;
-
-                // Prepare order data
-                const orderData = {
-                    items: cart,
-                    address: userAddress,
-                    paymentMethod: paymentMethod,
-                    subtotal: subtotal,
-                    deliveryCharges: deliveryCharges,
-                    total: total
-                };
-
-                if (paymentMethod === 'razorpay') {
-                    // Online payment
-                    await initiateRazorpayPayment(orderData);
-                } else {
-                    // Cash on delivery
-                    await createOrder(orderData);
-                }
+                if (!selectedPayment) throw new Error('Please select a payment method');
+                
+                const isCOD = selectedPayment.value === 'cod';
+                await createOrder(isCOD);
 
             } catch (error) {
-                console.error('Order placement error:', error);
-                showMessage(error.message || 'Failed to place order. Please try again.');
+                showMessage(error.message || 'Failed to place order.');
             } finally {
                 toggleLoading(button, false);
             }
         }
 
-        // Create order in backend
-        async function createOrder(orderData) {
+        async function createOrder(isCOD) {
             const token = localStorage.getItem('authToken');
+            if (!token) throw new Error('Authentication token not found');
 
-            if (!token) {
-                throw new Error('Authentication token not found');
-            }
+            const productDetails = cart.map(item => ({
+                productId: item.id,
+                quantity: item.quantity
+            }));
+            
+            const response = await fetch(`${API_BASE_URL}/create-order`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ productDetails, isCOD })
+            });
 
-            try {
-                const response = await fetch(`${API_BASE_URL}/orders`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(orderData)
-                });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'Failed to create order');
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-                }
+            currentOrderId = result.orderId;
 
-                const result = await response.json();
-
-                // Clear cart
-                localStorage.removeItem('cart');
-
-                // Show success message
-                showMessage('Order placed successfully! 🎉', 'success');
-
-                // Redirect to order confirmation
-                setTimeout(() => {
-                    window.location.href = `order-confirmation.html?orderId=${result.orderId}`;
-                }, 2000);
-
-                return result;
-
-            } catch (error) {
-                console.error('Order creation error:', error);
-                if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                    throw new Error('Network error. Please check your connection and try again.');
-                }
-                throw error;
+            if (isCOD) {
+                handleSuccessfulOrder('Order placed successfully! 🎉');
+            } else {
+                initiateRazorpayPayment(result.razorpayOrder);
             }
         }
-
-        // Initiate Razorpay payment
-        async function initiateRazorpayPayment(orderData) {
-            try {
-                // Create order in backend first
-                const order = await createOrder({ ...orderData, paymentStatus: 'pending' });
-
-                // Configure Razorpay options
-                const options = {
-                    ...razorpayOptions,
-                    amount: orderData.total * 100, // Amount in paise
-                    order_id: order.razorpayOrderId,
-                    prefill: {
-                        name: userAddress.fullName,
-                        email: userAddress.email,
-                        contact: userAddress.phoneNumber
-                    },
-                    handler: async function (response) {
-                        try {
-                            // Verify payment
-                            await verifyPayment(response, order.orderId);
-
-                            // Clear cart
-                            localStorage.removeItem('cart');
-
-                            // Show success message
-                            showMessage('Payment successful! Order confirmed 🎉', 'success');
-
-                            // Redirect to order confirmation
-                            setTimeout(() => {
-                                window.location.href = `order-confirmation.html?orderId=${order.orderId}`;
-                            }, 2000);
-
-                        } catch (error) {
-                            console.error('Payment verification error:', error);
-                            showMessage('Payment verification failed. Please contact support.');
-                        }
-                    },
-                    modal: {
-                        ondismiss: function () {
-                            showMessage('Payment cancelled. You can retry payment anytime.');
-                        }
+        
+        function initiateRazorpayPayment(razorpayOrder) {
+            const options = {
+                ...razorpayOptions,
+                amount: razorpayOrder.amount,
+                order_id: razorpayOrder.id,
+                handler: async function (response) {
+                    await verifyPayment(response);
+                },
+                modal: {
+                    ondismiss: function () {
+                        showMessage('Payment cancelled.');
                     }
-                };
-
-                // Open Razorpay
-                const razorpay = new Razorpay(options);
-                razorpay.open();
-
-            } catch (error) {
-                console.error('Razorpay initiation error:', error);
-                throw error;
-            }
+                }
+            };
+            const razorpay = new Razorpay(options);
+            razorpay.open();
         }
 
-        // Verify payment
-        async function verifyPayment(paymentResponse, orderId) {
+        async function verifyPayment(paymentResponse) {
             const token = localStorage.getItem('authToken');
+            if (!token) throw new Error('Authentication token not found');
 
-            if (!token) {
-                throw new Error('Authentication token not found');
+            const response = await fetch(`${API_BASE_URL}/verify-payment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    razorpay_order_id: paymentResponse.razorpay_order_id,
+                    razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                    razorpay_signature: paymentResponse.razorpay_signature,
+                    orderId: currentOrderId
+                })
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Payment verification failed.');
             }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/orders/verify-payment`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        orderId: orderId,
-                        paymentId: paymentResponse.razorpay_payment_id,
-                        signature: paymentResponse.razorpay_signature
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-                }
-
-                const result = await response.json();
-                console.log('Payment verified successfully:', result);
-                return result;
-
-            } catch (error) {
-                console.error('Payment verification error:', error);
-                if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                    throw new Error('Network error. Please check your connection and try again.');
-                }
-                throw error;
-            }
+            
+            handleSuccessfulOrder('Payment successful! Order confirmed 🎉');
         }
 
-        // Initialize page when DOM is loaded
+        function handleSuccessfulOrder(message) {
+            localStorage.removeItem('cartItems');
+            cart = [];
+            showMessage(message, 'success');
+            setTimeout(() => {
+                window.location.href = `main.html`; 
+            }, 2000);
+        }
+
         document.addEventListener('DOMContentLoaded', initializePage);
     </script>
 </body>

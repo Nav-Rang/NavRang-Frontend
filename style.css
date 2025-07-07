@@ -1,18 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
         :root {
-            /* Navratri 9 Sacred Colors */
-            --day1-yellow: #FFD700;      /* Shailaputri - Yellow */
-            --day2-green: #228B22;       /* Brahmacharini - Green */
-            --day3-grey: #708090;        /* Chandraghanta - Grey */
-            --day4-orange: #FF8C00;      /* Kushmanda - Orange */
-            --day5-white: #FFFFFF;       /* Skandamata - White */
-            --day6-red: #DC143C;         /* Katyayani - Red */
-            --day7-blue: #4169E1;        /* Kalaratri - Royal Blue */
-            --day8-pink: #FF69B4;        /* Mahagauri - Pink */
-            --day9-purple: #9932CC;      /* Siddhidatri - Purple */
+            --day1-yellow: #FFD700;
+            --day2-green: #228B22;
+            --day3-grey: #708090;
+            --day4-orange: #FF8C00;
+            --day5-white: #FFFFFF;
+            --day6-red: #DC143C;
+            --day7-blue: #4169E1;
+            --day8-pink: #FF69B4;
+            --day9-purple: #9932CC;
             
-            /* Divine Premium Gradients */
             --gradient-primary: linear-gradient(135deg, var(--day1-yellow), var(--day4-orange), var(--day6-red));
             --gradient-secondary: linear-gradient(135deg, var(--day7-blue), var(--day9-purple), var(--day8-pink));
             --gradient-divine: linear-gradient(45deg, var(--day1-yellow), var(--day2-green), var(--day4-orange), var(--day6-red), var(--day7-blue), var(--day8-pink), var(--day9-purple));
@@ -35,7 +33,6 @@
             position: relative;
         }
 
-        /* Divine Animated Background */
         .divine-bg {
             position: fixed;
             top: 0;
@@ -67,10 +64,8 @@
             z-index: 2;
         }
 
-        /* Professional Header */
         header {
             background: rgba(255, 255, 255, 0.95);
-            /* backdrop-filter: blur(15px); */
             border-bottom: 1px solid rgba(153, 50, 204, 0.1);
             position: sticky;
             top: 0;
@@ -153,7 +148,6 @@
   font-size: 12px;
 }
 
-        /* Professional Hero Section */
         .hero {
             padding: 80px 0;
             text-align: center;
@@ -240,7 +234,6 @@
             transform: translateY(-2px);
         }
 
-        /* Professional Products Section */
         .products-section {
             padding: 80px 0;
             background: rgba(255, 255, 255, 0.7);
@@ -275,7 +268,6 @@
 
        .product-card {
     background: rgba(255, 255, 255, 0.95);
-    /* backdrop-filter: blur(10px); */
     border: 1px solid rgba(153, 50, 204, 0.1);
     border-radius: 15px;
     padding: 25px;
@@ -477,7 +469,6 @@
             transform: translateY(-2px);
         }
 
-        /* Professional Cart Modal */
         .cart-modal {
             display: none;
             position: fixed;
@@ -486,7 +477,6 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            /* backdrop-filter: blur(10px); */
             z-index: 3000;
         }
 
@@ -634,7 +624,6 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
 
-        /* Professional Testimonials */
         .testimonials-section {
             padding: 80px 0;
             background: rgba(255, 248, 220, 0.5);
@@ -674,7 +663,6 @@
             margin-top: 8px;
         }
 
-        /* Professional Footer */
         footer {
             background: linear-gradient(135deg, var(--day9-purple), var(--day7-blue));
             color: white;
@@ -747,7 +735,6 @@
             font-size: 0.9rem;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .container {
                 padding: 0 20px;
@@ -974,10 +961,3 @@
                display: none;
            }
        }
-
-
-
-
-       /* userDetails Styles */
-
-      

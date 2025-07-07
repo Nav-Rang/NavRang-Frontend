@@ -11,10 +11,8 @@
 </head>
 
 <body>
-    <!-- Divine Animated Background -->
     <div class="divine-bg"></div>
 
-    <!-- Header -->
     <header>
         <div class="container">
             <nav>
@@ -25,18 +23,14 @@
                     <li><a href="#about">About</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
-                <div class="nav-actions">
-                    <!-- User Section -->
+                <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
                     <div class="user-section">
-                        <!-- For guests -->
                         <div class="auth-buttons">
-                            <a href="index.html" class="login-btn">Login</a>
-                            <a href="signup.html" class="signup-btn">Sign Up</a>
+                            <a href="login.html" class="login-btn">Login</a>
+                            <a href="index.html" class="signup-btn">Sign Up</a>
                         </div>
-
-                        <!-- For logged-in users -->
                         <div class="user-info" style="display: none;">
-                            <span class="user-greeting">🕉️ Welcome, <span id="userNameDisplay">Sacred
+                            <span class="user-greeting" style="margin-right: 15px;">🕉️ Welcome, <span id="userNameDisplay">Sacred
                                     Soul</span></span>
                             <div class="user-dropdown">
                                 <button class="user-menu-btn" onclick="toggleUserMenu()">
@@ -44,26 +38,22 @@
                                     <span class="dropdown-arrow">▼</span>
                                 </button>
                                 <div class="user-dropdown-menu" id="userDropdownMenu">
-                                    <!-- Dropdown content here -->
-                                </div>
-                                <div>
-                                    <a href="cart.html" class="cart-icon user-only" style="display: none;">
-                                        🛒 Cart <span class="cart-count">0</span>
-                                    </a>
+                                    <a href="#" class="dropdown-item" onclick="logout()">
+                                       <span class="item-icon">🚪</span>
+                                       Logout
+                                   </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Cart Icon -->
-
-
+                    <a href="cart.html" class="cart-icon user-only" style="display: none; text-decoration: none; color: inherit;">
+                        🛒 <span class="cart-count">0</span>
+                    </a>
                 </div>
             </nav>
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="container">
             <div class="hero-content">
@@ -79,7 +69,6 @@
         </div>
     </section>
 
-    <!-- Products Section -->
     <section class="products-section" id="products">
         <div class="container">
             <div class="section-header">
@@ -87,21 +76,17 @@
                 <p class="section-description">Nine sacred pieces for nine divine nights. Each item blessed with the
                     colors and essence of Navratri goddesses.</p>
             </div>
-
             <div class="products-grid" id="productsGrid">
-                <!-- Products will be dynamically generated -->
             </div>
         </div>
     </section>
 
-    <!-- Testimonials Section -->
     <section class="testimonials-section">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">What Our Customers Say</h2>
                 <p class="section-description">Blessed words from our devotees</p>
             </div>
-
             <div class="testimonials-grid">
                 <div class="testimonial-card">
                     <p class="testimonial-text">"The quality is absolutely divine! I felt blessed wearing these pieces
@@ -109,14 +94,12 @@
                     <p class="testimonial-author">- Priya Sharma</p>
                     <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
                 </div>
-
                 <div class="testimonial-card">
                     <p class="testimonial-text">"Luxe Navratri transformed my celebration. Each piece tells a story of
                         devotion and craftsmanship. Highly recommended!"</p>
                     <p class="testimonial-author">- Rajesh Patel</p>
                     <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
                 </div>
-
                 <div class="testimonial-card">
                     <p class="testimonial-text">"The premium collection is worth every rupee. The attention to detail
                         and spiritual significance is unmatched."</p>
@@ -127,24 +110,6 @@
         </div>
     </section>
 
-    <!-- Cart Modal -->
-    <div class="cart-modal" id="cartModal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h2 class="cart-title">Shopping Cart</h2>
-                <button class="close-cart" onclick="toggleCart()">×</button>
-            </div>
-            <div class="cart-items" id="cartItems">
-                <!-- Cart items will be dynamically generated -->
-            </div>
-            <div class="cart-total">
-                <div class="total-amount" id="totalAmount">₹0</div>
-                <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -159,7 +124,6 @@
                         <a href="#" class="social-link">📺</a>
                     </div>
                 </div>
-
                 <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul>
@@ -170,7 +134,6 @@
                         <li>Contact Us</li>
                     </ul>
                 </div>
-
                 <div class="footer-section">
                     <h3>Customer Care</h3>
                     <ul>
@@ -181,7 +144,6 @@
                         <li>Support</li>
                     </ul>
                 </div>
-
                 <div class="footer-section">
                     <h3>Contact Us</h3>
                     <p>📧 hello@luxenavratri.com</p>
@@ -189,29 +151,15 @@
                     <p>📍 Mumbai, Maharashtra, India</p>
                 </div>
             </div>
-
             <div class="footer-bottom">
                 <p>&copy; 2025 Luxe Navratri. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-
-
     <script>
-
-        // NAVRANG MAIN PAGE JAVASCRIPT
-
-
-        // Global Variables
         let products = [];
-        let cart = [];
-        let cartCount = 0;
-
-
-        // INITIALIZATION
-
-
+        
         document.addEventListener('DOMContentLoaded', function () {
             initializeApp();
         });
@@ -219,33 +167,9 @@
         function initializeApp() {
             checkUserLogin();
             fetchProducts();
-            updateCartUI();
-            setupEventListeners();
+            updateCartCount();
         }
-
-        function setupEventListeners() {
-            // Close cart when clicking outside
-            document.getElementById('cartModal').addEventListener('click', function (e) {
-                if (e.target === this) {
-                    toggleCart();
-                }
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function (event) {
-                const dropdown = document.getElementById('userDropdownMenu');
-                const userMenuBtn = document.querySelector('.user-menu-btn');
-
-                if (dropdown && userMenuBtn && !userMenuBtn.contains(event.target)) {
-                    dropdown.style.display = 'none';
-                }
-            });
-        }
-
-
-        // USER AUTHENTICATION & SESSION MANAGEMENT
-
-
+        
         function checkUserLogin() {
             const userLoggedIn = localStorage.getItem('userLoggedIn');
             const userName = localStorage.getItem('userName');
@@ -265,44 +189,29 @@
             const userInfo = document.querySelector('.user-info');
             if (userInfo) {
                 userInfo.style.display = 'flex';
-
                 const userInitial = document.getElementById('userInitial');
                 const userNameDisplay = document.getElementById('userNameDisplay');
                 if (userInitial) userInitial.textContent = userName?.charAt(0).toUpperCase() || 'S';
                 if (userNameDisplay) userNameDisplay.textContent = userName || 'Sacred Soul';
             }
-
             showUserFeatures();
         }
 
         function updateUIForGuestUser() {
             const authButtons = document.querySelector('.auth-buttons');
             if (authButtons) authButtons.style.display = 'flex';
-
             const userInfo = document.querySelector('.user-info');
             if (userInfo) userInfo.style.display = 'none';
-
             hideUserFeatures();
         }
 
-
         function showUserFeatures() {
-            const userOnlyElements = document.querySelectorAll('.user-only');
-            userOnlyElements.forEach(element => {
-                element.style.display = 'block';
-            });
+            document.querySelectorAll('.user-only').forEach(el => el.style.display = 'inline-block');
         }
 
         function hideUserFeatures() {
-            const userOnlyElements = document.querySelectorAll('.user-only');
-            userOnlyElements.forEach(element => {
-                element.style.display = 'none';
-            });
+            document.querySelectorAll('.user-only').forEach(el => el.style.display = 'none');
         }
-
-
-        // USER MENU FUNCTIONS
-
 
         function toggleUserMenu() {
             const dropdown = document.getElementById('userDropdownMenu');
@@ -311,265 +220,109 @@
             }
         }
 
-        function viewProfile() {
-            toggleUserMenu();
-            showNotification('Profile page coming soon! 👤');
-        }
-
-        function viewOrders() {
-            toggleUserMenu();
-            showNotification('Orders page coming soon! 📦');
-        }
-
-        function viewWishlist() {
-            toggleUserMenu();
-            showNotification('Wishlist page coming soon! 💖');
-        }
-
         function logout() {
-            const confirmLogout = confirm('Are you sure you want to logout?');
-            if (confirmLogout) {
-                // Clear all user data
+            if (confirm('Are you sure you want to logout?')) {
                 localStorage.removeItem('userLoggedIn');
                 localStorage.removeItem('userName');
                 localStorage.removeItem('userEmail');
                 localStorage.removeItem('userPhone');
                 localStorage.removeItem('authToken');
-
-                // Clear cart
-                cart = [];
-                updateCartUI();
-
-                // Update UI
+                localStorage.removeItem('cartItems');
                 updateUIForGuestUser();
+                updateCartCount();
                 showNotification('Logged out successfully! 🕉️');
             }
-        }
-
-
-        // NAVIGATION FUNCTIONS
-
-
-        function redirectToLogin() {
-            window.location.href = 'login.html';
-        }
-
-        function redirectToSignup() {
-            window.location.href = 'index.html';
         }
 
         function scrollToProducts() {
             document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
         }
 
-
-        // PRODUCT MANAGEMENT
-
-
         async function fetchProducts() {
+            const grid = document.getElementById('productsGrid');
             try {
-                showLoadingState();
+                grid.innerHTML = '<div class="loading">Loading divine collection... 🕉️</div>';
                 const response = await fetch('https://navrang-backend.onrender.com/api/get-items');
-
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
                 products = await response.json();
                 renderProducts();
-                hideLoadingState();
             } catch (error) {
-                console.error('Error fetching products:', error);
-                hideLoadingState();
+                grid.innerHTML = `<div class="error-state"><p>Unable to load products. Please try again.</p><button onclick="fetchProducts()" class="retry-btn">Retry</button></div>`;
                 showNotification('Failed to load products. Please try again later.', 'error');
-                renderErrorState();
             }
         }
 
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
-            if (!grid) return;
-
+            if (!grid || !products) return;
             if (products.length === 0) {
                 grid.innerHTML = '<div class="no-products">No products available at the moment.</div>';
                 return;
             }
-
             grid.innerHTML = products.map(product => `
-        <div class="product-card" data-product-id="${product.id}">
-            <div class="product-image">
-                <img src="${product.image}" alt="${product.name}" loading="lazy" />
-                <div class="product-badge">Premium</div>
-            </div>
-            <div class="product-info">
-                <h3 class="product-name">${product.name}</h3>
-                <p class="product-category">${product.category}</p>
-                <div class="product-price">
-                    ₹${product.price.toLocaleString()}
-                    ${product.originalPrice ? `<span class="product-price-original">₹${product.originalPrice.toLocaleString()}</span>` : ''}
-                </div>
-                <p class="product-description">${product.description}</p>
-                <ul class="product-features">
-                    ${product.features ? product.features.map(feature => `<li>${feature}</li>`).join('') : ''}
-                </ul>
-                <button 
-  class="add-to-cart" 
-  data-id="${product.id}"
-  data-name="${product.name}"
-  data-price="${product.price}"
-  data-image="${product.image}"
-  data-description="${product.description || ''}"
-  onclick="handleAddToCart(this)"
->
-  Add to Sacred Cart
-</button>
-
-            </div>
-        </div>
-    `).join('');
+                <div class="product-card" data-product-id="${product._id}">
+                    <div class="product-image">
+                        <img src="${product.images[0]}" alt="${product.name}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" />
+                    </div>
+                    <div>
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-category">${product.shortDescription}</p>
+                        <div class="product-price">
+                            ₹${product.price.toLocaleString()}
+                            ${product.originalPrice ? `<span class="product-price-original">₹${product.originalPrice.toLocaleString()}</span>` : ''}
+                        </div>
+                        <p class="product-description">${product.fullDescription}</p>
+                        <button class="add-to-cart" onclick="handleAddToCart(this)"
+                            data-id="${product._id}"
+                            data-name="${product.name}"
+                            data-price="${product.price}"
+                            data-image="${product.images[0]}"
+                            data-description="${product.shortDescription}">
+                            Add to Sacred Cart
+                        </button>
+                    </div>
+                </div>`).join('');
         }
-
-        function showLoadingState() {
-            const grid = document.getElementById('productsGrid');
-            if (grid) {
-                grid.innerHTML = '<div sty class="loading">Loading divine collection... 🕉️</div>';
-            }
-        }
-
-        function hideLoadingState() {
-            // Loading state is automatically hidden when products are rendered
-        }
-
-        function renderErrorState() {
-            const grid = document.getElementById('productsGrid');
-            if (grid) {
-                grid.innerHTML = `
-            <div class="error-state">
-                <p>Unable to load products. Please try again.</p>
-                <button onclick="fetchProducts()" class="retry-btn">Retry</button>
-            </div>
-        `;
-            }
-        }
-
-
-        // CART MANAGEMENT
-
-        function goToCartPage() {
+        
+        function handleAddToCart(button) {
             const userLoggedIn = localStorage.getItem('userLoggedIn');
-            if (userLoggedIn === 'true') {
-                window.location.href = 'cart.html';
-            } else {
-                showNotification('Please login to view your cart.', 'error');
-            }
-        }
-
-    function addToCartFromButton(button) {
-    const product = {
-        id: Number(button.dataset.id),
-        name: button.dataset.name,
-        price: Number(button.dataset.price),
-        image: button.dataset.image,
-        description: button.dataset.description,
-        quantity: 1
-    };
-
-    let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-
-    const existingItem = cartItems.find(item => item.id === product.id);
-    if (existingItem) {
-        existingItem.quantity += 1;
-    } else {
-        cartItems.push(product);
-    }
-
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-    updateCartUI();
-    showNotification(`${product.name} added to cart! 🛒`);
-    animateCartIcon();
-}
-
-
-
-
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
-            updateCartUI();
-            showNotification('Item removed from cart');
-        }
-
-        function updateQuantity(productId, change) {
-            const item = cart.find(item => item.id === productId);
-            if (item) {
-                item.quantity += change;
-                if (item.quantity <= 0) {
-                    removeFromCart(productId);
-                } else {
-                    updateCartUI();
-                }
-            }
-        }
-
-        function updateCartUI() {
-            cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-            const cartCountElement = document.querySelector('.cart-count');
-            if (cartCountElement) {
-                cartCountElement.textContent = cartCount;
-            }
-
-            updateCartModal();
-        }
-
-        function updateCartModal() {
-            const cartItems = document.getElementById('cartItems');
-            const totalAmount = document.getElementById('totalAmount');
-
-            if (!cartItems || !totalAmount) return;
-
-            if (cart.length === 0) {
-                cartItems.innerHTML = `
-            <div class="empty-cart">
-                <p>Your sacred cart is empty</p>
-                <button onclick="toggleCart(); scrollToProducts();" class="continue-shopping">
-                    Continue Shopping
-                </button>
-            </div>
-        `;
-                totalAmount.textContent = '₹0';
+            if (userLoggedIn !== 'true') {
+                showNotification('Please log in to add items to your cart.', 'error');
                 return;
             }
 
-            cartItems.innerHTML = cart.map(item => `
-        <div class="cart-item">
-            <div class="cart-item-image">
-                <img src="${item.image}" alt="${item.name}" />
-            </div>
-            <div class="cart-item-details">
-                <div class="cart-item-name">${item.name}</div>
-                <div class="cart-item-price">₹${item.price.toLocaleString()}</div>
-            </div>
-            <div class="quantity-controls">
-                <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
-                <span class="quantity">${item.quantity}</span>
-                <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
-            </div>
-            <button class="remove-item" onclick="removeFromCart(${item.id})">×</button>
-        </div>
-    `).join('');
+            const product = {
+                id: button.dataset.id,
+                name: button.dataset.name,
+                price: Number(button.dataset.price),
+                image: button.dataset.image,
+                description: button.dataset.description,
+                quantity: 1
+            };
 
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            totalAmount.textContent = `₹${total.toLocaleString()}`;
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const existingItem = cartItems.find(item => item.id === product.id);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cartItems.push(product);
+            }
+            
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            updateCartCount();
+            showNotification(`${product.name} added to cart! 🛒`);
+            animateCartIcon();
         }
 
-        function toggleCart() {
-            const modal = document.getElementById('cartModal');
-            if (modal) {
-                modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
-                if (modal.style.display === 'block') {
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    document.body.style.overflow = 'auto';
-                }
+        function updateCartCount() {
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const count = cartItems.reduce((total, item) => total + item.quantity, 0);
+            const cartCountElement = document.querySelector('.cart-count');
+            if (cartCountElement) {
+                cartCountElement.textContent = count;
             }
         }
 
@@ -582,202 +335,23 @@
                 }, 300);
             }
         }
-
-
-        // CHECKOUT PROCESS
-
-
-        async function checkout() {
-            const userLoggedIn = localStorage.getItem('userLoggedIn');
-            const authToken = localStorage.getItem('authToken');
-            const userName = localStorage.getItem('userName');
-            const userEmail = localStorage.getItem('userEmail');
-
-            // Validate user authentication
-            if (userLoggedIn !== 'true' || !authToken) {
-                showNotification('Please login to proceed with checkout', 'error');
-                redirectToLogin();
-                return;
-            }
-
-            // Validate cart
-            if (cart.length === 0) {
-                showNotification('Your cart is empty!', 'error');
-                return;
-            }
-
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-            // Show loading state
-            const checkoutBtn = document.querySelector('.checkout-btn');
-            if (checkoutBtn) {
-                checkoutBtn.disabled = true;
-                checkoutBtn.textContent = 'Processing...';
-            }
-
-            try {
-                const response = await fetch('https://navrang-backend.onrender.com/api/create-order', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authToken}`
-                    },
-                    body: JSON.stringify({
-                        userName: userName,
-                        userEmail: userEmail,
-                        cart: cart,
-                        totalAmount: total
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Order failed with status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log('Order successful:', data);
-
-                // Success handling
-                showNotification('Your sacred order was placed successfully! 🪔');
-
-                // Clear cart and close modal
-                cart = [];
-                updateCartUI();
-                toggleCart();
-
-                // Show order confirmation
-                showOrderConfirmation(data);
-
-            } catch (error) {
-                console.error('Checkout error:', error);
-                showNotification('Checkout failed. Please try again.', 'error');
-            } finally {
-                // Reset checkout button
-                if (checkoutBtn) {
-                    checkoutBtn.disabled = false;
-                    checkoutBtn.textContent = 'Proceed to Checkout';
-                }
-            }
-        }
-
-        function showOrderConfirmation(orderData) {
-            const modal = document.createElement('div');
-            modal.className = 'order-confirmation-modal';
-            modal.innerHTML = `
-        <div class="order-confirmation-content">
-            <div class="success-icon">✅</div>
-            <h2>Order Confirmed!</h2>
-            <p>Thank you for your purchase. Your order has been placed successfully.</p>
-            <p><strong>Order ID:</strong> ${orderData.orderId || 'N/A'}</p>
-            <button onclick="closeOrderConfirmation()" class="close-confirmation">
-                Continue Shopping
-            </button>
-        </div>
-    `;
-
-            document.body.appendChild(modal);
-            setTimeout(() => modal.classList.add('show'), 10);
-        }
-
-        function closeOrderConfirmation() {
-            const modal = document.querySelector('.order-confirmation-modal');
-            if (modal) {
-                modal.classList.remove('show');
-                setTimeout(() => modal.remove(), 300);
-            }
-        }
-
-
-        // NOTIFICATION SYSTEM
-
-
+        
         function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
-            notification.className = `notification notification-${type}`;
-
             const bgColor = type === 'success' ? 'var(--gradient-royal)' : 'var(--day6-red)';
-
             notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 30px;
-        background: ${bgColor};
-        color: white;
-        padding: 20px 30px;
-        border-radius: 25px;
-        font-weight: 700;
-        z-index: 3001;
-        max-width: 300px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-    `;
-
+                position: fixed; top: 100px; right: 30px; background: ${bgColor}; color: white;
+                padding: 20px 30px; border-radius: 25px; font-weight: 700; z-index: 3001;
+                max-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                transform: translateX(110%); transition: transform 0.4s ease-in-out;`;
             notification.textContent = message;
             document.body.appendChild(notification);
-
-            // Animate in
+            setTimeout(() => notification.style.transform = 'translateX(0)', 10);
             setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 10);
-
-            // Remove notification
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => notification.remove(), 300);
+                notification.style.transform = 'translateX(110%)';
+                setTimeout(() => notification.remove(), 400);
             }, 3000);
         }
-
-
-        // UTILITY FUNCTIONS
-
-
-        function simulateLogin() {
-            localStorage.setItem('userLoggedIn', 'true');
-            localStorage.setItem('userName', 'Priya Sharma');
-            localStorage.setItem('userEmail', 'priya@example.com');
-            localStorage.setItem('authToken', 'demo-token-123');
-            checkUserLogin();
-            showNotification('Welcome back, Priya! 🕉️');
-        }
-
-        function clearCart() {
-            cart = [];
-            updateCartUI();
-            showNotification('Cart cleared');
-        }
-
-        function getTotalItems() {
-            return cart.reduce((total, item) => total + item.quantity, 0);
-        }
-
-        function getTotalAmount() {
-            return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-        }
-
-
-        // ERROR HANDLING
-
-
-        window.addEventListener('error', function (e) {
-            console.error('Global error:', e.error);
-            showNotification('An unexpected error occurred', 'error');
-        });
-
-        window.addEventListener('unhandledrejection', function (e) {
-            console.error('Unhandled promise rejection:', e.reason);
-            showNotification('An unexpected error occurred', 'error');
-        });
-
-        // window.NavRangApp = {
-        //     products,
-        //     cart,
-        //     addToCart,
-        //     removeFromCart,
-        //     updateQuantity,
-        //     checkout,
-        //     toggleCart
-        // };
     </script>
 </body>
 
