@@ -1,63 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NavRang - Divine Premium Collection</title>
-    <link rel="icon" type="image/png" href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
+    <link rel="icon" type="image/png"
+        href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- Divine Animated Background -->
     <div class="divine-bg"></div>
 
     <!-- Header -->
-   <header>
-    <div class="container">
-        <nav>
-            <a href="#home" class="logo">NavRang</a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#products">Collection</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <div class="nav-actions">
-                <!-- User Section -->
-                <div class="user-section">
-                    <!-- For guests -->
-                    <div class="auth-buttons">
-                        <a href="index.html" class="login-btn">Login</a>
-                        <a href="signup.html" class="signup-btn">Sign Up</a>
-                    </div>
-                    
-                    <!-- For logged-in users -->
-                    <div class="user-info" style="display: none;">
-                        <span class="user-greeting">🕉️ Welcome, <span id="userNameDisplay">Sacred Soul</span></span>
-                        <div class="user-dropdown">
-                            <button class="user-menu-btn" onclick="toggleUserMenu()">
-                                <span class="user-initial" id="userInitial">S</span>
-                                <span class="dropdown-arrow">▼</span>
-                            </button>
-                            <div class="user-dropdown-menu" id="userDropdownMenu">
-                                <!-- Dropdown content here -->
-                            </div>
-                            <div>
-                                <a href="cart.html" class="cart-icon user-only" style="display: none;">
-    🛒 Cart <span class="cart-count">0</span>
-</a>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#home" class="logo">NavRang</a>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products">Collection</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <!-- User Section -->
+                    <div class="user-section">
+                        <!-- For guests -->
+                        <div class="auth-buttons">
+                            <a href="index.html" class="login-btn">Login</a>
+                            <a href="signup.html" class="signup-btn">Sign Up</a>
+                        </div>
+
+                        <!-- For logged-in users -->
+                        <div class="user-info" style="display: none;">
+                            <span class="user-greeting">🕉️ Welcome, <span id="userNameDisplay">Sacred
+                                    Soul</span></span>
+                            <div class="user-dropdown">
+                                <button class="user-menu-btn" onclick="toggleUserMenu()">
+                                    <span class="user-initial" id="userInitial">S</span>
+                                    <span class="dropdown-arrow">▼</span>
+                                </button>
+                                <div class="user-dropdown-menu" id="userDropdownMenu">
+                                    <!-- Dropdown content here -->
+                                </div>
+                                <div>
+                                    <a href="cart.html" class="cart-icon user-only" style="display: none;">
+                                        🛒 Cart <span class="cart-count">0</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Cart Icon -->
+
+
                 </div>
-                
-                <!-- Cart Icon -->
-
-
-            </div>
-        </nav>
-    </div>
-</header>
+            </nav>
+        </div>
+    </header>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
@@ -65,7 +69,8 @@
             <div class="hero-content">
                 <h1>NavRang</h1>
                 <h2 class="hero-subtitle">Sacred Navratri Collection</h2>
-                <p>Celebrate the nine divine nights with our premium collection of traditional attire, jewelry, and sacred accessories. Each piece is blessed with the essence of Maa Durga's nine forms.</p>
+                <p>Celebrate the nine divine nights with our premium collection of traditional attire, jewelry, and
+                    sacred accessories. Each piece is blessed with the essence of Maa Durga's nine forms.</p>
                 <div class="cta-group">
                     <button class="cta-primary" onclick="scrollToProducts()">Explore Collection</button>
                     <button class="cta-secondary">Learn More</button>
@@ -79,9 +84,10 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Divine Collection</h2>
-                <p class="section-description">Nine sacred pieces for nine divine nights. Each item blessed with the colors and essence of Navratri goddesses.</p>
+                <p class="section-description">Nine sacred pieces for nine divine nights. Each item blessed with the
+                    colors and essence of Navratri goddesses.</p>
             </div>
-            
+
             <div class="products-grid" id="productsGrid">
                 <!-- Products will be dynamically generated -->
             </div>
@@ -95,22 +101,25 @@
                 <h2 class="section-title">What Our Customers Say</h2>
                 <p class="section-description">Blessed words from our devotees</p>
             </div>
-            
+
             <div class="testimonials-grid">
                 <div class="testimonial-card">
-                    <p class="testimonial-text">"The quality is absolutely divine! I felt blessed wearing these pieces during Navratri. The colors are so vibrant and true to tradition."</p>
+                    <p class="testimonial-text">"The quality is absolutely divine! I felt blessed wearing these pieces
+                        during Navratri. The colors are so vibrant and true to tradition."</p>
                     <p class="testimonial-author">- Priya Sharma</p>
                     <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
                 </div>
-                
+
                 <div class="testimonial-card">
-                    <p class="testimonial-text">"Luxe Navratri transformed my celebration. Each piece tells a story of devotion and craftsmanship. Highly recommended!"</p>
+                    <p class="testimonial-text">"Luxe Navratri transformed my celebration. Each piece tells a story of
+                        devotion and craftsmanship. Highly recommended!"</p>
                     <p class="testimonial-author">- Rajesh Patel</p>
                     <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
                 </div>
-                
+
                 <div class="testimonial-card">
-                    <p class="testimonial-text">"The premium collection is worth every rupee. The attention to detail and spiritual significance is unmatched."</p>
+                    <p class="testimonial-text">"The premium collection is worth every rupee. The attention to detail
+                        and spiritual significance is unmatched."</p>
                     <p class="testimonial-author">- Meera Gupta</p>
                     <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
                 </div>
@@ -141,7 +150,8 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Luxe Navratri</h3>
-                    <p>Celebrating divine traditions with premium quality and spiritual significance. Our mission is to bring the sacred essence of Navratri to every devotee's celebration.</p>
+                    <p>Celebrating divine traditions with premium quality and spiritual significance. Our mission is to
+                        bring the sacred essence of Navratri to every devotee's celebration.</p>
                     <div class="social-links">
                         <a href="#" class="social-link">📘</a>
                         <a href="#" class="social-link">📷</a>
@@ -149,7 +159,7 @@
                         <a href="#" class="social-link">📺</a>
                     </div>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul>
@@ -160,7 +170,7 @@
                         <li>Contact Us</li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>Customer Care</h3>
                     <ul>
@@ -171,7 +181,7 @@
                         <li>Support</li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>Contact Us</h3>
                     <p>📧 hello@luxenavratri.com</p>
@@ -179,7 +189,7 @@
                     <p>📍 Mumbai, Maharashtra, India</p>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
                 <p>&copy; 2025 Luxe Navratri. All rights reserved.</p>
             </div>
@@ -190,202 +200,202 @@
 
     <script>
 
-// NAVRANG MAIN PAGE JAVASCRIPT
+        // NAVRANG MAIN PAGE JAVASCRIPT
 
 
-// Global Variables
-let products = [];
-let cart = [];
-let cartCount = 0;
+        // Global Variables
+        let products = [];
+        let cart = [];
+        let cartCount = 0;
 
 
-// INITIALIZATION
+        // INITIALIZATION
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
-});
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeApp();
+        });
 
-function initializeApp() {
-    checkUserLogin();
-    fetchProducts();
-    updateCartUI();
-    setupEventListeners();
-}
-
-function setupEventListeners() {
-    // Close cart when clicking outside
-    document.getElementById('cartModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            toggleCart();
-        }
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('userDropdownMenu');
-        const userMenuBtn = document.querySelector('.user-menu-btn');
-        
-        if (dropdown && userMenuBtn && !userMenuBtn.contains(event.target)) {
-            dropdown.style.display = 'none';
-        }
-    });
-}
-
-
-// USER AUTHENTICATION & SESSION MANAGEMENT
-
-
-function checkUserLogin() {
-    const userLoggedIn = localStorage.getItem('userLoggedIn');
-    const userName = localStorage.getItem('userName');
-    const authToken = localStorage.getItem('authToken');
-
-    if (userLoggedIn === 'true' && authToken) {
-        updateUIForLoggedInUser(userName);
-    } else {
-        updateUIForGuestUser();
-    }
-}
-
-function updateUIForLoggedInUser(userName) {
-    const authButtons = document.querySelector('.auth-buttons');
-    if (authButtons) authButtons.style.display = 'none';
-
-    const userInfo = document.querySelector('.user-info');
-    if (userInfo) {
-        userInfo.style.display = 'flex';
-
-        const userInitial = document.getElementById('userInitial');
-        const userNameDisplay = document.getElementById('userNameDisplay');
-        if (userInitial) userInitial.textContent = userName?.charAt(0).toUpperCase() || 'S';
-        if (userNameDisplay) userNameDisplay.textContent = userName || 'Sacred Soul';
-    }
-
-    showUserFeatures();
-}
-
-function updateUIForGuestUser() {
-    const authButtons = document.querySelector('.auth-buttons');
-    if (authButtons) authButtons.style.display = 'flex';
-
-    const userInfo = document.querySelector('.user-info');
-    if (userInfo) userInfo.style.display = 'none';
-
-    hideUserFeatures();
-}
-
-
-function showUserFeatures() {
-    const userOnlyElements = document.querySelectorAll('.user-only');
-    userOnlyElements.forEach(element => {
-        element.style.display = 'block';
-    });
-}
-
-function hideUserFeatures() {
-    const userOnlyElements = document.querySelectorAll('.user-only');
-    userOnlyElements.forEach(element => {
-        element.style.display = 'none';
-    });
-}
-
-
-// USER MENU FUNCTIONS
-
-
-function toggleUserMenu() {
-    const dropdown = document.getElementById('userDropdownMenu');
-    if (dropdown) {
-        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-    }
-}
-
-function viewProfile() {
-    toggleUserMenu();
-    showNotification('Profile page coming soon! 👤');
-}
-
-function viewOrders() {
-    toggleUserMenu();
-    showNotification('Orders page coming soon! 📦');
-}
-
-function viewWishlist() {
-    toggleUserMenu();
-    showNotification('Wishlist page coming soon! 💖');
-}
-
-function logout() {
-    const confirmLogout = confirm('Are you sure you want to logout?');
-    if (confirmLogout) {
-        // Clear all user data
-        localStorage.removeItem('userLoggedIn');
-        localStorage.removeItem('userName');
-        localStorage.removeItem('userEmail');
-        localStorage.removeItem('userPhone');
-        localStorage.removeItem('authToken');
-        
-        // Clear cart
-        cart = [];
-        updateCartUI();
-        
-        // Update UI
-        updateUIForGuestUser();
-        showNotification('Logged out successfully! 🕉️');
-    }
-}
-
-
-// NAVIGATION FUNCTIONS
-
-
-function redirectToLogin() {
-    window.location.href = 'login.html';
-}
-
-function redirectToSignup() {
-    window.location.href = 'index.html';
-}
-
-function scrollToProducts() {
-    document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
-}
-
-
-// PRODUCT MANAGEMENT
-
-
-async function fetchProducts() {
-    try {
-        showLoadingState();
-        const response = await fetch('https://navrang-backend.onrender.com/api/get-items');
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        function initializeApp() {
+            checkUserLogin();
+            fetchProducts();
+            updateCartUI();
+            setupEventListeners();
         }
 
-        products = await response.json();
-        renderProducts();
-        hideLoadingState();
-    } catch (error) {
-        console.error('Error fetching products:', error);
-        hideLoadingState();
-        showNotification('Failed to load products. Please try again later.', 'error');
-        renderErrorState();
-    }
-}
+        function setupEventListeners() {
+            // Close cart when clicking outside
+            document.getElementById('cartModal').addEventListener('click', function (e) {
+                if (e.target === this) {
+                    toggleCart();
+                }
+            });
 
-function renderProducts() {
-    const grid = document.getElementById('productsGrid');
-    if (!grid) return;
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function (event) {
+                const dropdown = document.getElementById('userDropdownMenu');
+                const userMenuBtn = document.querySelector('.user-menu-btn');
 
-    if (products.length === 0) {
-        grid.innerHTML = '<div class="no-products">No products available at the moment.</div>';
-        return;
-    }
+                if (dropdown && userMenuBtn && !userMenuBtn.contains(event.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
 
-    grid.innerHTML = products.map(product => `
+
+        // USER AUTHENTICATION & SESSION MANAGEMENT
+
+
+        function checkUserLogin() {
+            const userLoggedIn = localStorage.getItem('userLoggedIn');
+            const userName = localStorage.getItem('userName');
+            const authToken = localStorage.getItem('authToken');
+
+            if (userLoggedIn === 'true' && authToken) {
+                updateUIForLoggedInUser(userName);
+            } else {
+                updateUIForGuestUser();
+            }
+        }
+
+        function updateUIForLoggedInUser(userName) {
+            const authButtons = document.querySelector('.auth-buttons');
+            if (authButtons) authButtons.style.display = 'none';
+
+            const userInfo = document.querySelector('.user-info');
+            if (userInfo) {
+                userInfo.style.display = 'flex';
+
+                const userInitial = document.getElementById('userInitial');
+                const userNameDisplay = document.getElementById('userNameDisplay');
+                if (userInitial) userInitial.textContent = userName?.charAt(0).toUpperCase() || 'S';
+                if (userNameDisplay) userNameDisplay.textContent = userName || 'Sacred Soul';
+            }
+
+            showUserFeatures();
+        }
+
+        function updateUIForGuestUser() {
+            const authButtons = document.querySelector('.auth-buttons');
+            if (authButtons) authButtons.style.display = 'flex';
+
+            const userInfo = document.querySelector('.user-info');
+            if (userInfo) userInfo.style.display = 'none';
+
+            hideUserFeatures();
+        }
+
+
+        function showUserFeatures() {
+            const userOnlyElements = document.querySelectorAll('.user-only');
+            userOnlyElements.forEach(element => {
+                element.style.display = 'block';
+            });
+        }
+
+        function hideUserFeatures() {
+            const userOnlyElements = document.querySelectorAll('.user-only');
+            userOnlyElements.forEach(element => {
+                element.style.display = 'none';
+            });
+        }
+
+
+        // USER MENU FUNCTIONS
+
+
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdownMenu');
+            if (dropdown) {
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            }
+        }
+
+        function viewProfile() {
+            toggleUserMenu();
+            showNotification('Profile page coming soon! 👤');
+        }
+
+        function viewOrders() {
+            toggleUserMenu();
+            showNotification('Orders page coming soon! 📦');
+        }
+
+        function viewWishlist() {
+            toggleUserMenu();
+            showNotification('Wishlist page coming soon! 💖');
+        }
+
+        function logout() {
+            const confirmLogout = confirm('Are you sure you want to logout?');
+            if (confirmLogout) {
+                // Clear all user data
+                localStorage.removeItem('userLoggedIn');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userPhone');
+                localStorage.removeItem('authToken');
+
+                // Clear cart
+                cart = [];
+                updateCartUI();
+
+                // Update UI
+                updateUIForGuestUser();
+                showNotification('Logged out successfully! 🕉️');
+            }
+        }
+
+
+        // NAVIGATION FUNCTIONS
+
+
+        function redirectToLogin() {
+            window.location.href = 'login.html';
+        }
+
+        function redirectToSignup() {
+            window.location.href = 'index.html';
+        }
+
+        function scrollToProducts() {
+            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        }
+
+
+        // PRODUCT MANAGEMENT
+
+
+        async function fetchProducts() {
+            try {
+                showLoadingState();
+                const response = await fetch('https://navrang-backend.onrender.com/api/get-items');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                products = await response.json();
+                renderProducts();
+                hideLoadingState();
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                hideLoadingState();
+                showNotification('Failed to load products. Please try again later.', 'error');
+                renderErrorState();
+            }
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            if (!grid) return;
+
+            if (products.length === 0) {
+                grid.innerHTML = '<div class="no-products">No products available at the moment.</div>';
+                return;
+            }
+
+            grid.innerHTML = products.map(product => `
         <div class="product-card" data-product-id="${product.id}">
             <div class="product-image">
                 <img src="${product.image}" alt="${product.name}" loading="lazy" />
@@ -402,77 +412,78 @@ function renderProducts() {
                 <ul class="product-features">
                     ${product.features ? product.features.map(feature => `<li>${feature}</li>`).join('') : ''}
                 </ul>
-                <button class="add-to-cart" onclick="addToCart(${product.id})">
-                    Add to Sacred Cart
-                </button>
+                <button 
+  class="add-to-cart" 
+  data-id="${product.id}"
+  data-name="${product.name}"
+  data-price="${product.price}"
+  data-image="${product.image}"
+  data-description="${product.description || ''}"
+  onclick="handleAddToCart(this)"
+>
+  Add to Sacred Cart
+</button>
+
             </div>
         </div>
     `).join('');
-}
+        }
 
-function showLoadingState() {
-    const grid = document.getElementById('productsGrid');
-    if (grid) {
-        grid.innerHTML = '<div class="loading">Loading divine collection... 🕉️</div>';
-    }
-}
+        function showLoadingState() {
+            const grid = document.getElementById('productsGrid');
+            if (grid) {
+                grid.innerHTML = '<div sty class="loading">Loading divine collection... 🕉️</div>';
+            }
+        }
 
-function hideLoadingState() {
-    // Loading state is automatically hidden when products are rendered
-}
+        function hideLoadingState() {
+            // Loading state is automatically hidden when products are rendered
+        }
 
-function renderErrorState() {
-    const grid = document.getElementById('productsGrid');
-    if (grid) {
-        grid.innerHTML = `
+        function renderErrorState() {
+            const grid = document.getElementById('productsGrid');
+            if (grid) {
+                grid.innerHTML = `
             <div class="error-state">
                 <p>Unable to load products. Please try again.</p>
                 <button onclick="fetchProducts()" class="retry-btn">Retry</button>
             </div>
         `;
-    }
-}
+            }
+        }
 
 
-// CART MANAGEMENT
+        // CART MANAGEMENT
 
-function goToCartPage() {
-    const userLoggedIn = localStorage.getItem('userLoggedIn');
-    if (userLoggedIn === 'true') {
-        window.location.href = 'cart.html';
-    } else {
-        showNotification('Please login to view your cart.', 'error');
-    }
-}
+        function goToCartPage() {
+            const userLoggedIn = localStorage.getItem('userLoggedIn');
+            if (userLoggedIn === 'true') {
+                window.location.href = 'cart.html';
+            } else {
+                showNotification('Please login to view your cart.', 'error');
+            }
+        }
 
-function addToCart(productId) {
-    const userLoggedIn = localStorage.getItem('userLoggedIn');
-    if (userLoggedIn !== 'true') {
-        const shouldLogin = confirm('Please login to add items to cart. Would you like to login now?');
-        if (shouldLogin) redirectToLogin();
-        return;
-    }
+    function addToCartFromButton(button) {
+    const product = {
+        id: Number(button.dataset.id),
+        name: button.dataset.name,
+        price: Number(button.dataset.price),
+        image: button.dataset.image,
+        description: button.dataset.description,
+        quantity: 1
+    };
 
-    const product = products.find(p => p.id === productId);
-    if (!product) {
-        showNotification('Product not found!', 'error');
-        return;
-    }
-
-    // Get current cart from localStorage
     let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
-    const existingItem = cartItems.find(item => item.id === productId);
+    const existingItem = cartItems.find(item => item.id === product.id);
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cartItems.push({ ...product, quantity: 1 });
+        cartItems.push(product);
     }
 
-    // Save back to localStorage
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
-
-    // Also update UI
     updateCartUI();
     showNotification(`${product.name} added to cart! 🛒`);
     animateCartIcon();
@@ -480,42 +491,43 @@ function addToCart(productId) {
 
 
 
-function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
-    updateCartUI();
-    showNotification('Item removed from cart');
-}
 
-function updateQuantity(productId, change) {
-    const item = cart.find(item => item.id === productId);
-    if (item) {
-        item.quantity += change;
-        if (item.quantity <= 0) {
-            removeFromCart(productId);
-        } else {
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
             updateCartUI();
+            showNotification('Item removed from cart');
         }
-    }
-}
 
-function updateCartUI() {
-    cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-    const cartCountElement = document.querySelector('.cart-count');
-    if (cartCountElement) {
-        cartCountElement.textContent = cartCount;
-    }
-    
-    updateCartModal();
-}
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartUI();
+                }
+            }
+        }
 
-function updateCartModal() {
-    const cartItems = document.getElementById('cartItems');
-    const totalAmount = document.getElementById('totalAmount');
-    
-    if (!cartItems || !totalAmount) return;
-    
-    if (cart.length === 0) {
-        cartItems.innerHTML = `
+        function updateCartUI() {
+            cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            const cartCountElement = document.querySelector('.cart-count');
+            if (cartCountElement) {
+                cartCountElement.textContent = cartCount;
+            }
+
+            updateCartModal();
+        }
+
+        function updateCartModal() {
+            const cartItems = document.getElementById('cartItems');
+            const totalAmount = document.getElementById('totalAmount');
+
+            if (!cartItems || !totalAmount) return;
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
             <div class="empty-cart">
                 <p>Your sacred cart is empty</p>
                 <button onclick="toggleCart(); scrollToProducts();" class="continue-shopping">
@@ -523,11 +535,11 @@ function updateCartModal() {
                 </button>
             </div>
         `;
-        totalAmount.textContent = '₹0';
-        return;
-    }
-    
-    cartItems.innerHTML = cart.map(item => `
+                totalAmount.textContent = '₹0';
+                return;
+            }
+
+            cartItems.innerHTML = cart.map(item => `
         <div class="cart-item">
             <div class="cart-item-image">
                 <img src="${item.image}" alt="${item.name}" />
@@ -544,114 +556,114 @@ function updateCartModal() {
             <button class="remove-item" onclick="removeFromCart(${item.id})">×</button>
         </div>
     `).join('');
-    
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    totalAmount.textContent = `₹${total.toLocaleString()}`;
-}
 
-function toggleCart() {
-    const modal = document.getElementById('cartModal');
-    if (modal) {
-        modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
-        if (modal.style.display === 'block') {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
-        }
-    }
-}
-
-function animateCartIcon() {
-    const cartIcon = document.querySelector('.cart-icon');
-    if (cartIcon) {
-        cartIcon.style.animation = 'bounce 0.3s ease';
-        setTimeout(() => {
-            cartIcon.style.animation = '';
-        }, 300);
-    }
-}
-
-
-// CHECKOUT PROCESS
-
-
-async function checkout() {
-    const userLoggedIn = localStorage.getItem('userLoggedIn');
-    const authToken = localStorage.getItem('authToken');
-    const userName = localStorage.getItem('userName');
-    const userEmail = localStorage.getItem('userEmail');
-
-    // Validate user authentication
-    if (userLoggedIn !== 'true' || !authToken) {
-        showNotification('Please login to proceed with checkout', 'error');
-        redirectToLogin();
-        return;
-    }
-
-    // Validate cart
-    if (cart.length === 0) {
-        showNotification('Your cart is empty!', 'error');
-        return;
-    }
-
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-    // Show loading state
-    const checkoutBtn = document.querySelector('.checkout-btn');
-    if (checkoutBtn) {
-        checkoutBtn.disabled = true;
-        checkoutBtn.textContent = 'Processing...';
-    }
-
-    try {
-        const response = await fetch('https://navrang-backend.onrender.com/api/create-order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`
-            },
-            body: JSON.stringify({
-                userName: userName,
-                userEmail: userEmail,
-                cart: cart,
-                totalAmount: total
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`Order failed with status: ${response.status}`);
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            totalAmount.textContent = `₹${total.toLocaleString()}`;
         }
 
-        const data = await response.json();
-        console.log('Order successful:', data);
-        
-        // Success handling
-        showNotification('Your sacred order was placed successfully! 🪔');
-        
-        // Clear cart and close modal
-        cart = [];
-        updateCartUI();
-        toggleCart();
-        
-        // Show order confirmation
-        showOrderConfirmation(data);
-        
-    } catch (error) {
-        console.error('Checkout error:', error);
-        showNotification('Checkout failed. Please try again.', 'error');
-    } finally {
-        // Reset checkout button
-        if (checkoutBtn) {
-            checkoutBtn.disabled = false;
-            checkoutBtn.textContent = 'Proceed to Checkout';
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            if (modal) {
+                modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+                if (modal.style.display === 'block') {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = 'auto';
+                }
+            }
         }
-    }
-}
 
-function showOrderConfirmation(orderData) {
-    const modal = document.createElement('div');
-    modal.className = 'order-confirmation-modal';
-    modal.innerHTML = `
+        function animateCartIcon() {
+            const cartIcon = document.querySelector('.cart-icon');
+            if (cartIcon) {
+                cartIcon.style.animation = 'bounce 0.3s ease';
+                setTimeout(() => {
+                    cartIcon.style.animation = '';
+                }, 300);
+            }
+        }
+
+
+        // CHECKOUT PROCESS
+
+
+        async function checkout() {
+            const userLoggedIn = localStorage.getItem('userLoggedIn');
+            const authToken = localStorage.getItem('authToken');
+            const userName = localStorage.getItem('userName');
+            const userEmail = localStorage.getItem('userEmail');
+
+            // Validate user authentication
+            if (userLoggedIn !== 'true' || !authToken) {
+                showNotification('Please login to proceed with checkout', 'error');
+                redirectToLogin();
+                return;
+            }
+
+            // Validate cart
+            if (cart.length === 0) {
+                showNotification('Your cart is empty!', 'error');
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            // Show loading state
+            const checkoutBtn = document.querySelector('.checkout-btn');
+            if (checkoutBtn) {
+                checkoutBtn.disabled = true;
+                checkoutBtn.textContent = 'Processing...';
+            }
+
+            try {
+                const response = await fetch('https://navrang-backend.onrender.com/api/create-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        userName: userName,
+                        userEmail: userEmail,
+                        cart: cart,
+                        totalAmount: total
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Order failed with status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Order successful:', data);
+
+                // Success handling
+                showNotification('Your sacred order was placed successfully! 🪔');
+
+                // Clear cart and close modal
+                cart = [];
+                updateCartUI();
+                toggleCart();
+
+                // Show order confirmation
+                showOrderConfirmation(data);
+
+            } catch (error) {
+                console.error('Checkout error:', error);
+                showNotification('Checkout failed. Please try again.', 'error');
+            } finally {
+                // Reset checkout button
+                if (checkoutBtn) {
+                    checkoutBtn.disabled = false;
+                    checkoutBtn.textContent = 'Proceed to Checkout';
+                }
+            }
+        }
+
+        function showOrderConfirmation(orderData) {
+            const modal = document.createElement('div');
+            modal.className = 'order-confirmation-modal';
+            modal.innerHTML = `
         <div class="order-confirmation-content">
             <div class="success-icon">✅</div>
             <h2>Order Confirmed!</h2>
@@ -662,30 +674,30 @@ function showOrderConfirmation(orderData) {
             </button>
         </div>
     `;
-    
-    document.body.appendChild(modal);
-    setTimeout(() => modal.classList.add('show'), 10);
-}
 
-function closeOrderConfirmation() {
-    const modal = document.querySelector('.order-confirmation-modal');
-    if (modal) {
-        modal.classList.remove('show');
-        setTimeout(() => modal.remove(), 300);
-    }
-}
+            document.body.appendChild(modal);
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
 
-
-// NOTIFICATION SYSTEM
+        function closeOrderConfirmation() {
+            const modal = document.querySelector('.order-confirmation-modal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => modal.remove(), 300);
+            }
+        }
 
 
-function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    
-    const bgColor = type === 'success' ? 'var(--gradient-royal)' : 'var(--day6-red)';
-    
-    notification.style.cssText = `
+        // NOTIFICATION SYSTEM
+
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+
+            const bgColor = type === 'success' ? 'var(--gradient-royal)' : 'var(--day6-red)';
+
+            notification.style.cssText = `
         position: fixed;
         top: 100px;
         right: 30px;
@@ -700,72 +712,73 @@ function showNotification(message, type = 'success') {
         transform: translateX(100%);
         transition: transform 0.3s ease;
     `;
-    
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    
-    // Animate in
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 10);
-    
-    // Remove notification
-    setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
-}
+
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+
+            // Remove notification
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
 
 
-// UTILITY FUNCTIONS
+        // UTILITY FUNCTIONS
 
 
-function simulateLogin() {
-    localStorage.setItem('userLoggedIn', 'true');
-    localStorage.setItem('userName', 'Priya Sharma');
-    localStorage.setItem('userEmail', 'priya@example.com');
-    localStorage.setItem('authToken', 'demo-token-123');
-    checkUserLogin();
-    showNotification('Welcome back, Priya! 🕉️');
-}
+        function simulateLogin() {
+            localStorage.setItem('userLoggedIn', 'true');
+            localStorage.setItem('userName', 'Priya Sharma');
+            localStorage.setItem('userEmail', 'priya@example.com');
+            localStorage.setItem('authToken', 'demo-token-123');
+            checkUserLogin();
+            showNotification('Welcome back, Priya! 🕉️');
+        }
 
-function clearCart() {
-    cart = [];
-    updateCartUI();
-    showNotification('Cart cleared');
-}
+        function clearCart() {
+            cart = [];
+            updateCartUI();
+            showNotification('Cart cleared');
+        }
 
-function getTotalItems() {
-    return cart.reduce((total, item) => total + item.quantity, 0);
-}
+        function getTotalItems() {
+            return cart.reduce((total, item) => total + item.quantity, 0);
+        }
 
-function getTotalAmount() {
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-}
-
-
-// ERROR HANDLING
+        function getTotalAmount() {
+            return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+        }
 
 
-window.addEventListener('error', function(e) {
-    console.error('Global error:', e.error);
-    showNotification('An unexpected error occurred', 'error');
-});
+        // ERROR HANDLING
 
-window.addEventListener('unhandledrejection', function(e) {
-    console.error('Unhandled promise rejection:', e.reason);
-    showNotification('An unexpected error occurred', 'error');
-});
 
-// window.NavRangApp = {
-//     products,
-//     cart,
-//     addToCart,
-//     removeFromCart,
-//     updateQuantity,
-//     checkout,
-//     toggleCart
-// };
+        window.addEventListener('error', function (e) {
+            console.error('Global error:', e.error);
+            showNotification('An unexpected error occurred', 'error');
+        });
+
+        window.addEventListener('unhandledrejection', function (e) {
+            console.error('Unhandled promise rejection:', e.reason);
+            showNotification('An unexpected error occurred', 'error');
+        });
+
+        // window.NavRangApp = {
+        //     products,
+        //     cart,
+        //     addToCart,
+        //     removeFromCart,
+        //     updateQuantity,
+        //     checkout,
+        //     toggleCart
+        // };
     </script>
 </body>
+
 </html>
