@@ -433,6 +433,15 @@
             renderCartItems();
         }
 
+        function checkAuthentication() {
+    return localStorage.getItem('userLoggedIn') === 'true';
+}
+
+window.onload = function() {
+    loadCartItems();
+};
+
+
         function renderCartItems() {
             const cartContainer = document.getElementById('cartItems');
             

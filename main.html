@@ -42,14 +42,17 @@
                             <div class="user-dropdown-menu" id="userDropdownMenu">
                                 <!-- Dropdown content here -->
                             </div>
+                            <div>
+                                <a href="cart.html" class="cart-icon user-only" style="display: none;">
+    🛒 Cart <span class="cart-count">0</span>
+</a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Cart Icon -->
-<a href="cart.html" class="cart-icon user-only" style="display: none;">
-    🛒 Cart <span class="cart-count">0</span>
-</a>
+
 
             </div>
         </nav>
@@ -442,38 +445,40 @@ function goToCartPage() {
     }
 }
 
-
 function addToCart(productId) {
     const userLoggedIn = localStorage.getItem('userLoggedIn');
-    
     if (userLoggedIn !== 'true') {
         const shouldLogin = confirm('Please login to add items to cart. Would you like to login now?');
-        if (shouldLogin) {
-            redirectToLogin();
-        }
+        if (shouldLogin) redirectToLogin();
         return;
     }
-    
+
     const product = products.find(p => p.id === productId);
     if (!product) {
         showNotification('Product not found!', 'error');
         return;
     }
 
-    const existingItem = cart.find(item => item.id === productId);
-    
+    // Get current cart from localStorage
+    let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+    const existingItem = cartItems.find(item => item.id === productId);
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({...product, quantity: 1});
+        cartItems.push({ ...product, quantity: 1 });
     }
-    
+
+    // Save back to localStorage
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+    // Also update UI
     updateCartUI();
     showNotification(`${product.name} added to cart! 🛒`);
-    
-    // Add visual feedback
     animateCartIcon();
 }
+
+
 
 function removeFromCart(productId) {
     cart = cart.filter(item => item.id !== productId);
