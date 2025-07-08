@@ -7,6 +7,8 @@
     <title>NavRang | Checkout</title>
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- Axios CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
@@ -917,18 +919,16 @@
             const token = localStorage.getItem('authToken');
             if (!token) throw new Error('Authentication token not found');
 
-            const response = await fetch(`${API_BASE_URL}/update-address`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(addressData)
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            try {
+                const response = await axios.patch(`${API_BASE_URL}/update-address`, addressData, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                // No specific return value needed, success is implied if no error
+            } catch (error) {
+                throw new Error(error.response?.data?.message || `HTTP error! status: ${error.response?.status}`);
             }
         }
 
@@ -996,24 +996,23 @@
                 quantity: item.quantity
             }));
             
-            const response = await fetch(`${API_BASE_URL}/create-order`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ productDetails, isCOD })
-            });
+            try {
+                const response = await axios.post(`${API_BASE_URL}/create-order`, { productDetails, isCOD }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
 
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.error || 'Failed to create order');
+                currentOrderId = response.data.orderId;
 
-            currentOrderId = result.orderId;
-
-            if (isCOD) {
-                handleSuccessfulOrder('Order placed successfully! 🎉');
-            } else {
-                initiateRazorpayPayment(result.razorpayOrder);
+                if (isCOD) {
+                    handleSuccessfulOrder('Order placed successfully! 🎉');
+                } else {
+                    initiateRazorpayPayment(response.data.razorpayOrder);
+                }
+            } catch (error) {
+                throw new Error(error.response?.data?.error || 'Failed to create order');
             }
         }
         
@@ -1039,26 +1038,23 @@
             const token = localStorage.getItem('authToken');
             if (!token) throw new Error('Authentication token not found');
 
-            const response = await fetch(`${API_BASE_URL}/verify-payment`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
+            try {
+                const response = await axios.post(`${API_BASE_URL}/verify-payment`, {
                     razorpay_order_id: paymentResponse.razorpay_order_id,
                     razorpay_payment_id: paymentResponse.razorpay_payment_id,
                     razorpay_signature: paymentResponse.razorpay_signature,
                     orderId: currentOrderId
-                })
-            });
-            
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Payment verification failed.');
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                handleSuccessfulOrder('Payment successful! Order confirmed 🎉');
+            } catch (error) {
+                throw new Error(error.response?.data?.error || 'Payment verification failed.');
             }
-            
-            handleSuccessfulOrder('Payment successful! Order confirmed 🎉');
         }
 
         function handleSuccessfulOrder(message) {
