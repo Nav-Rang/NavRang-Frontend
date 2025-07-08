@@ -5,10 +5,20 @@
 
 [[redirects]]
   from = "/cart"
-  to = "/index.html"
+  to = "/cart.html"
   status = 200
 
 [[redirects]]
   from = "/signup"
-  to = "/index.html"
+  to = "/signup.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/userDetails"
+  to = "/userDetails.html"
   status = 200
