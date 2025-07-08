@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NavRang | Sign Up</title>
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
+    <!-- Axios CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
@@ -521,90 +523,59 @@
 
         async function sendOTP(email) {
             try {
-                const response = await fetch('https://navrang-backend.onrender.com/api/sendOTP', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email: email })
-                });
-                
-                const data = await response.json();
-                
+                const response = await axios.post('https://navrang-backend.onrender.com/api/sendOTP', { email: email });
                 return { 
-                    success: response.ok, 
-                    message: data.message || (response.ok ? 'OTP sent successfully' : 'Failed to send OTP'),
+                    success: true, 
+                    message: response.data.message || 'OTP sent successfully',
                     status: response.status
                 };
             } catch (error) {
                 return { 
                     success: false, 
-                    message: 'Network error. Please try again.',
-                    status: 500
+                    message: error.response?.data?.message || 'Network error. Please try again.',
+                    status: error.response?.status || 500
                 };
             }
         }
        
        async function verifyOTP(email, otp) {
             try {
-                const response = await fetch('https://navrang-backend.onrender.com/api/verifyOTP', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email: email, otp: otp })
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.token) {
-                    return {
-                        success: true,
-                        message: data.message || 'OTP verified successfully',
-                        authToken: data.token,
-                        status: response.status
-                    };
-                } else {
-                    return {
-                        success: false,
-                        message: data.message || 'Invalid OTP',
-                        status: response.status
-                    };
-                }
+                const response = await axios.post('https://navrang-backend.onrender.com/api/verifyOTP', { email: email, otp: otp });
+                return {
+                    success: true,
+                    message: response.data.message || 'OTP verified successfully',
+                    authToken: response.data.token,
+                    status: response.status
+                };
             } catch (error) {
                 return {
                     success: false,
-                    message: 'Network error. Please try again.',
-                    status: 500
+                    message: error.response?.data?.message || 'Invalid OTP',
+                    status: error.response?.status || 500
                 };
             }
         }
 
         async function createUser(userData) {
             try {
-                const response = await fetch('https://navrang-backend.onrender.com/api/update-user-details', {
-                    method: 'PATCH',
+                const response = await axios.patch('https://navrang-backend.onrender.com/api/update-user-details', {
+                    email: userData.email,
+                    name: userData.name,
+                    phone: userData.phone
+                }, {
                     headers: {
-                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${userData.authToken}`
-                    },
-                    body: JSON.stringify({
-                        email: userData.email,
-                        name: userData.name,
-                        phone: userData.phone
-                    })
+                    }
                 });
                 
-                const data = await response.json();
-
                 return { 
-                    success: response.ok, 
-                    message: data.message || (response.ok ? 'User details updated successfully' : 'Failed to create account') 
+                    success: true, 
+                    message: response.data.message || 'User details updated successfully' 
                 };
             } catch (error) {
                 return { 
                     success: false, 
-                    message: 'Network error. Please try again.' 
+                    message: error.response?.data?.message || 'Network error. Please try again.' 
                 };
             }
         }
@@ -778,7 +749,7 @@
                 localStorage.setItem('authToken', userData.authToken);
                 
                 setTimeout(() => {
-                    window.location.href = 'main.html';
+                    window.location.href = 'main.html'; // Assuming 'main.html' is the main page after signup
                 }, 2000);
             } else {
                 alert(result.message);
