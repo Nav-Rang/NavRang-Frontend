@@ -5,468 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NavRang | Login</title>
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
-    <!-- Axios CDN -->
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
-
-        :root {
-            --day1-yellow: #FFD700;
-            --day2-green: #228B22;
-            --day3-grey: #708090;
-            --day4-orange: #FF8C00;
-            --day5-white: #FFFFFF;
-            --day6-red: #DC143C;
-            --day7-blue: #4169E1;
-            --day8-pink: #FF69B4;
-            --day9-purple: #9932CC;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #2D1B69;
-        }
-
-        .auth-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            width: 100%;
-            max-width: 900px;
-            min-height: 600px;
-            display: flex;
-            animation: slideIn 0.6s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .auth-left {
-            flex: 1;
-            background: linear-gradient(135deg, var(--day7-blue), var(--day9-purple));
-            padding: 3rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .auth-left::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: float 25s linear infinite;
-        }
-
-        @keyframes float {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-  .subtle-wavy-underline {
-        position: relative;
-        display: inline-block;
-    }
-
-    .subtle-wavy-underline::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: -5px;
-        width: 100%;
-        height: 4px;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0,5 Q20,8 30,4 Q40,0 60,5 Q80,10 100,5' stroke='url(%23wavy-gradient)' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3ClinearGradient id='wavy-gradient' gradientUnits='userSpaceOnUse' x1='0' y1='0' x2='100' y2='0'%3E%3Cstop offset='0%25' stop-color='%23ff6b6b'/%3E%3Cstop offset='50%25' stop-color='%23a176ff'/%3E%3Cstop offset='100%25' stop-color='%234ecdc4'/%3E%3C/linearGradient%3E%3C/svg%3E");
-        background-size: 100% 100%;
-        opacity: 0.95;
-        filter: url('#roughpaper');
-    }
-
-        .sacred-logo {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .sacred-tagline {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .auth-illustration {
-            font-size: 6rem;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-        }
-
-        .auth-right {
-            flex: 1;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .auth-form {
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .form-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .form-title {
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--day9-purple);
-            margin-bottom: 0.5rem;
-        }
-
-        .form-subtitle {
-            color: var(--day3-grey);
-            font-size: 0.9rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--day9-purple);
-            font-size: 0.9rem;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.9rem 1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: #fafafa;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--day9-purple);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(153, 50, 204, 0.1);
-            transform: translateY(-1px);
-        }
-
-        .form-input.error {
-            border-color: var(--day6-red);
-            background: #fff5f5;
-            animation: shake 0.5s;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        .error-message {
-            color: var(--day6-red);
-            font-size: 0.8rem;
-            margin-top: 0.3rem;
-            display: none;
-        }
-
-        .form-input.error + .error-message {
-            display: block;
-        }
-
-        .auth-button {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, var(--day7-blue), var(--day9-purple));
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 1rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .auth-button:hover:not(:disabled) {
-            background: linear-gradient(135deg, Green, lightgreen);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(153, 50, 204, 0.3);
-        }
-
-        .auth-button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .auth-button.secondary {
-            background: #f8f9fa;
-            color: var(--day9-purple);
-            border: 2px solid var(--day9-purple);
-        }
-
-        .auth-button.secondary:hover:not(:disabled) {
-            background: var(--day9-purple);
-            color: white;
-        }
-
-        .auth-toggle {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: var(--day3-grey);
-        }
-
-        .auth-toggle a {
-            color: var(--day9-purple);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-
-        .auth-toggle a:hover {
-            color: var(--day6-red);
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            color: var(--day9-purple);
-            margin-top: 1rem;
-        }
-
-        .loading.active {
-            display: block;
-        }
-
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #e0e0e0;
-            border-top: 2px solid var(--day9-purple);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-right: 0.5rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .success-message {
-            background: linear-gradient(135deg, #d4edda, #c3e6cb);
-            color: var(--day2-green);
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-            border: 1px solid var(--day2-green);
-            display: none;
-        }
-
-        .success-message.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .error-alert {
-            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
-            color: var(--day6-red);
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-            border: 1px solid var(--day6-red);
-            display: none;
-        }
-
-        .error-alert.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .otp-container {
-            display: none;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        .otp-container.active {
-            display: block;
-        }
-
-        .otp-input-group {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-
-        .otp-input {
-            width: 50px;
-            height: 50px;
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: 600;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            background: #fafafa;
-            transition: all 0.3s ease;
-        }
-
-        .otp-input:focus {
-            outline: none;
-            border-color: var(--day9-purple);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(153, 50, 204, 0.1);
-        }
-
-        .otp-input.error {
-            border-color: var(--day6-red);
-            background: #fff5f5;
-        }
-
-        .otp-info {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            color: var(--day3-grey);
-            font-size: 0.9rem;
-        }
-
-        .otp-info .email {
-            color: var(--day9-purple);
-            font-weight: 600;
-        }
-
-        .resend-otp {
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        .resend-otp button {
-            background: none;
-            border: none;
-            color: var(--day9-purple);
-            text-decoration: underline;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-
-        .resend-otp button:hover:not(:disabled) {
-            color: var(--day6-red);
-        }
-
-        .resend-otp button:disabled {
-            color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .timer {
-            color: var(--day4-orange);
-            font-weight: 600;
-        }
-
-        .email-container {
-            animation: slideIn 0.5s ease-out;
-        }
-
-        .email-container.hidden {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            .auth-container {
-                flex-direction: column;
-                max-width: 400px;
-                margin: 1rem;
-            }
-
-            .auth-left {
-                padding: 2rem;
-                min-height: 200px;
-            }
-
-            .sacred-logo {
-                font-size: 2rem;
-            }
-
-            .auth-illustration {
-                font-size: 4rem;
-            }
-
-            .auth-right {
-                padding: 1.5rem;
-            }
-
-            .otp-input {
-                width: 45px;
-                height: 45px;
-                font-size: 1.2rem;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="auth-container">
         <div class="auth-left">
-            <div class="auth-illustration"><img height="200px" style="border-radius: 15px;" src="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png" alt="NavRang Logo"></div>
+            <div class="auth-illustration"><img height="200px" style="border-radius: 15px;" src="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png" alt=""></div>
             <h1 class="sacred-logo subtle-wavy-underline">NavRang</h1>
-            <p class="sacred-tagline">Welcome Back to Your Divine Journey</p>
+            <p class="sacred-tagline">Your Divine Shopping Destination</p>
         </div>
 
         <div class="auth-right">
@@ -476,296 +23,170 @@
                     <p class="form-subtitle">Login to your sacred account</p>
                 </div>
 
-                <div class="success-message" id="successMessage">
-                    Login successful! Redirecting to main page...
+                <div class="auth-options">
+                    <button id="otp-login-btn" class="active">Login with OTP</button>
+                    <button id="password-login-btn">Login with Password</button>
                 </div>
 
-                <div class="error-alert" id="errorAlert">
-                    Invalid credentials. Please try again.
-                </div>
-
-                <div class="email-container" id="emailContainer">
-                    <form id="emailForm">
-                        <div class="form-group">
-                            <label class="form-label" for="email">Email Address</label>
-                            <input type="email" id="email" class="form-input" placeholder="Enter your email address" required>
-                            <div class="error-message">Please enter a valid email address</div>
-                        </div>
-
-                        <button type="submit" class="auth-button" id="sendOtpBtn">Send OTP</button>
-                    </form>
-                </div>
-
-                <div class="otp-container" id="otpContainer">
-                    <div class="otp-info">
-                        We've sent a 6-digit OTP to <span class="email" id="displayEmail"></span>
-                    </div>
-
-                    <form id="otpForm">
-                        <div class="form-group">
-                            <label class="form-label">Enter OTP</label>
-                            <div class="otp-input-group">
-                                <input type="text" class="otp-input" maxlength="1" id="otp1">
-                                <input type="text" class="otp-input" maxlength="1" id="otp2">
-                                <input type="text" class="otp-input" maxlength="1" id="otp3">
-                                <input type="text" class="otp-input" maxlength="1" id="otp4">
-                                <input type="text" class="otp-input" maxlength="1" id="otp5">
-                                <input type="text" class="otp-input" maxlength="1" id="otp6">
+                <div id="otp-login-form">
+                    <div id="otpRequestStep">
+                        <form id="otpRequestForm">
+                            <div class="form-group">
+                                <label class="form-label" for="otp-email">Email Address</label>
+                                <input type="email" id="otp-email" class="form-input" placeholder="Enter your registered email" required>
                             </div>
-                            <div class="error-message" id="otpError">Invalid OTP. Please try again.</div>
-                        </div>
-
-                        <button type="submit" class="auth-button" id="verifyOtpBtn">Verify OTP</button>
-                        <button type="button" class="auth-button secondary" id="backToEmailBtn">Change Email</button>
-                    </form>
-
-                    <div class="resend-otp">
-                        <button type="button" id="resendOtpBtn" disabled>
-                            Resend OTP <span class="timer" id="timer">(60s)</span>
-                        </button>
+                            <button type="submit" class="auth-button">Send OTP</button>
+                        </form>
+                    </div>
+                    <div id="otpVerifyStep" style="display: none;">
+                        <form id="otpVerifyForm">
+                            <p class="form-subtitle" style="text-align:center; margin-bottom: 1rem;">An OTP has been sent to your email. Please enter it below.</p>
+                             <div class="form-group">
+                                <label class="form-label" for="otp-code">OTP Code</label>
+                                <input type="text" id="otp-code" class="form-input" placeholder="Enter the 6-digit OTP" required>
+                            </div>
+                            <button type="submit" class="auth-button">Verify & Login</button>
+                        </form>
                     </div>
                 </div>
 
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
-                    <span id="loadingText">Processing...</span>
+                <div id="password-login-form" style="display: none;">
+                    <form id="passwordForm">
+                        <div class="form-group">
+                            <label class="form-label" for="password-email">Email Address</label>
+                            <input type="email" id="password-email" class="form-input" placeholder="Enter your email address" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="password">Password</label>
+                            <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="auth-button">Login</button>
+                    </form>
                 </div>
-
-                <div class="auth-toggle">
-                    Don't have an account? <a href="signup.html">Sign up here</a>
+                
+                <div class="form-footer">
+                    <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let currentEmail = '';
-        let otpTimer = null;
-        let resendTimer = 60;
+        document.addEventListener('DOMContentLoaded', () => {
+            const otpLoginBtn = document.getElementById('otp-login-btn');
+            const passwordLoginBtn = document.getElementById('password-login-btn');
+            const otpFormContainer = document.getElementById('otp-login-form');
+            const passwordFormContainer = document.getElementById('password-login-form');
 
-        function validateEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
+            otpLoginBtn.addEventListener('click', () => {
+                otpFormContainer.style.display = 'block';
+                passwordFormContainer.style.display = 'none';
+                otpLoginBtn.classList.add('active');
+                passwordLoginBtn.classList.remove('active');
+            });
+
+            passwordLoginBtn.addEventListener('click', () => {
+                otpFormContainer.style.display = 'none';
+                passwordFormContainer.style.display = 'block';
+                otpLoginBtn.classList.remove('active');
+                passwordLoginBtn.classList.add('active');
+            });
+
+            document.getElementById('passwordForm').addEventListener('submit', handlePasswordLogin);
+            document.getElementById('otpRequestForm').addEventListener('submit', handleOtpRequest);
+            document.getElementById('otpVerifyForm').addEventListener('submit', handleOtpVerify);
+        });
+
+        async function handlePasswordLogin(e) {
+            e.preventDefault();
+            const button = e.target.querySelector('button');
+            const email = document.getElementById('password-email').value;
+            const password = document.getElementById('password').value;
+            setLoadingState(button, true, 'Logging In...');
+
+            try {
+                const response = await axios.post('https://navrang-backend.onrender.com/api/login-password', { email, password });
+                const { token, user } = response.data;
+                loginSuccess(token, user.name, user.email);
+            } catch (error) {
+                const errorMessage = error.response?.data?.message || 'Login failed. Please check your credentials.';
+                showNotification(errorMessage, 'error');
+            } finally {
+                setLoadingState(button, false, 'Login');
+            }
         }
 
-        function showLoading(show, text = 'Processing...') {
-            document.getElementById('loading').classList.toggle('active', show);
-            document.getElementById('loadingText').textContent = text;
-            
-            const buttons = document.querySelectorAll('.auth-button');
-            buttons.forEach(btn => btn.disabled = show);
+        async function handleOtpRequest(e) {
+            e.preventDefault();
+            const button = e.target.querySelector('button');
+            const email = document.getElementById('otp-email').value;
+            setLoadingState(button, true, 'Sending OTP...');
+
+            try {
+                await axios.post('https://navrang-backend.onrender.com/api/send-login-otp', { email });
+                document.getElementById('otpRequestStep').style.display = 'none';
+                document.getElementById('otpVerifyStep').style.display = 'block';
+                showNotification(`OTP sent to ${email}`, 'success');
+            } catch (error) {
+                const errorMessage = error.response?.data?.message || 'Failed to send OTP. Make sure the email is registered.';
+                showNotification(errorMessage, 'error');
+            } finally {
+                setLoadingState(button, false, 'Send OTP');
+            }
         }
 
-        function showError(message) {
-            document.getElementById('errorAlert').textContent = message;
-            document.getElementById('errorAlert').classList.add('active');
+        async function handleOtpVerify(e) {
+            e.preventDefault();
+            const button = e.target.querySelector('button');
+            const email = document.getElementById('otp-email').value;
+            const otp = document.getElementById('otp-code').value;
+            setLoadingState(button, true, 'Verifying...');
+
+            try {
+                const response = await axios.post('https://navrang-backend.onrender.com/api/verify-login-otp', { email, otp });
+                const { token, user } = response.data;
+                loginSuccess(token, user.name, user.email);
+            } catch (error) {
+                const errorMessage = error.response?.data?.message || 'Invalid OTP. Please try again.';
+                showNotification(errorMessage, 'error');
+            } finally {
+                setLoadingState(button, false, 'Verify & Login');
+            }
+        }
+
+        function loginSuccess(token, userName, email) {
+            localStorage.setItem('authToken', token);
+            localStorage.setItem('userName', userName);
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userLoggedIn', 'true');
+            showNotification('Login successful! Welcome back. 🕉️', 'success');
+            setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+        }
+
+        function setLoadingState(button, isLoading, loadingText) {
+            const originalText = button.dataset.originalText || button.textContent;
+            if(!button.dataset.originalText) button.dataset.originalText = originalText;
+
+            if (isLoading) {
+                button.disabled = true;
+                button.innerHTML = `<span class="spinner"></span> ${loadingText}`;
+            } else {
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => { notification.classList.add('show'); }, 10);
             setTimeout(() => {
-                document.getElementById('errorAlert').classList.remove('active');
-            }, 5000);
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
         }
-
-        function showSuccess(message) {
-            document.getElementById('successMessage').textContent = message;
-            document.getElementById('successMessage').classList.add('active');
-        }
-
-        async function sendOTP(email) {
-            try {
-                const response = await axios.post('https://navrang-backend.onrender.com/api/sendOTP', { email });
-                return { 
-                    success: true, 
-                    message: response.data.message || 'OTP sent successfully',
-                    status: response.status
-                };
-            } catch (error) {
-                return { 
-                    success: false, 
-                    message: error.response?.data?.message || 'Network error. Please try again.',
-                    status: error.response?.status || 500
-                };
-            }
-        }
-        
-        async function verifyOTP(email, otp) {
-            try {
-                const response = await axios.post('https://navrang-backend.onrender.com/api/verifyOTP', { email, otp });
-                return {
-                    success: true,
-                    token: response.data.token,
-                    message: response.data.message || 'OTP verified successfully'
-                };
-            } catch (error) {
-                return {
-                    success: false,
-                    message: error.response?.data?.message || 'Invalid OTP',
-                    status: error.response?.status || 500
-                };
-            }
-        }
-
-        function startResendTimer() {
-            resendTimer = 60;
-            const resendBtn = document.getElementById('resendOtpBtn');
-            const timerSpan = document.getElementById('timer');
-            resendBtn.disabled = true;
-            
-            otpTimer = setInterval(() => {
-                resendTimer--;
-                timerSpan.textContent = `(${resendTimer}s)`;
-                
-                if (resendTimer <= 0) {
-                    clearInterval(otpTimer);
-                    resendBtn.disabled = false;
-                    timerSpan.textContent = '';
-                }
-            }, 1000);
-        }
-
-        function switchToOTPView(email) {
-            currentEmail = email;
-            document.getElementById('displayEmail').textContent = email;
-            document.getElementById('emailContainer').classList.add('hidden');
-            document.getElementById('otpContainer').classList.add('active');
-            startResendTimer();
-            document.getElementById('otp1').focus();
-        }
-
-        function switchToEmailView() {
-            document.getElementById('emailContainer').classList.remove('hidden');
-            document.getElementById('otpContainer').classList.remove('active');
-            document.querySelectorAll('.otp-input').forEach(input => {
-                input.value = '';
-                input.classList.remove('error');
-            });
-            if (otpTimer) {
-                clearInterval(otpTimer);
-            }
-            document.getElementById('email').focus();
-        }
-
-        function getOTPValue() {
-            let otp = '';
-            for (let i = 1; i <= 6; i++) {
-                otp += document.getElementById(`otp${i}`).value;
-            }
-            return otp;
-        }
-
-        function clearOTPInputs() {
-            document.querySelectorAll('.otp-input').forEach(input => {
-                input.value = '';
-                input.classList.remove('error');
-            });
-        }
-
-        document.getElementById('emailForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value.trim();
-            document.getElementById('email').classList.remove('error');
-            document.getElementById('errorAlert').classList.remove('active');
-
-            if (!validateEmail(email)) {
-                document.getElementById('email').classList.add('error');
-                return;
-            }
-
-            showLoading(true, 'Sending OTP...');
-            const result = await sendOTP(email);
-            showLoading(false);
-
-            if (result.success) {
-                switchToOTPView(email);
-            } else {
-                showError(result.message || 'Failed to send OTP. This email might not be registered.');
-            }
-        });
-
-        document.getElementById('otpForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const otp = getOTPValue();
-            if (otp.length !== 6) {
-                document.querySelectorAll('.otp-input').forEach(input => input.classList.add('error'));
-                document.getElementById('otpError').style.display = 'block';
-                return;
-            }
-
-            showLoading(true, 'Verifying OTP...');
-            const result = await verifyOTP(currentEmail, otp);
-            showLoading(false);
-
-            if (result.success && result.token) {
-                showSuccess('Login successful! Redirecting...');
-                document.getElementById('otpContainer').style.display = 'none';
-
-                localStorage.setItem('userLoggedIn', 'true');
-                localStorage.setItem('userEmail', currentEmail);
-                localStorage.setItem('authToken', result.token);
-
-                setTimeout(() => {
-                    window.location.href = 'main.html'; // Assuming 'main.html' is the next page
-                }, 2000);
-            } else {
-                clearOTPInputs();
-                document.querySelectorAll('.otp-input').forEach(input => input.classList.add('error'));
-                document.getElementById('otpError').style.display = 'block';
-                showError(result.message || 'Invalid OTP. Please try again.');
-            }
-        });
-
-        document.getElementById('backToEmailBtn').addEventListener('click', switchToEmailView);
-
-        document.getElementById('resendOtpBtn').addEventListener('click', async function() {
-            showLoading(true, 'Resending OTP...');
-            const result = await sendOTP(currentEmail);
-            showLoading(false);
-            
-            if (result.success) {
-                clearOTPInputs();
-                startResendTimer();
-                showError('OTP resent successfully!'); 
-            } else {
-                showError(result.message || 'Failed to resend OTP.');
-            }
-        });
-
-        document.querySelectorAll('.otp-input').forEach((input, index) => {
-            input.addEventListener('input', function(e) {
-                e.target.classList.remove('error');
-                document.getElementById('otpError').style.display = 'none';
-                if (!/^\d$/.test(e.target.value)) {
-                    e.target.value = '';
-                    return;
-                }
-                if (e.target.value && index < 5) {
-                    document.getElementById(`otp${index + 2}`).focus();
-                }
-            });
-            
-            input.addEventListener('keydown', function(e) {
-                if (e.key === 'Backspace' && !e.target.value && index > 0) {
-                    document.getElementById(`otp${index}`).focus();
-                }
-            });
-            
-            input.addEventListener('paste', function(e) {
-                e.preventDefault();
-                const paste = e.clipboardData.getData('text');
-                if (/^\d{6}$/.test(paste)) {
-                    for (let i = 0; i < 6; i++) {
-                        document.getElementById(`otp${i + 1}`).value = paste[i];
-                    }
-                    document.getElementById('otp6').focus();
-                }
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedEmail = localStorage.getItem('userEmail');
-            if (savedEmail) {
-                document.getElementById('email').value = savedEmail;
-            }
-        });
     </script>
 </body>
 </html>

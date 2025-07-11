@@ -8,7 +8,6 @@
     <link rel="icon" type="image/png"
         href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
     <link rel="stylesheet" href="style.css">
-    <!-- Axios CDN -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
@@ -18,12 +17,12 @@
     <header>
         <div class="container">
             <nav>
-                <a href="#home" class="logo">NavRang</a>
+                <a href="index.html" class="logo">NavRang</a>
                 <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="#products">Collection</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
                 </ul>
                 <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
                     <div class="user-section">
@@ -32,8 +31,7 @@
                             <a href="signup.html" class="signup-btn">Sign Up</a>
                         </div>
                         <div class="user-info" style="display: none;">
-                            <span class="user-greeting" style="margin-right: 15px;">🕉️ Welcome, <span id="userNameDisplay">Sacred
-                                    Soul</span></span>
+                            <span class="user-greeting" style="margin-right: 15px;">🕉️ Welcome, <span id="userNameDisplay">Sacred Soul</span></span>
                             <div class="user-dropdown">
                                 <button class="user-menu-btn" onclick="toggleUserMenu()">
                                     <span class="user-initial" id="userInitial">S</span>
@@ -65,7 +63,7 @@
                     sacred accessories. Each piece is blessed with the essence of Maa Durga's nine forms.</p>
                 <div class="cta-group">
                     <button class="cta-primary" onclick="scrollToProducts()">Explore Collection</button>
-                    <button class="cta-secondary">Learn More</button>
+                    <button class="cta-secondary" onclick="location.href='about.html'">Learn More</button>
                 </div>
             </div>
         </div>
@@ -116,52 +114,34 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>Luxe Navratri</h3>
+                    <h3>NavRang</h3>
                     <p>Celebrating divine traditions with premium quality and spiritual significance. Our mission is to
                         bring the sacred essence of Navratri to every devotee's celebration.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link">📘</a>
-                        <a href="#" class="social-link">📷</a>
-                        <a href="#" class="social-link">🐦</a>
-                        <a href="#" class="social-link">📺</a>
-                    </div>
                 </div>
                 <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li>Home</li>
-                        <li>Divine Collection</li>
-                        <li>About Us</li>
-                        <li>Blog</li>
-                        <li>Contact Us</li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Customer Care</h3>
-                    <ul>
-                        <li>Shipping Info</li>
-                        <li>Return Policy</li>
-                        <li>Size Guide</li>
-                        <li>FAQ</li>
-                        <li>Support</li>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#products">Divine Collection</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Contact Us</h3>
-                    <p>📧 hello@luxenavratri.com</p>
+                    <p>📧 hello@navrang.com</p>
                     <p>📞 +91 98765 43210</p>
-                    <p>📍 Mumbai, Maharashtra, India</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Luxe Navratri. All rights reserved.</p>
+                <p>&copy; 2025 NavRang. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
         let products = [];
-        
+
         document.addEventListener('DOMContentLoaded', function () {
             initializeApp();
         });
@@ -186,23 +166,23 @@
 
         function updateUIForLoggedInUser(userName) {
             const authButtons = document.querySelector('.auth-buttons');
-            if (authButtons) authButtons.style.display = 'none';
-
             const userInfo = document.querySelector('.user-info');
+            const userNameDisplay = document.getElementById('userNameDisplay');
+            const userInitial = document.getElementById('userInitial');
+
+            if (authButtons) authButtons.style.display = 'none';
             if (userInfo) {
                 userInfo.style.display = 'flex';
-                const userInitial = document.getElementById('userInitial');
-                const userNameDisplay = document.getElementById('userNameDisplay');
-                if (userInitial) userInitial.textContent = userName?.charAt(0).toUpperCase() || 'S';
                 if (userNameDisplay) userNameDisplay.textContent = userName || 'Sacred Soul';
+                if (userInitial) userInitial.textContent = userName?.charAt(0).toUpperCase() || 'S';
             }
             showUserFeatures();
         }
 
         function updateUIForGuestUser() {
             const authButtons = document.querySelector('.auth-buttons');
-            if (authButtons) authButtons.style.display = 'flex';
             const userInfo = document.querySelector('.user-info');
+            if (authButtons) authButtons.style.display = 'flex';
             if (userInfo) userInfo.style.display = 'none';
             hideUserFeatures();
         }
@@ -227,7 +207,6 @@
                 localStorage.removeItem('userLoggedIn');
                 localStorage.removeItem('userName');
                 localStorage.removeItem('userEmail');
-                localStorage.removeItem('userPhone');
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('cartItems');
                 updateUIForGuestUser();
@@ -287,9 +266,9 @@
         }
         
         function handleAddToCart(button) {
-            const userLoggedIn = localStorage.getItem('userLoggedIn');
-            if (userLoggedIn !== 'true') {
+            if (localStorage.getItem('userLoggedIn') !== 'true') {
                 showNotification('Please log in to add items to your cart.', 'error');
+                setTimeout(() => { window.location.href = 'login.html'; }, 1500);
                 return;
             }
 
@@ -328,28 +307,21 @@
 
         function animateCartIcon() {
             const cartIcon = document.querySelector('.cart-icon');
-            if (cartIcon) {
-                cartIcon.style.animation = 'bounce 0.3s ease';
-                setTimeout(() => {
-                    cartIcon.style.animation = '';
-                }, 300);
+            if(cartIcon) {
+                cartIcon.classList.add('bounce');
+                setTimeout(() => cartIcon.classList.remove('bounce'), 500);
             }
         }
         
         function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
-            const bgColor = type === 'success' ? 'var(--gradient-royal)' : 'var(--day6-red)';
-            notification.style.cssText = `
-                position: fixed; top: 100px; right: 30px; background: ${bgColor}; color: white;
-                padding: 20px 30px; border-radius: 25px; font-weight: 700; z-index: 3001;
-                max-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                transform: translateX(110%); transition: transform 0.4s ease-in-out;`;
+            notification.className = `notification ${type}`;
             notification.textContent = message;
             document.body.appendChild(notification);
-            setTimeout(() => notification.style.transform = 'translateX(0)', 10);
+            setTimeout(() => { notification.classList.add('show'); }, 10);
             setTimeout(() => {
-                notification.style.transform = 'translateX(110%)';
-                setTimeout(() => notification.remove(), 400);
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 500);
             }, 3000);
         }
     </script>

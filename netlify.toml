@@ -22,3 +22,12 @@
   from = "/userDetails"
   to = "/userDetails.html"
   status = 200
+
+[build]
+  command = "echo 'No build command specified'"
+  publish = "/"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
