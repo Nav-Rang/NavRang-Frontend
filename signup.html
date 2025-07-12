@@ -379,19 +379,24 @@
             setLoadingState(button, true, 'Creating Account...');
 
             try {
+                // Send signup details and trigger OTP send
                 await axios.post('https://navrang-backend.onrender.com/api/signup', { name, email, phone, password });
+                await axios.post('https://navrang-backend.onrender.com/api/sendOTP', { email })
 
+                // Store temporary user data for OTP verification
                 localStorage.setItem('temp_user_name', name);
                 localStorage.setItem('temp_user_email', email);
 
                 const otpMessage = document.getElementById('otp-message');
                 otpMessage.textContent = `An OTP has been sent to ${email}. Please check your inbox.`;
                 
+                // Switch to OTP verification step
                 document.getElementById('detailsStep').classList.remove('active');
                 document.getElementById('otpStep').classList.add('active');
+                showNotification(`OTP sent to ${email}`, 'success');
 
             } catch (error) {
-                const errorMessage = error.response?.data?.message || 'Registration failed. The email might already be in use.';
+                const errorMessage = error.response?.data?.message || 'Registration failed. The email might already be in use or an issue occurred.';
                 showNotification(errorMessage, 'error');
             } finally {
                 setLoadingState(button, false, 'Create Account');
@@ -402,7 +407,7 @@
             e.preventDefault();
             const button = e.target.querySelector('button');
             const otp = document.getElementById('otp').value;
-            const email = localStorage.getItem('temp_user_email');
+            const email = localStorage.getItem('temp_user_email'); // Retrieve email from temporary storage
 
             if (!email || !otp) {
                 showNotification('Something went wrong. Please try signing up again.', 'error');
@@ -412,16 +417,18 @@
             setLoadingState(button, true, 'Verifying...');
 
             try {
-                const response = await axios.post('https://navrang-backend.onrender.com/api/verify-otp', { email, otp });
+                const response = await axios.post('https://navrang-backend.onrender.com/api/verifyOTP', { email, otp });
 
                 const { token } = response.data;
-                const userName = localStorage.getItem('temp_user_name');
+                const userName = localStorage.getItem('temp_user_name'); // Retrieve name from temporary storage
 
+                // Store user data in localStorage after successful verification
                 localStorage.setItem('authToken', token);
                 localStorage.setItem('userName', userName);
                 localStorage.setItem('userEmail', email);
                 localStorage.setItem('userLoggedIn', 'true');
 
+                // Clear temporary storage
                 localStorage.removeItem('temp_user_name');
                 localStorage.removeItem('temp_user_email');
 
