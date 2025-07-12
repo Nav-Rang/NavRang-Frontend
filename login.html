@@ -182,8 +182,8 @@
         .form-input {
             width: 100%;
             padding: 0.8rem 1rem;
-            border: 1px solid #dcdcdc; /* Added border */
-            border-radius: 8px; /* Added border-radius */
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
             color: #2D1B69;
@@ -194,6 +194,43 @@
             outline: none;
             border-color: var(--day7-blue);
             box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.2);
+        }
+
+        /* Password input with eye icon */
+        .password-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-input-wrapper .form-input {
+            padding-right: 3rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #708090;
+            font-size: 1.2rem;
+            padding: 4px;
+            border-radius: 4px;
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--day7-blue);
+            background-color: rgba(65, 105, 225, 0.1);
+        }
+
+        .password-toggle:focus {
+            outline: none;
+            color: var(--day7-blue);
+            background-color: rgba(65, 105, 225, 0.1);
         }
 
         .auth-button {
@@ -321,6 +358,31 @@
         .notification.error {
             background-color: #dc3545;
         }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                max-width: 100%;
+                margin: 1rem;
+            }
+            
+            .auth-left {
+                padding: 2rem;
+            }
+            
+            .auth-right {
+                padding: 2rem;
+            }
+            
+            .sacred-logo {
+                font-size: 2rem;
+            }
+            
+            .form-title {
+                font-size: 1.8rem;
+            }
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
@@ -339,6 +401,8 @@
                     <p class="form-subtitle">Login to your sacred account</p>
                 </div>
 
+                <!-- OTP Login Section - Commented out for now -->
+                <!-- 
                 <div class="auth-options">
                     <button id="otp-login-btn" class="active">Login with OTP</button>
                     <button id="password-login-btn">Login with Password</button>
@@ -365,8 +429,9 @@
                         </form>
                     </div>
                 </div>
+                -->
 
-                <div id="password-login-form" style="display: none;">
+                <div id="password-login-form">
                     <form id="passwordForm">
                         <div class="form-group">
                             <label class="form-label" for="password-email">Email Address</label>
@@ -374,7 +439,12 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="password">Password</label>
-                            <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword()">
+                                    <span id="password-toggle-icon">👁️</span>
+                                </button>
+                            </div>
                         </div>
                         <button type="submit" class="auth-button">Login</button>
                     </form>
@@ -389,29 +459,43 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const otpLoginBtn = document.getElementById('otp-login-btn');
-            const passwordLoginBtn = document.getElementById('password-login-btn');
-            const otpFormContainer = document.getElementById('otp-login-form');
-            const passwordFormContainer = document.getElementById('password-login-form');
+            // OTP functionality commented out for now
+            // const otpLoginBtn = document.getElementById('otp-login-btn');
+            // const passwordLoginBtn = document.getElementById('password-login-btn');
+            // const otpFormContainer = document.getElementById('otp-login-form');
+            // const passwordFormContainer = document.getElementById('password-login-form');
 
-            otpLoginBtn.addEventListener('click', () => {
-                otpFormContainer.style.display = 'block';
-                passwordFormContainer.style.display = 'none';
-                otpLoginBtn.classList.add('active');
-                passwordLoginBtn.classList.remove('active');
-            });
+            // otpLoginBtn.addEventListener('click', () => {
+            //     otpFormContainer.style.display = 'block';
+            //     passwordFormContainer.style.display = 'none';
+            //     otpLoginBtn.classList.add('active');
+            //     passwordLoginBtn.classList.remove('active');
+            // });
 
-            passwordLoginBtn.addEventListener('click', () => {
-                otpFormContainer.style.display = 'none';
-                passwordFormContainer.style.display = 'block';
-                otpLoginBtn.classList.remove('active');
-                passwordLoginBtn.classList.add('active');
-            });
+            // passwordLoginBtn.addEventListener('click', () => {
+            //     otpFormContainer.style.display = 'none';
+            //     passwordFormContainer.style.display = 'block';
+            //     otpLoginBtn.classList.remove('active');
+            //     passwordLoginBtn.classList.add('active');
+            // });
 
             document.getElementById('passwordForm').addEventListener('submit', handlePasswordLogin);
-            document.getElementById('otpRequestForm').addEventListener('submit', handleOtpRequest);
-            document.getElementById('otpVerifyForm').addEventListener('submit', handleOtpVerify);
+            // document.getElementById('otpRequestForm').addEventListener('submit', handleOtpRequest);
+            // document.getElementById('otpVerifyForm').addEventListener('submit', handleOtpVerify);
         });
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('password-toggle-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = '👁️';
+            }
+        }
 
         async function handlePasswordLogin(e) {
             e.preventDefault();
@@ -422,16 +506,50 @@
 
             try {
                 const response = await axios.post('https://navrang-backend.onrender.com/api/login', { email, password });
-                const { token, user } = response.data;
-                loginSuccess(token, user.name, user.email);
+                const { token, message } = response.data;
+                
+                // Store token and mark user as logged in
+                localStorage.setItem('authToken', token);
+                localStorage.setItem('userLoggedIn', 'true');
+                localStorage.setItem('userEmail', email);
+                
+                showNotification(message + ' 🕉️', 'success');
+                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
             } catch (error) {
-                const errorMessage = error.response?.data?.message || 'Login failed. Please check your credentials.';
+                let errorMessage = 'Login failed. Please try again.';
+                
+                if (error.response) {
+                    // Handle different error status codes
+                    switch (error.response.status) {
+                        case 400:
+                            errorMessage = 'Email and password are required.';
+                            break;
+                        case 404:
+                            errorMessage = 'User not found. Please check your email or sign up.';
+                            break;
+                        case 401:
+                            errorMessage = 'Invalid password. Please try again.';
+                            break;
+                        case 500:
+                            errorMessage = 'Server error. Please try again later.';
+                            break;
+                        default:
+                            errorMessage = error.response.data?.message || 'Login failed. Please try again.';
+                    }
+                } else if (error.request) {
+                    errorMessage = 'Network error. Please check your connection.';
+                } else {
+                    errorMessage = 'Something went wrong. Please try again.';
+                }
+                
                 showNotification(errorMessage, 'error');
             } finally {
                 setLoadingState(button, false, 'Login');
             }
         }
 
+        // OTP functions commented out for now
+        /*
         async function handleOtpRequest(e) {
             e.preventDefault();
             const button = e.target.querySelector('button');
@@ -439,7 +557,7 @@
             setLoadingState(button, true, 'Sending OTP...');
 
             try {
-                await axios.post('https://navrang-backend.onrender.com/api/send-login-otp', { email });
+                await axios.post('https://navrang-backend.onrender.com/api/sendOTP', { email });
                 document.getElementById('otpRequestStep').style.display = 'none';
                 document.getElementById('otpVerifyStep').style.display = 'block';
                 showNotification(`OTP sent to ${email}`, 'success');
@@ -469,15 +587,10 @@
                 setLoadingState(button, false, 'Verify & Login');
             }
         }
+        */
 
-        function loginSuccess(token, userName, email) {
-            localStorage.setItem('authToken', token);
-            localStorage.setItem('userName', userName);
-            localStorage.setItem('userEmail', email);
-            localStorage.setItem('userLoggedIn', 'true');
-            showNotification('Login successful! Welcome back. 🕉️', 'success');
-            setTimeout(() => { window.location.href = 'index.html'; }, 1500);
-        }
+        // Remove the old loginSuccess function as it's no longer needed
+        // Login success is now handled directly in handlePasswordLogin function
 
         function setLoadingState(button, isLoading, loadingText) {
             const originalText = button.dataset.originalText || button.textContent;

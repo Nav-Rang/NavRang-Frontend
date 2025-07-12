@@ -182,12 +182,43 @@
         .form-input {
             width: 100%;
             padding: 0.8rem 1rem;
-            border: 1px solid #dcdcdc; /* Added border */
-            border-radius: 8px; /* Added border-radius */
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
             color: #2D1B69;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .password-input-container {
+            position: relative;
+        }
+
+        .password-input-container .form-input {
+            padding-right: 3rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #708090;
+            padding: 4px;
+            border-radius: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--day7-blue);
+        }
+
+        .password-toggle:focus {
+            outline: none;
         }
 
         .form-input:focus {
@@ -318,28 +349,27 @@
                     <p class="form-subtitle">Join our sacred community</p>
                 </div>
 
-                <div class="step-container active" id="detailsStep">
-                    <form id="detailsForm">
-                        <div class="form-group">
-                            <label class="form-label" for="name">Full Name</label>
-                            <input type="text" id="name" class="form-input" placeholder="Enter your full name" required>
-                        </div>
+                <div class="step-container active" id="signupStep">
+                    <form id="signupForm">
                         <div class="form-group">
                             <label class="form-label" for="email">Email Address</label>
                             <input type="email" id="email" class="form-input" placeholder="Enter your email address" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="phone">Phone Number</label>
-                            <input type="tel" id="phone" class="form-input" placeholder="Enter your phone number" required>
-                        </div>
-                        <div class="form-group">
                             <label class="form-label" for="password">Password</label>
-                            <input type="password" id="password" class="form-input" placeholder="Create a password (min. 6 characters)" required>
+                            <div class="password-input-container">
+                                <input type="password" id="password" class="form-input" placeholder="Create a password (min. 6 characters)" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword()">
+                                    <span id="eyeIcon">👁️</span>
+                                </button>
+                            </div>
                         </div>
                         <button type="submit" class="auth-button">Create Account</button>
                     </form>
                 </div>
 
+                <!-- OTP Step - Commented out for now -->
+                <!-- 
                 <div class="step-container" id="otpStep">
                     <form id="otpForm">
                         <p id="otp-message" class="form-subtitle" style="text-align:center; margin-bottom: 1rem;"></p>
@@ -350,6 +380,7 @@
                         <button type="submit" class="auth-button">Verify & Create Account</button>
                     </form>
                 </div>
+                -->
                 
                 <div class="form-footer">
                     <p>Already have an account? <a href="login.html">Log In</a></p>
@@ -359,16 +390,15 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('detailsForm').addEventListener('submit', handleDetailsSubmit);
-            document.getElementById('otpForm').addEventListener('submit', handleOtpSubmit);
+            document.getElementById('signupForm').addEventListener('submit', handleSignupSubmit);
+            // OTP form event listener commented out
+            // document.getElementById('otpForm').addEventListener('submit', handleOtpSubmit);
         });
 
-        async function handleDetailsSubmit(e) {
+        async function handleSignupSubmit(e) {
             e.preventDefault();
             const button = e.target.querySelector('button');
-            const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
             const password = document.getElementById('password').value;
 
             if (password.length < 6) {
@@ -379,35 +409,60 @@
             setLoadingState(button, true, 'Creating Account...');
 
             try {
-                // Send signup details and trigger OTP send
-                await axios.post('https://navrang-backend.onrender.com/api/signup', { name, email, phone, password });
-                await axios.post('https://navrang-backend.onrender.com/api/sendOTP', { email })
+                // Send signup request to backend
+                const response = await axios.post('https://navrang-backend.onrender.com/api/signup', { 
+                    email, 
+                    password 
+                });
 
-                // Store temporary user data for OTP verification
-                localStorage.setItem('temp_user_name', name);
-                localStorage.setItem('temp_user_email', email);
-
-                const otpMessage = document.getElementById('otp-message');
-                otpMessage.textContent = `An OTP has been sent to ${email}. Please check your inbox.`;
-                
-                // Switch to OTP verification step
-                document.getElementById('detailsStep').classList.remove('active');
-                document.getElementById('otpStep').classList.add('active');
-                showNotification(`OTP sent to ${email}`, 'success');
+                // Handle successful registration
+                if (response.status === 201) {
+                    showNotification('Account created successfully! Welcome to NavRang. 🕉️', 'success');
+                    
+                    // Store user data in localStorage
+                    localStorage.setItem('userEmail', email);
+                    localStorage.setItem('userLoggedIn', 'true');
+                    
+                    // Redirect to main page after a brief delay
+                    setTimeout(() => { 
+                        window.location.href = 'index.html'; 
+                    }, 1500);
+                }
 
             } catch (error) {
-                const errorMessage = error.response?.data?.message || 'Registration failed. The email might already be in use or an issue occurred.';
+                let errorMessage = 'Registration failed. Please try again.';
+                
+                if (error.response) {
+                    switch (error.response.status) {
+                        case 400:
+                            if (error.response.data.message === 'Email and password are required') {
+                                errorMessage = 'Email and password are required.';
+                            } else if (error.response.data.message === 'User already exists') {
+                                errorMessage = 'An account with this email already exists.';
+                            } else {
+                                errorMessage = error.response.data.message;
+                            }
+                            break;
+                        case 500:
+                            errorMessage = 'Server error. Please try again later.';
+                            break;
+                        default:
+                            errorMessage = error.response.data.message || errorMessage;
+                    }
+                }
+                
                 showNotification(errorMessage, 'error');
             } finally {
                 setLoadingState(button, false, 'Create Account');
             }
         }
 
+        /* OTP Submit Handler - Commented out for now
         async function handleOtpSubmit(e) {
             e.preventDefault();
             const button = e.target.querySelector('button');
             const otp = document.getElementById('otp').value;
-            const email = localStorage.getItem('temp_user_email'); // Retrieve email from temporary storage
+            const email = localStorage.getItem('temp_user_email');
 
             if (!email || !otp) {
                 showNotification('Something went wrong. Please try signing up again.', 'error');
@@ -420,15 +475,13 @@
                 const response = await axios.post('https://navrang-backend.onrender.com/api/verifyOTP', { email, otp });
 
                 const { token } = response.data;
-                const userName = localStorage.getItem('temp_user_name'); // Retrieve name from temporary storage
+                const userName = localStorage.getItem('temp_user_name');
 
-                // Store user data in localStorage after successful verification
                 localStorage.setItem('authToken', token);
                 localStorage.setItem('userName', userName);
                 localStorage.setItem('userEmail', email);
                 localStorage.setItem('userLoggedIn', 'true');
 
-                // Clear temporary storage
                 localStorage.removeItem('temp_user_name');
                 localStorage.removeItem('temp_user_email');
 
@@ -442,6 +495,7 @@
                 setLoadingState(button, false, 'Verify & Create Account');
             }
         }
+        */
 
         function setLoadingState(button, isLoading, loadingText) {
             const originalText = button.dataset.originalText || button.textContent;
@@ -466,6 +520,19 @@
                 notification.classList.remove('show');
                 setTimeout(() => notification.remove(), 500);
             }, 3000);
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.textContent = '👁️';
+            }
         }
     </script>
 </body>
