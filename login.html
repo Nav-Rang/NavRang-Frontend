@@ -234,7 +234,7 @@
             setLoadingState(button, true, 'Logging In...');
 
             try {
-                const response = await axios.post('https://navrang-backend.onrender.com/api/login-password', { email, password });
+                const response = await axios.post('https://navrang-backend.onrender.com/api/login', { email, password });
                 const { token, user } = response.data;
                 loginSuccess(token, user.name, user.email);
             } catch (error) {
