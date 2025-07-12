@@ -213,7 +213,7 @@
             setLoadingState(button, true, 'Creating Account...');
 
             try {
-                await axios.post('https://navrang-backend.onrender.com/api/register', { name, email, phone, password });
+                await axios.post('https://navrang-backend.onrender.com/api/signup', { name, email, phone, password });
 
                 localStorage.setItem('temp_user_name', name);
                 localStorage.setItem('temp_user_email', email);
