@@ -23,7 +23,7 @@ body {
 .checkout-details-column {
     display: flex;
     flex-direction: column;
-    gap: 30px; /* Space between user details and address card */
+    gap: 30px; /* Space between cards */
 }
 
 .order-summary-column {
@@ -31,25 +31,58 @@ body {
     top: 120px;
 }
 
+/* Generic Card style for this page */
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.07);
+}
+
+.card h2 {
+    font-size: 1.5rem;
+    font-family: 'Playfair Display', serif;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
 /* Overriding profile-card for this context */
 .checkout-grid .profile-card {
     width: 100%;
     margin: 0;
     text-align: left;
+    display: flex; /* Use flexbox for avatar and details */
+    align-items: center;
+    gap: 20px;
 }
 
 .checkout-grid .profile-avatar {
     margin: 0; /* Remove auto margin */
-    margin-bottom: 20px;
+    width: 80px;  /* smaller avatar */
+    height: 80px;
+    font-size: 2rem;
 }
-
 .checkout-grid .profile-details p {
     text-align: left;
+    margin: 2px 0;
 }
 
 /* Address Display & Form */
 .address-section-container .form-group {
     margin-bottom: 1rem;
+}
+.address-section-container .auth-button { /* a more generic button style */
+    background: var(--day9-purple);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.address-section-container .auth-button:hover {
+    background: var(--day7-blue);
 }
 
 .saved-address p {
@@ -63,7 +96,54 @@ body {
     color: #333;
 }
 
-/* Notification Styling (already in style.css but good to have here if needed) */
+/* New Payment Method Card */
+.payment-options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.payment-button {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 20px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    background-color: #fdfdfd;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.payment-button:hover {
+    border-color: var(--day9-purple);
+    background-color: #f8f1fc;
+}
+.payment-button:disabled {
+    cursor: not-allowed;
+    background-color: #e9ecef;
+}
+
+.payment-button strong {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.payment-button span {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.payment-button .spinner {
+    border: 3px solid rgba(153, 50, 204, 0.3);
+    border-top: 3px solid var(--day9-purple);
+}
+
+/* Notification Styling */
 .notification {
     position: fixed;
     bottom: 20px;
@@ -86,13 +166,8 @@ body {
     transform: translate(-50%, -10px);
 }
 
-.notification.success {
-    background-color: #28a745;
-}
-
-.notification.error {
-    background-color: #dc3545;
-}
+.notification.success { background-color: #28a745; }
+.notification.error { background-color: #dc3545; }
 
 
 /* Responsive Adjustments */
@@ -100,7 +175,6 @@ body {
     .checkout-grid {
         grid-template-columns: 1fr; /* Stack columns on smaller screens */
     }
-
     .order-summary-column {
         position: static; /* Unstick the summary on mobile */
         top: auto;

@@ -41,13 +41,14 @@
 
                 <div class="card address-section-container">
                     <h2>Delivery Address</h2>
-                    <div id="savedAddress" class="saved-address">
-                        <p id="addressName">Loading...</p>
+                    <div id="savedAddress" class="saved-address" style="display:none;">
+                        <p id="addressName"></p>
                         <p id="addressDetails"></p>
                         <p id="addressCityStatePin"></p>
                         <p id="addressNearTo"></p>
                     </div>
-                    <button id="changeAddressBtn" class="auth-button" style="margin-top: 1rem;">Change Address</button>
+                     <p id="addressPrompt">Please add your delivery address below.</p>
+                    <button id="changeAddressBtn" class="auth-button" style="margin-top: 1rem; display:none;">Change Address</button>
                     
                     <form id="addressForm" class="address-form" style="display:none; margin-top: 20px;">
                         <div class="form-group">
@@ -77,6 +78,19 @@
                         <button type="submit" class="auth-button">Save Address</button>
                     </form>
                 </div>
+                 <div class="card payment-method-card">
+                    <h2>Payment Method</h2>
+                    <div class="payment-options">
+                        <button id="codButton" class="payment-button">
+                            <strong>Cash on Delivery</strong>
+                            <span>Pay at your doorstep</span>
+                        </button>
+                        <button id="razorpayButton" class="payment-button">
+                            <strong>Pay Online</strong>
+                            <span>Cards, UPI, Netbanking via Razorpay</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="order-summary-column">
@@ -95,13 +109,6 @@
                         <span>Total:</span>
                         <span id="totalAmount">₹0.00</span>
                     </div>
-
-                    <div class="payment-options" style="margin-top: 30px;">
-                        <h3>Choose Payment Method:</h3>
-                        <button id="codButton" class="auth-button" style="margin-bottom: 10px;">Cash on Delivery</button>
-                        <button id="razorpayButton" class="auth-button">Pay with Razorpay</button>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -147,65 +154,60 @@
             }
 
             loadUserDetails();
-            loadAddressDetails();
+            initializeAddressSection();
             renderOrderSummary();
 
             document.getElementById('changeAddressBtn').addEventListener('click', () => {
                 const form = document.getElementById('addressForm');
                 form.style.display = form.style.display === 'none' ? 'block' : 'none';
-                document.getElementById('changeAddressBtn').textContent = form.style.display === 'none' ? 'Change Address' : 'Hide Address Form';
             });
 
             document.getElementById('addressForm').addEventListener('submit', handleSaveAddress);
-
-            // Payment button listeners
             document.getElementById('codButton').addEventListener('click', handleCashOnDelivery);
             document.getElementById('razorpayButton').addEventListener('click', handleRazorpayPayment);
         });
+
+        function displayAddress(user) {
+            const address = user.address;
+            const savedAddressDiv = document.getElementById('savedAddress');
+            const addressForm = document.getElementById('addressForm');
+            const changeAddressBtn = document.getElementById('changeAddressBtn');
+            
+            if (address && address.building) {
+                document.getElementById('addressName').textContent = user.name || 'User';
+                document.getElementById('addressDetails').textContent = `${address.building}, ${address.address}`;
+                document.getElementById('addressCityStatePin').textContent = `${address.city}, ${address.state} - ${address.pinCode}`;
+                document.getElementById('addressNearTo').textContent = address.nearTo ? `Landmark: ${address.nearTo}` : '';
+                
+                document.getElementById('building').value = address.building || '';
+                document.getElementById('address').value = address.address || '';
+                document.getElementById('nearTo').value = address.nearTo || '';
+                document.getElementById('pinCode').value = address.pinCode || '';
+                document.getElementById('city').value = address.city || '';
+                document.getElementById('state').value = address.state || '';
+
+                savedAddressDiv.style.display = 'block';
+                document.getElementById('addressPrompt').style.display = 'none';
+                addressForm.style.display = 'none';
+                changeAddressBtn.style.display = 'block';
+
+            } else {
+                 initializeAddressSection();
+            }
+        }
+
+        function initializeAddressSection() {
+            document.getElementById('addressPrompt').style.display = 'block';
+            document.getElementById('addressForm').style.display = 'block';
+            document.getElementById('savedAddress').style.display = 'none';
+            document.getElementById('changeAddressBtn').style.display = 'none';
+        }
 
         async function loadUserDetails() {
             const userName = localStorage.getItem('userName') || 'Guest';
             const userEmail = localStorage.getItem('userEmail') || 'guest@example.com';
             document.getElementById('userNameDisplay').textContent = userName;
             document.getElementById('userEmailDisplay').textContent = userEmail;
-        }
-
-        async function loadAddressDetails() {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-                showNotification('Authentication token not found. Please log in.', 'error');
-                return;
-            }
-
-            try {
-                const response = await axios.get(`${backendUrl}/get-user-details`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const user = response.data.user; // Assuming user object is directly in data
-                if (user && user.address) {
-                    const address = user.address;
-                    document.getElementById('addressName').textContent = user.name || 'User';
-                    document.getElementById('addressDetails').textContent = `${address.building}, ${address.address}`;
-                    document.getElementById('addressCityStatePin').textContent = `${address.city}, ${address.state} - ${address.pinCode}`;
-                    document.getElementById('addressNearTo').textContent = address.nearTo ? `Landmark: ${address.nearTo}` : '';
-
-                    // Pre-fill form for editing
-                    document.getElementById('building').value = address.building || '';
-                    document.getElementById('address').value = address.address || '';
-                    document.getElementById('nearTo').value = address.nearTo || '';
-                    document.getElementById('pinCode').value = address.pinCode || '';
-                    document.getElementById('city').value = address.city || '';
-                    document.getElementById('state').value = address.state || '';
-                } else {
-                    document.getElementById('savedAddress').innerHTML = '<p>No address saved. Please add one.</p>';
-                    document.getElementById('addressForm').style.display = 'block'; // Show form if no address
-                }
-            } catch (error) {
-                console.error('Error fetching address details:', error);
-                document.getElementById('savedAddress').innerHTML = '<p>Failed to load address. Please add one.</p>';
-                document.getElementById('addressForm').style.display = 'block'; // Show form on error
-                showNotification(error.response?.data?.message || 'Failed to fetch address.', 'error');
-            }
         }
 
         async function handleSaveAddress(event) {
@@ -228,8 +230,9 @@
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 showNotification(response.data.message || 'Address updated successfully!', 'success');
-                document.getElementById('addressForm').style.display = 'none'; // Hide form after saving
-                loadAddressDetails(); // Reload to display new address
+                if (response.data.user) {
+                    displayAddress(response.data.user);
+                }
             } catch (error) {
                 console.error('Error saving address:', error);
                 showNotification(error.response?.data?.message || 'Failed to save address.', 'error');
@@ -263,7 +266,7 @@
                 orderSummaryItemsDiv.appendChild(itemDiv);
             });
 
-            const shippingCost = 50; // Example shipping
+            const shippingCost = 50; 
             const total = subtotal + shippingCost;
 
             document.getElementById('subtotalAmount').textContent = `₹${subtotal.toFixed(2)}`;
@@ -278,147 +281,107 @@
                 const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
                 
                 if (cartItems.length === 0) {
-                    showNotification('Your cart is empty. Please add items before placing an order.', 'error');
+                    showNotification('Your cart is empty.', 'error');
                     setLoadingState(codButton, false, 'Cash on Delivery');
                     return;
                 }
 
-                const productDetails = cartItems.map(item => ({
-                    productId: item.id, // Assuming item.id is the productId for your backend
-                    quantity: item.quantity
-                }));
+                const productDetails = cartItems.map(item => ({ productId: item.id, quantity: item.quantity }));
 
-                const response = await axios.post(`${backendUrl}/create-order`, {
-                    productDetails: productDetails,
-                    isCOD: true
-                }, {
+                const response = await axios.post(`${backendUrl}/create-order`, { productDetails, isCOD: true }, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
-                showNotification(response.data.message || 'COD Order Placed Successfully! Check your email for confirmation. 📦', 'success');
-                localStorage.removeItem('cartItems'); // Clear cart
-                setTimeout(() => { window.location.href = 'index.html'; }, 2000); // Redirect to home or confirmation page
+                showNotification(response.data.message || 'COD Order Placed Successfully!', 'success');
+                localStorage.removeItem('cartItems');
+                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
 
             } catch (error) {
-                console.error('COD Order Error:', error);
-                showNotification(error.response?.data?.error || 'Failed to place COD order. Please ensure your address is saved.', 'error');
+                showNotification(error.response?.data?.error || 'Failed to place order. Please ensure your address is saved.', 'error');
             } finally {
-                setLoadingState(codButton, false, 'Cash on Delivery');
+                setLoadingState(document.getElementById('codButton'), false, '<strong>Cash on Delivery</strong><span>Pay at your doorstep</span>');
             }
         }
 
         async function handleRazorpayPayment() {
             const razorpayButton = document.getElementById('razorpayButton');
-            setLoadingState(razorpayButton, true, 'Initiating Payment...');
+            setLoadingState(razorpayButton, true, 'Initiating...');
 
             try {
                 const token = localStorage.getItem('authToken');
-                const userEmail = localStorage.getItem('userEmail');
-                const userName = localStorage.getItem('userName');
-                const totalAmountText = document.getElementById('totalAmount').textContent;
-                const totalAmount = parseFloat(totalAmountText.replace(/[^\d.]/g, '')); // Extract number from "₹1500.00"
-
-                if (!userEmail || !userName) {
-                    showNotification('User details not found. Please log in again.', 'error');
-                    setLoadingState(razorpayButton, false, 'Pay with Razorpay');
-                    return;
-                }
-                
                 const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+                
                 if (cartItems.length === 0) {
-                    showNotification('Your cart is empty. Please add items before proceeding to payment.', 'error');
+                    showNotification('Your cart is empty.', 'error');
                     setLoadingState(razorpayButton, false, 'Pay with Razorpay');
                     return;
                 }
-
-                const productDetails = cartItems.map(item => ({
-                    productId: item.id,
-                    quantity: item.quantity
-                }));
-
-                // Step 1: Create an order on your backend which will interact with Razorpay API
-                const orderResponse = await axios.post(`${backendUrl}/create-order`, {
-                    productDetails: productDetails,
-                    isCOD: false // Indicate it's not a COD order
-                }, {
+                const productDetails = cartItems.map(item => ({ productId: item.id, quantity: item.quantity }));
+                
+                const orderResponse = await axios.post(`${backendUrl}/create-order`, { productDetails, isCOD: false }, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
-                const { razorpayOrder, orderId } = orderResponse.data; // Backend sends razorpayOrder object and your internal orderId
+                const { razorpayOrder, orderId } = orderResponse.data;
 
-                if (!razorpayOrder || !razorpayOrder.id || !razorpayOrder.currency || !razorpayOrder.amount) {
-                    throw new Error("Missing Razorpay order details from backend response.");
-                }
-
-                // Step 2: Configure Razorpay Checkout
                 var options = {
-                    "key": "YOUR_RAZORPAY_KEY_ID", // Replace with your actual Razorpay Key ID
-                    "amount": razorpayOrder.amount, // Amount is in paisa
+                    "key": "YOUR_RAZORPAY_KEY_ID", 
+                    "amount": razorpayOrder.amount,
                     "currency": razorpayOrder.currency,
                     "name": "NavRang",
                     "description": "Purchase from NavRang",
-                    "image": "https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png", // Your company logo
-                    "order_id": razorpayOrder.id, // Razorpay Order ID from backend
+                    "image": "https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png",
+                    "order_id": razorpayOrder.id,
                     "handler": async function (response) {
-                        setLoadingState(razorpayButton, true, 'Verifying Payment...');
+                        setLoadingState(razorpayButton, true, 'Verifying...');
                         try {
-                            // Step 3: Verify the payment on your backend
                             const verificationResponse = await axios.post(`${backendUrl}/verify-payment`, {
                                 razorpay_order_id: response.razorpay_order_id,
                                 razorpay_payment_id: response.razorpay_payment_id,
                                 razorpay_signature: response.razorpay_signature,
-                                orderId: orderId // Your internal order ID
+                                orderId: orderId
                             }, {
                                 headers: { 'Authorization': `Bearer ${token}` }
                             });
 
-                            showNotification(verificationResponse.data.msg || 'Payment successful! Order Placed. ✅', 'success');
-                            localStorage.removeItem('cartItems'); // Clear cart
-                            setTimeout(() => { window.location.href = 'index.html'; }, 2000); // Redirect to success page
+                            showNotification(verificationResponse.data.msg || 'Payment successful!', 'success');
+                            localStorage.removeItem('cartItems');
+                            setTimeout(() => { window.location.href = 'index.html'; }, 2000);
 
                         } catch (verifyError) {
-                            console.error('Razorpay Verification Error:', verifyError);
-                            showNotification(verifyError.response?.data?.error || 'Payment verification failed. Please contact support.', 'error');
+                            showNotification(verifyError.response?.data?.error || 'Payment verification failed.', 'error');
                         } finally {
-                            setLoadingState(razorpayButton, false, 'Pay with Razorpay');
+                             setLoadingState(document.getElementById('razorpayButton'), false, '<strong>Pay Online</strong><span>Cards, UPI, Netbanking via Razorpay</span>');
                         }
                     },
                     "prefill": {
-                        "name": userName,
-                        "email": userEmail,
-                        "contact": "" // Optional: User's phone number if available
+                        "name": localStorage.getItem('userName'),
+                        "email": localStorage.getItem('userEmail'),
                     },
-                    "notes": {
-                        "address": "NavRang Shopping"
-                    },
-                    "theme": {
-                        "color": "#6a0dad" // Your theme color (Day9 purple)
-                    }
+                    "theme": { "color": "#9932CC" }
                 };
 
                 var rzp = new Razorpay(options);
                 rzp.on('payment.failed', function (response){
-                    showNotification(`Payment failed: ${response.error.description}. Please try again.`, 'error');
-                    console.error('Razorpay Payment Failed:', response.error);
-                    setLoadingState(razorpayButton, false, 'Pay with Razorpay');
+                    showNotification(`Payment failed: ${response.error.description}.`, 'error');
                 });
-
-                rzp.open(); // Open Razorpay checkout form
+                rzp.open();
 
             } catch (error) {
-                console.error('Razorpay Order Creation Error:', error);
-                showNotification(error.response?.data?.error || 'Failed to initiate Razorpay payment.', 'error');
+                showNotification(error.response?.data?.error || 'Failed to initiate payment.', 'error');
             } finally {
-                setLoadingState(razorpayButton, false, 'Pay with Razorpay');
+                 setLoadingState(document.getElementById('razorpayButton'), false, '<strong>Pay Online</strong><span>Cards, UPI, Netbanking via Razorpay</span>');
             }
         }
 
-
-        // --- UTILITY FUNCTIONS ---
         function setLoadingState(button, isLoading, loadingText) {
             if (button) {
                 button.disabled = isLoading;
-                button.innerHTML = isLoading ? `<span class="spinner"></span> ${loadingText}` : button.textContent;
+                if(isLoading) {
+                    button.innerHTML = `<span class="spinner"></span> ${loadingText}`;
+                } else {
+                    button.innerHTML = loadingText;
+                }
             }
         }
 
