@@ -96,12 +96,21 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 NavRang. All rights reserved.</p>
+                <p>© 2025 NavRang. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script>
+    <div class="modal-overlay" id="productModalOverlay">
+        <div class="modal-content" id="productModalContent" onclick="event.stopPropagation()">
+            
+        </div>
+    </div>
+
+
+        <script>
+        let allProducts = []; // 1. Store all products here
+
         document.addEventListener('DOMContentLoaded', () => {
             checkUserLogin();
             fetchProducts();
@@ -152,8 +161,9 @@
             const grid = document.getElementById('productsGrid');
             grid.innerHTML = '<p>Loading divine collection... 🕉️</p>';
             try {
-                const response = await axios.get('https://navrang-backend.onrender.com/api/get-items');
-                renderProducts(response.data);
+                const response = await axios.get('http://localhost:5000/api/get-items');
+                allProducts = response.data; // 2. Populate the global array
+                renderProducts(allProducts);
             } catch (error) {
                 grid.innerHTML = `<p>Unable to load products. Please try again.</p>`;
                 showNotification('Failed to load products.', 'error');
@@ -168,8 +178,10 @@
             }
             grid.innerHTML = products.map(product => {
                 const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+                
+                // 3. Change onclick to pass only the ID
                 return `
-                <div class="product-card" data-product-id="${product._id}">
+                <div class="product-card" onclick="openProductModalById('${product._id}')">
                     <div class="product-image">
                         <img src="${product.images[0]}" alt="${product.name}" loading="lazy"/>
                         ${product.originalPrice > product.price ? `<span class="discount-badge">${discount}% OFF</span>` : ''}
@@ -183,7 +195,7 @@
                         </div>
                         <div class="product-action">
                             ${product.quantity > 0
-                                ? `<button class="add-to-cart" onclick="handleAddToCart(this)"
+                                ? `<button class="add-to-cart" onclick="handleAddToCart(event, this)"
                                     data-id="${product._id}"
                                     data-name="${product.name}"
                                     data-price="${product.price}"
@@ -198,7 +210,8 @@
             }).join('');
         }
         
-        function handleAddToCart(button) {
+        function handleAddToCart(event, button) {
+            event.stopPropagation(); // This is correct, it stops the modal from opening when you click the button.
             if (localStorage.getItem('userLoggedIn') !== 'true') {
                 showNotification('Please log in to add items to your cart.', 'error');
                 setTimeout(() => { window.location.href = 'login.html'; }, 1500);
@@ -247,6 +260,69 @@
                 setTimeout(() => notification.remove(), 500);
             }, 3000);
         }
+
+        // 4. New function to find the product by ID
+        function openProductModalById(productId) {
+            const product = allProducts.find(p => p._id === productId);
+            if (product) {
+                openProductModal(product); // Pass the full product object
+            }
+        }
+        
+        // 5. Modify this function to accept an object, not a string
+        function openProductModal(product) { 
+            const modalOverlay = document.getElementById('productModalOverlay');
+            const modalContent = document.getElementById('productModalContent');
+            const fullDescription = product.fullDescription || product.shortDescription;
+
+            modalContent.innerHTML = `
+                <button class="modal-close-btn" onclick="closeProductModal(event)">×</button>
+                <div class="modal-product-layout">
+                    <div class="modal-product-image">
+                        <img src="${product.images[0]}" alt="${product.name}" />
+                    </div>
+                    <div class="modal-product-details">
+                        <h2 class="modal-product-name">${product.name}</h2>
+                        <div class="modal-product-pricing">
+                            <span class="modal-current-price">₹${product.price.toLocaleString()}</span>
+                            ${product.originalPrice > product.price ? `<del class="modal-original-price">₹${product.originalPrice.toLocaleString()}</del>` : ''}
+                        </div>
+                        <p class="modal-product-description">${fullDescription}</p>
+                        <div class="modal-product-action">
+                            ${product.quantity > 0
+                                ? `<button class="add-to-cart" onclick="handleAddToCart(event, this)"
+                                    data-id="${product._id}"
+                                    data-name="${product.name}"
+                                    data-price="${product.price}"
+                                    data-image="${product.images[0]}">
+                                    Add to Sacred Cart
+                                </button>`
+                                : `<div class="out-of-stock">Out of Stock</div>`
+                            }
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modalOverlay.style.display = 'flex';
+            setTimeout(() => modalOverlay.classList.add('active'), 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProductModal(event) {
+            if (event) event.stopPropagation();
+            const modalOverlay = document.getElementById('productModalOverlay');
+            modalOverlay.classList.remove('active');
+             setTimeout(() => {
+                modalOverlay.style.display = 'none';
+            }, 300);
+            document.body.style.overflow = 'auto';
+        }
+
+        // Add event listener to overlay to close modal when clicking outside the content
+        document.getElementById('productModalOverlay').addEventListener('click', closeProductModal);
+
     </script>
+    
 </body>
 </html>
