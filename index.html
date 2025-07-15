@@ -270,44 +270,74 @@
         }
         
         // 5. Modify this function to accept an object, not a string
-        function openProductModal(product) { 
-            const modalOverlay = document.getElementById('productModalOverlay');
-            const modalContent = document.getElementById('productModalContent');
-            const fullDescription = product.fullDescription || product.shortDescription;
+function openProductModal(product) { 
+    const modalOverlay = document.getElementById('productModalOverlay');
+    const modalContent = document.getElementById('productModalContent');
+    const fullDescription = product.fullDescription || product.shortDescription;
+    let currentImageIndex = 0;
 
-            modalContent.innerHTML = `
-                <button class="modal-close-btn" onclick="closeProductModal(event)">×</button>
-                <div class="modal-product-layout">
-                    <div class="modal-product-image">
-                        <img src="${product.images[0]}" alt="${product.name}" />
-                    </div>
-                    <div class="modal-product-details">
-                        <h2 class="modal-product-name">${product.name}</h2>
-                        <div class="modal-product-pricing">
-                            <span class="modal-current-price">₹${product.price.toLocaleString()}</span>
-                            ${product.originalPrice > product.price ? `<del class="modal-original-price">₹${product.originalPrice.toLocaleString()}</del>` : ''}
-                        </div>
-                        <p class="modal-product-description">${fullDescription}</p>
-                        <div class="modal-product-action">
-                            ${product.quantity > 0
-                                ? `<button class="add-to-cart" onclick="handleAddToCart(event, this)"
-                                    data-id="${product._id}"
-                                    data-name="${product.name}"
-                                    data-price="${product.price}"
-                                    data-image="${product.images[0]}">
-                                    Add to Sacred Cart
-                                </button>`
-                                : `<div class="out-of-stock">Out of Stock</div>`
-                            }
-                        </div>
-                    </div>
+    function renderImageSection() {
+        return `
+            <div class="modal-product-image" style="position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                <div style="width:100%; display:flex; align-items:center; justify-content:center; position:relative;">
+                    <button id="leftArrowBtn" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"></button>
+                    <img id="modalProductImg" src="${product.images[currentImageIndex]}" alt="${product.name}" />
+                    <button id="rightArrowBtn" style="position:absolute; right:0; top:50%; transform:translateY(-50%);"></button>
                 </div>
-            `;
-            
-            modalOverlay.style.display = 'flex';
-            setTimeout(() => modalOverlay.classList.add('active'), 10);
-            document.body.style.overflow = 'hidden';
-        }
+                <div class="modal-image-counter">${currentImageIndex + 1} / ${product.images.length}</div>
+            </div>
+        `;
+    }
+
+    modalContent.innerHTML = `
+        <button class="modal-close-btn" onclick="closeProductModal(event)">×</button>
+        <div class="modal-product-layout">
+            ${renderImageSection()}
+            <div class="modal-product-details">
+                <h2 class="modal-product-name">${product.name}</h2>
+                <div class="modal-product-pricing">
+                    <span class="modal-current-price">₹${product.price.toLocaleString()}</span>
+                    ${product.originalPrice > product.price ? `<del class="modal-original-price">₹${product.originalPrice.toLocaleString()}</del>` : ''}
+                </div>
+                <p class="modal-product-description" id="modalProductDescription">${fullDescription}</p>
+                <div class="modal-product-action">
+                    ${product.quantity > 0
+                        ? `<button class="add-to-cart" onclick="handleAddToCart(event, this)"
+                            data-id="${product._id}"
+                            data-name="${product.name}"
+                            data-price="${product.price}"
+                            data-image="${product.images[0]}">
+                            Add to Sacred Cart
+                        </button>`
+                        : `<div class="out-of-stock">Out of Stock</div>`
+                    }
+                </div>
+            </div>
+        </div>
+    `;
+    
+    modalOverlay.style.display = 'flex';
+    setTimeout(() => modalOverlay.classList.add('active'), 10);
+    document.body.style.overflow = 'hidden';
+
+    // Image navigation logic
+    function updateImage(newIndex) {
+        currentImageIndex = newIndex;
+        const img = document.getElementById('modalProductImg');
+        img.src = product.images[currentImageIndex];
+        document.querySelector('.modal-image-counter').textContent = `${currentImageIndex + 1} / ${product.images.length}`;
+    }
+    document.getElementById('leftArrowBtn').innerHTML = "&#8592;";
+    document.getElementById('rightArrowBtn').innerHTML = "&#8594;";
+    document.getElementById('leftArrowBtn').onclick = function(e) {
+        e.stopPropagation();
+        if (currentImageIndex > 0) updateImage(currentImageIndex - 1);
+    };
+    document.getElementById('rightArrowBtn').onclick = function(e) {
+        e.stopPropagation();
+        if (currentImageIndex < product.images.length - 1) updateImage(currentImageIndex + 1);
+    };
+}
 
         function closeProductModal(event) {
             if (event) event.stopPropagation();
