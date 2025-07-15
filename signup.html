@@ -101,7 +101,7 @@
 
             setLoadingState(button, true, 'Creating Account...');
             try {
-                const response = await axios.post('https://navrang-backend.onrender.com/api/signup', { email, password });
+                const response = await axios.post('https://navrang-backend.onrender.com/api/signup', { email, name, password });
                 
                 showNotification(response.data.message || 'Account created successfully!', 'success');
                 try {
