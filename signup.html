@@ -96,24 +96,9 @@
         // --- Password Signup Logic ---
         document.getElementById('signupFormPassword').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('name-password').value;
-            const email = document.getElementById('email-password').value;
-            const password = document.getElementById('password').value;
-            const button = document.getElementById('signupButtonPassword');
-
             // NOTE: The API doc doesn't have a password-based signup.
-            // This is a placeholder. A real endpoint like /api/signup-password would be needed.
-            // For now, this will show an alert.
+            // This is a placeholder. A real endpoint like /api/signup-with-password would be needed.
             showNotification('Password signup is not yet available. Please use OTP.', 'error');
-            // setLoadingState(button, true, 'Creating...');
-            // try {
-            //     const response = await axios.post('https://navrang-backend.onrender.com/api/signup-with-password', { name, email, password });
-            //     handleSuccessfulLogin(response.data.token, email, name);
-            // } catch (error) {
-            //     showNotification(error.response?.data?.message || 'Signup failed.', 'error');
-            // } finally {
-            //     setLoadingState(button, false, 'Create Account');
-            // }
         });
 
         // --- OTP Signup Logic ---
@@ -146,18 +131,40 @@
             const button = document.getElementById('verifyOtpButton');
 
             setLoadingState(button, true, 'Verifying...');
+
             try {
-                const response = await axios.post('https://navrang-backend.onrender.com/api/verifyOTP', { email, otp });
-                // After OTP is verified, we have a token. Now we can update the user's name.
-                const token = response.data.token;
-                await axios.patch('https://navrang-backend.onrender.com/api/update-user-details', 
-                    { email, name, phone: "" }, // Phone is optional
-                    { headers: { 'Authorization': `Bearer ${token}` } }
-                );
+                // Step 1: Verify the OTP and get the token
+                const verifyResponse = await axios.post('https://navrang-backend.onrender.com/api/verifyOTP', { email, otp });
+                const token = verifyResponse.data.token;
+
+                // CRITICAL: Check if the token was actually returned
+                if (!token) {
+                    showNotification('Verification failed, please try again.', 'error');
+                    setLoadingState(button, false, 'Verify OTP & Create Account');
+                    return; // Stop execution if no token is found
+                }
+
+                // Step 2: Now that we have a valid token, log the user in immediately.
                 handleSuccessfulLogin(token, email, name);
-            } catch (error) {
-                showNotification(error.response?.data?.message || 'Invalid OTP.', 'error');
+
+                // Step 3: Attempt to update user details in the background.
+                // This will not block the login even if it fails.
+                try {
+                    await axios.patch('https://navrang-backend.onrender.com/api/update-user-details', 
+                        { email, name, phone: "" }, // Phone is optional or can be added to the form
+                        { headers: { 'Authorization': `Bearer ${token}` } }
+                    );
+                } catch (updateError) {
+                    // Log the error for debugging but don't bother the user
+                    console.error("Post-signup name update failed:", updateError.response?.data?.message || updateError.message);
+                }
+
+            } catch (verifyError) {
+                const errorMessage = verifyError.response?.data?.message || 'Invalid OTP or verification failed.';
+                showNotification(errorMessage, 'error');
             } finally {
+                // The button state will be reset by the page redirect in handleSuccessfulLogin
+                // but we add it here as a fallback.
                 setLoadingState(button, false, 'Verify OTP & Create Account');
             }
         });
@@ -174,8 +181,10 @@
         }
 
         function setLoadingState(button, isLoading, loadingText) {
-            button.disabled = isLoading;
-            button.innerHTML = isLoading ? `<span class="spinner"></span> ${loadingText}` : button.textContent;
+            if (button) {
+                button.disabled = isLoading;
+                button.innerHTML = isLoading ? `<span class="spinner"></span> ${loadingText}` : button.textContent;
+            }
         }
 
         function showNotification(message, type = 'success') {
