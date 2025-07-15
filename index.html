@@ -141,9 +141,11 @@
             localStorage.removeItem('userEmail');
             localStorage.removeItem('authToken');
             localStorage.removeItem('cartItems');
+            localStorage.removeItem('userAddress');
             checkUserLogin();
             updateCartCount();
             showNotification('Logged out successfully! 🕉️', 'success');
+            setTimeout(() => { window.location.reload(); }, 1000);
         }
 
         async function fetchProducts() {
@@ -164,24 +166,36 @@
                 grid.innerHTML = '<p>No products available at the moment.</p>';
                 return;
             }
-            grid.innerHTML = products.map(product => `
+            grid.innerHTML = products.map(product => {
+                const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+                return `
                 <div class="product-card" data-product-id="${product._id}">
                     <div class="product-image">
                         <img src="${product.images[0]}" alt="${product.name}" loading="lazy"/>
+                        ${product.originalPrice > product.price ? `<span class="discount-badge">${discount}% OFF</span>` : ''}
                     </div>
-                    <div>
+                    <div class="product-details">
                         <h3 class="product-name">${product.name}</h3>
-                        <p class="product-price">₹${product.price.toLocaleString()}</p>
-                        <p>${product.shortDescription}</p>
-                        <button class="add-to-cart" onclick="handleAddToCart(this)"
-                            data-id="${product._id}"
-                            data-name="${product.name}"
-                            data-price="${product.price}"
-                            data-image="${product.images[0]}">
-                            Add to Sacred Cart
-                        </button>
+                        <p class="product-description">${product.shortDescription}</p>
+                        <div class="product-pricing">
+                            <span class="current-price">₹${product.price.toLocaleString()}</span>
+                            ${product.originalPrice > product.price ? `<del class="original-price">₹${product.originalPrice.toLocaleString()}</del>` : ''}
+                        </div>
+                        <div class="product-action">
+                            ${product.quantity > 0
+                                ? `<button class="add-to-cart" onclick="handleAddToCart(this)"
+                                    data-id="${product._id}"
+                                    data-name="${product.name}"
+                                    data-price="${product.price}"
+                                    data-image="${product.images[0]}">
+                                    Add to Sacred Cart
+                                </button>`
+                                : `<div class="out-of-stock">Out of Stock</div>`
+                            }
+                        </div>
                     </div>
-                </div>`).join('');
+                </div>`
+            }).join('');
         }
         
         function handleAddToCart(button) {

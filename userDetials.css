@@ -1,182 +1,232 @@
-/* =================================
-   Checkout Page Specific Styles
-   ================================= */
+:root {
+    --primary-color: #2D1B69; /* Deep purple for titles and key elements */
+    --secondary-color: #6a11cb; /* A slightly lighter purple for buttons */
+    --text-color: #333; /* Dark grey for body text */
+    --text-light: #666; /* Lighter grey for subtitles and less important text */
+    --background-color: #f4f5f7; /* A very light grey for the page background */
+    --card-background: #ffffff; /* White for all card elements */
+    --border-color: #e8ebf1; /* Light border color */
+    --success-color: #28a745;
+    --error-color: #dc3545;
+}
 
 body {
-    background-color: #f9f9f9; /* Lighter background for the page */
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 #checkout-page .section-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--primary-color);
     text-align: left;
-    margin-bottom: 20px;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
 }
 
-/* Grid Layout for Checkout */
+/* --- Main Grid Layout --- */
 .checkout-grid {
     display: grid;
-    grid-template-columns: 1.2fr 1fr; /* Two columns, left one is slightly larger */
+    grid-template-columns: 1.5fr 1fr; /* Give more space to the details column */
     gap: 40px;
-    align-items: flex-start; /* Align items to the top of the grid cell */
+    align-items: flex-start;
     padding: 40px 0;
 }
 
 .checkout-details-column {
     display: flex;
     flex-direction: column;
-    gap: 30px; /* Space between cards */
+    gap: 30px;
 }
 
 .order-summary-column {
-    position: sticky; /* Makes the summary stick on screen while scrolling */
-    top: 120px;
+    position: sticky;
+    top: 100px; /* Adjust sticky position */
 }
 
-/* Generic Card style for this page */
+/* --- Reusable Card Component Style --- */
 .card {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.07);
-}
-
-.card h2 {
-    font-size: 1.5rem;
-    font-family: 'Playfair Display', serif;
-    color: #333;
-    margin-bottom: 1rem;
-}
-
-/* Overriding profile-card for this context */
-.checkout-grid .profile-card {
+    background: var(--card-background);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
     width: 100%;
     margin: 0;
-    text-align: left;
-    display: flex; /* Use flexbox for avatar and details */
+}
+
+.card {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* --- Profile Display Card --- */
+.profile-card {
+    display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 1.5rem;
+    background: var(--card-background);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
 }
 
-.checkout-grid .profile-avatar {
-    margin: 0; /* Remove auto margin */
-    width: 80px;  /* smaller avatar */
-    height: 80px;
-    font-size: 2rem;
-}
-.checkout-grid .profile-details p {
-    text-align: left;
-    margin: 2px 0;
-}
-
-/* Address Display & Form */
-.address-section-container .form-group {
-    margin-bottom: 1rem;
-}
-.address-section-container .auth-button { /* a more generic button style */
-    background: var(--day9-purple);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 20px;
+.profile-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    color: var(--primary-color);
     font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-.address-section-container .auth-button:hover {
-    background: var(--day7-blue);
 }
 
+.profile-card p {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    margin: 0;
+}
+
+/* --- Address Section --- */
 .saved-address p {
     margin: 4px 0;
-    line-height: 1.5;
-    color: #555;
+    line-height: 1.6;
+    color: var(--text-light);
 }
 
 .saved-address p:first-child {
-    font-weight: 500;
-    color: #333;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--text-color);
 }
 
-/* New Payment Method Card */
+#addressPrompt {
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* --- Payment Method Section --- */
 .payment-options {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 15px;
-    margin-top: 20px;
+    gap: 1rem;
 }
 
 .payment-button {
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 15px 20px;
-    border: 2px solid #eee;
-    border-radius: 10px;
-    background-color: #fdfdfd;
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.3s ease;
-    width: 100%;
 }
 
-.payment-button:hover {
-    border-color: var(--day9-purple);
-    background-color: #f8f1fc;
-}
-.payment-button:disabled {
-    cursor: not-allowed;
-    background-color: #e9ecef;
+.payment-button:hover,
+.payment-button.active {
+    border-color: var(--secondary-color);
+    background-color: #f8f5ff; /* A very light purple */
+    box-shadow: 0 2px 8px rgba(106, 17, 203, 0.1);
 }
 
 .payment-button strong {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
-    color: #333;
+    color: var(--primary-color);
 }
 
 .payment-button span {
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 4px;
 }
 
-.payment-button .spinner {
-    border: 3px solid rgba(153, 50, 204, 0.3);
-    border-top: 3px solid var(--day9-purple);
+/* --- Order Summary Card --- */
+.cart-summary {
+    background: var(--card-background);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
 }
 
-/* Notification Styling */
-.notification {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #333;
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    font-size: 0.95rem;
+    color: var(--text-light);
+}
+
+.summary-row:not(:last-child) {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.summary-row.total {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    padding-top: 1rem;
+    border-top: 2px solid #ddd;
+    margin-top: 1rem;
+}
+
+/* --- Forms & Buttons (General) --- */
+.auth-button { /* General button style */
+    display: inline-block;
+    background: linear-gradient(90deg, var(--secondary-color), #4169E1);
     color: white;
-    padding: 15px 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-    z-index: 3000;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(106, 17, 203, 0.2);
 }
 
-.notification.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translate(-50%, -10px);
+.auth-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.3);
 }
 
-.notification.success { background-color: #28a745; }
-.notification.error { background-color: #dc3545; }
+.form-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #f9f9f9;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.15);
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
 
 
-/* Responsive Adjustments */
+/* --- Responsive Adjustments --- */
 @media (max-width: 900px) {
     .checkout-grid {
         grid-template-columns: 1fr; /* Stack columns on smaller screens */
     }
+
     .order-summary-column {
-        position: static; /* Unstick the summary on mobile */
+        position: static;
         top: auto;
+    }
+    
+    #checkout-page .section-title {
+        font-size: 2rem;
     }
 }

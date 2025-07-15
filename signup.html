@@ -13,6 +13,25 @@
         .tab-link.active { color: var(--day9-purple); border-bottom-color: var(--day9-purple); background: white; }
         .form-container { display: none; }
         .form-container.active { display: block; }
+        
+        /* --- Styles for Password Validation Feedback --- */
+        #password-rules {
+            font-size: 0.8rem;
+            color: #708090;
+            margin-top: -1rem;
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+        }
+        #password-rules li {
+            list-style-type: '○ ';
+            padding-left: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        #password-rules li.valid {
+            color: #28a745; /* Success Green */
+            list-style-type: '● ';
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -47,6 +66,14 @@
                         <label class="form-label" for="password">Password</label>
                         <input type="password" id="password" class="form-input" placeholder="Create a password" required>
                     </div>
+                    
+                    <ul id="password-rules">
+                        <li id="rule-length">At least 8 characters long</li>
+                        <li id="rule-capital">Contains a capital letter</li>
+                        <li id="rule-number">Contains a number</li>
+                        <li id="rule-special">Contains a special character (!@#$%^&*)</li>
+                    </ul>
+
                     <button type="submit" class="auth-button" id="signupButtonPassword">Create Account</button>
                 </form>
             </div>
@@ -83,6 +110,8 @@
     </div>
 
     <script>
+        const backendUrl = 'https://navrang-backend.onrender.com/api';
+
         function switchTab(tabName) {
             document.querySelectorAll('.tab-link').forEach(tab => tab.classList.remove('active'));
             document.querySelector(`.tab-link[onclick="switchTab('${tabName}')"]`).classList.add('active');
@@ -91,7 +120,39 @@
             document.getElementById(`${tabName}-form`).classList.add('active');
         }
 
-        // --- Password Signup Logic ---
+        // --- NEW: Password Validation Logic ---
+        const passwordInput = document.getElementById('password');
+        const rules = {
+            length: document.getElementById('rule-length'),
+            capital: document.getElementById('rule-capital'),
+            number: document.getElementById('rule-number'),
+            special: document.getElementById('rule-special'),
+        };
+
+        function validatePassword(password) {
+            // Regular expressions for each rule
+            const hasCapital = /[A-Z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[!@#$%^&*]/.test(password);
+            const hasLength = password.length >= 8;
+
+            // Update UI feedback
+            rules.length.classList.toggle('valid', hasLength);
+            rules.capital.classList.toggle('valid', hasCapital);
+            rules.number.classList.toggle('valid', hasNumber);
+            rules.special.classList.toggle('valid', hasSpecial);
+
+            // Return overall validity
+            return hasLength && hasCapital && hasNumber && hasSpecial;
+        }
+
+        // Add event listener for real-time validation
+        passwordInput.addEventListener('input', () => {
+            validatePassword(passwordInput.value);
+        });
+
+
+        // --- Password Signup Logic (Updated) ---
         document.getElementById('signupFormPassword').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email-password').value;
@@ -99,18 +160,34 @@
             const name = document.getElementById('name-password').value;
             const button = document.getElementById('signupButtonPassword');
 
+            // --- VALIDATION CHECK ---
+            if (!validatePassword(password)) {
+                showNotification('Password does not meet all requirements.', 'error');
+                return; // Stop submission
+            }
+
             setLoadingState(button, true, 'Creating Account...');
             try {
-                const response = await axios.post('https://navrang-backend.onrender.com/api/signup', { email, name, password });
+                // Step 1: Create the user account
+                await axios.post(`${backendUrl}/signup`, { email, password });
                 
-                showNotification(response.data.message || 'Account created successfully!', 'success');
+                // Step 2: Log the new user in to get a token
+                const loginResponse = await axios.post(`${backendUrl}/login`, { email, password });
+                const token = loginResponse.data.token;
+                
+                // Step 3: Use the token to update the user's name
                 try {
-                    const loginResponse = await axios.post('https://navrang-backend.onrender.com/api/login', { email, password });
-                    handleSuccessfulLogin(loginResponse.data.token, email, name);
-                } catch (loginError) {
-                    console.error("Auto-login after signup failed:", loginError);
-                    setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+                    await axios.patch(`${backendUrl}/update-user-details`, 
+                        { email, name, phone: "" },
+                        { headers: { 'Authorization': `Bearer ${token}` } }
+                    );
+                } catch (updateError) {
+                    console.error("Post-signup name update failed:", updateError.response?.data?.message || updateError.message);
+                    // Non-critical error, we can still proceed with login
                 }
+
+                // Step 4: Finalize the login on the frontend
+                handleSuccessfulLogin(token, email, name);
 
             } catch (error) {
                 const errorMessage = error.response?.data?.message || 'Signup failed.';
@@ -131,7 +208,7 @@
             const button = document.getElementById('sendOtpButton');
             setLoadingState(button, true, 'Sending...');
             try {
-                await axios.post('https://navrang-backend.onrender.com/api/sendOTP', { email });
+                await axios.post(`${backendUrl}/sendOTP`, { email });
                 showNotification('OTP sent to your email!', 'success');
                 document.getElementById('otp-details-group').style.display = 'none';
                 document.getElementById('otp-verify-group').style.display = 'block';
@@ -152,28 +229,20 @@
             setLoadingState(button, true, 'Verifying...');
 
             try {
-                const verifyResponse = await axios.post('https://navrang-backend.onrender.com/api/verifyOTP', { email, otp });
+                const verifyResponse = await axios.post(`${backendUrl}/verifyOTP`, { email, otp });
                 const token = verifyResponse.data.token;
 
-                if (!token) {
-                    showNotification('Verification failed, please try again.', 'error');
-                    setLoadingState(button, false, 'Verify OTP & Create Account');
-                    return;
-                }
+                if (!token) throw new Error('Verification failed, no token received.');
+
+                await axios.patch(`${backendUrl}/update-user-details`, 
+                    { email, name, phone: "" },
+                    { headers: { 'Authorization': `Bearer ${token}` } }
+                );
 
                 handleSuccessfulLogin(token, email, name);
 
-                try {
-                    await axios.patch('https://navrang-backend.onrender.com/api/update-user-details', 
-                        { email, name, phone: "" },
-                        { headers: { 'Authorization': `Bearer ${token}` } }
-                    );
-                } catch (updateError) {
-                    console.error("Post-signup name update failed:", updateError.response?.data?.message || updateError.message);
-                }
-
-            } catch (verifyError) {
-                const errorMessage = verifyError.response?.data?.message || 'Invalid OTP or verification failed.';
+            } catch (error) {
+                const errorMessage = error.response?.data?.message || 'Invalid OTP or signup failed.';
                 showNotification(errorMessage, 'error');
             } finally {
                 setLoadingState(button, false, 'Verify OTP & Create Account');
@@ -194,7 +263,11 @@
         function setLoadingState(button, isLoading, loadingText) {
             if (button) {
                 button.disabled = isLoading;
-                button.innerHTML = isLoading ? `<span class="spinner"></span> ${loadingText}` : button.textContent;
+                const originalText = button.getAttribute('data-original-text') || button.textContent;
+                if (!isLoading && !button.getAttribute('data-original-text')) {
+                    button.setAttribute('data-original-text', originalText);
+                }
+                button.innerHTML = isLoading ? `<span class="spinner"></span> ${loadingText}` : originalText;
             }
         }
 

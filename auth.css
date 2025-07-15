@@ -1,9 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+
 :root {
     --day7-blue: #4169E1;
     --day9-purple: #9932CC;
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -11,7 +18,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 1rem; /* Added padding for smaller screens */
 }
+
 .auth-container {
     background: white;
     border-radius: 20px;
@@ -21,7 +30,9 @@ body {
     max-width: 900px;
     min-height: 600px;
     display: flex;
+    transition: all 0.3s ease-in-out;
 }
+
 .auth-left {
     flex: 1;
     background: linear-gradient(135deg, var(--day9-purple), var(--day7-blue));
@@ -33,13 +44,19 @@ body {
     text-align: center;
     color: white;
 }
+
 .sacred-logo {
     font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
     font-weight: 800;
     margin-top: 1rem;
 }
-.sacred-tagline { font-size: 1.1rem; opacity: 0.9; }
+
+.sacred-tagline { 
+    font-size: 1.1rem; 
+    opacity: 0.9; 
+}
+
 .auth-right {
     flex: 1.2;
     padding: 3rem;
@@ -47,12 +64,41 @@ body {
     flex-direction: column;
     justify-content: center;
 }
-.auth-form { width: 100%; max-width: 400px; margin: 0 auto; }
-.form-header { text-align: center; margin-bottom: 2rem; }
-.form-title { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: #2D1B69; }
-.form-subtitle { font-size: 1rem; color: #708090; }
-.form-group { margin-bottom: 1.5rem; }
-.form-label { display: block; font-size: 0.9rem; color: #2D1B69; margin-bottom: 0.5rem; font-weight: 600; }
+
+.auth-form { 
+    width: 100%; 
+    max-width: 400px; 
+    margin: 0 auto; 
+}
+
+.form-header { 
+    text-align: center; 
+    margin-bottom: 2rem; 
+}
+
+.form-title { 
+    font-family: 'Playfair Display', serif; 
+    font-size: 2.2rem; 
+    color: #2D1B69; 
+}
+
+.form-subtitle { 
+    font-size: 1rem; 
+    color: #708090; 
+}
+
+.form-group { 
+    margin-bottom: 1.5rem; 
+}
+
+.form-label { 
+    display: block; 
+    font-size: 0.9rem; 
+    color: #2D1B69; 
+    margin-bottom: 0.5rem; 
+    font-weight: 600; 
+}
+
 .form-input {
     width: 100%;
     padding: 0.8rem 1rem;
@@ -60,9 +106,21 @@ body {
     border-radius: 8px;
     font-size: 1rem;
 }
-.form-input:focus { outline: none; border-color: var(--day7-blue); box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.2); }
-.password-input-container { position: relative; }
-.password-input-container .form-input { padding-right: 3rem; }
+
+.form-input:focus { 
+    outline: none; 
+    border-color: var(--day7-blue); 
+    box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.2); 
+}
+
+.password-input-container { 
+    position: relative; 
+}
+
+.password-input-container .form-input { 
+    padding-right: 3rem; 
+}
+
 .password-toggle {
     position: absolute;
     right: 1px;
@@ -75,6 +133,7 @@ body {
     font-size: 1.2rem;
     color: #708090;
 }
+
 .auth-button {
     width: 100%;
     padding: 1rem;
@@ -90,9 +149,24 @@ body {
     justify-content: center;
     gap: 10px;
 }
-.auth-button:disabled { background: #cccccc; cursor: not-allowed; }
-.form-footer { text-align: center; margin-top: 2rem; font-size: 0.9rem; }
-.form-footer a { color: var(--day7-blue); text-decoration: none; font-weight: 600; }
+
+.auth-button:disabled { 
+    background: #cccccc; 
+    cursor: not-allowed; 
+}
+
+.form-footer { 
+    text-align: center; 
+    margin-top: 2rem; 
+    font-size: 0.9rem; 
+}
+
+.form-footer a { 
+    color: var(--day7-blue); 
+    text-decoration: none; 
+    font-weight: 600; 
+}
+
 .spinner {
     border: 3px solid rgba(255, 255, 255, 0.3);
     border-top: 3px solid #fff;
@@ -101,8 +175,71 @@ body {
     height: 18px;
     animation: spin 1s linear infinite;
 }
-@keyframes spin { 100% { transform: rotate(360deg); } }
-.notification { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: #333; color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 1000; }
-.notification.show { opacity: 1; visibility: visible; transform: translate(-50%, -10px); }
-.notification.success { background-color: #28a745; }
-.notification.error { background-color: #dc3545; }
+
+@keyframes spin { 
+    100% { transform: rotate(360deg); } 
+}
+
+.notification { 
+    position: fixed; 
+    bottom: 20px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background-color: #333; 
+    color: white; 
+    padding: 15px 25px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+    opacity: 0; 
+    visibility: hidden; 
+    transition: all 0.3s ease; 
+    z-index: 1000; 
+}
+
+.notification.show { 
+    opacity: 1; 
+    visibility: visible; 
+    transform: translate(-50%, -10px); 
+}
+
+.notification.success { 
+    background-color: #28a745; 
+}
+
+.notification.error { 
+    background-color: #dc3545; 
+}
+
+/* --- RESPONSIVE STYLES --- */
+@media (max-width: 768px) {
+    body {
+        /* Remove flex centering to allow scrolling */
+        display: block;
+    }
+
+    .auth-container {
+        /* Stack the two columns vertically */
+        flex-direction: column;
+        min-height: auto;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .auth-left {
+        /* Reduce padding and treat as a header */
+        padding: 2rem;
+        border-radius: 20px 20px 0 0;
+    }
+    
+    .auth-right {
+        padding: 2.5rem 1.5rem; /* Adjust padding for mobile */
+    }
+
+    .sacred-logo {
+        font-size: 2rem;
+    }
+
+    .form-title {
+        font-size: 1.8rem;
+    }
+}
