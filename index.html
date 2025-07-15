@@ -161,7 +161,7 @@
             const grid = document.getElementById('productsGrid');
             grid.innerHTML = '<p>Loading divine collection... 🕉️</p>';
             try {
-                const response = await axios.get('http://localhost:5000/api/get-items');
+                const response = await axios.get('https://navrang-backend.onrender.com/api/get-items');
                 allProducts = response.data; // 2. Populate the global array
                 renderProducts(allProducts);
             } catch (error) {
