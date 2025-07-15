@@ -47,7 +47,7 @@
                         <p id="addressCityStatePin"></p>
                         <p id="addressNearTo"></p>
                     </div>
-                     <p id="addressPrompt">Please add your delivery address below.</p>
+                     <p id="addressPrompt" style="display:none;">Please add your delivery address below.</p>
                     <button id="changeAddressBtn" class="auth-button" style="margin-top: 1rem; display:none;">Change Address</button>
                     
                     <form id="addressForm" class="address-form" style="display:none; margin-top: 20px;">
@@ -154,12 +154,19 @@
             }
 
             loadUserDetails();
-            initializeAddressSection();
+            loadAddressDetails(); // Changed from initializeAddressSection
             renderOrderSummary();
 
             document.getElementById('changeAddressBtn').addEventListener('click', () => {
                 const form = document.getElementById('addressForm');
-                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+                const button = document.getElementById('changeAddressBtn');
+                if (form.style.display === 'none') {
+                    form.style.display = 'block';
+                    button.textContent = 'Hide Address Form';
+                } else {
+                    form.style.display = 'none';
+                    button.textContent = 'Change Address';
+                }
             });
 
             document.getElementById('addressForm').addEventListener('submit', handleSaveAddress);
@@ -172,13 +179,15 @@
             const savedAddressDiv = document.getElementById('savedAddress');
             const addressForm = document.getElementById('addressForm');
             const changeAddressBtn = document.getElementById('changeAddressBtn');
-            
+            const addressPrompt = document.getElementById('addressPrompt');
+
             if (address && address.building) {
-                document.getElementById('addressName').textContent = user.name || 'User';
+                document.getElementById('addressName').textContent = user.name || localStorage.getItem('userName');
                 document.getElementById('addressDetails').textContent = `${address.building}, ${address.address}`;
                 document.getElementById('addressCityStatePin').textContent = `${address.city}, ${address.state} - ${address.pinCode}`;
                 document.getElementById('addressNearTo').textContent = address.nearTo ? `Landmark: ${address.nearTo}` : '';
                 
+                // Pre-fill form for editing
                 document.getElementById('building').value = address.building || '';
                 document.getElementById('address').value = address.address || '';
                 document.getElementById('nearTo').value = address.nearTo || '';
@@ -187,10 +196,10 @@
                 document.getElementById('state').value = address.state || '';
 
                 savedAddressDiv.style.display = 'block';
-                document.getElementById('addressPrompt').style.display = 'none';
+                addressPrompt.style.display = 'none';
                 addressForm.style.display = 'none';
                 changeAddressBtn.style.display = 'block';
-
+                changeAddressBtn.textContent = 'Change Address';
             } else {
                  initializeAddressSection();
             }
@@ -201,6 +210,18 @@
             document.getElementById('addressForm').style.display = 'block';
             document.getElementById('savedAddress').style.display = 'none';
             document.getElementById('changeAddressBtn').style.display = 'none';
+        }
+
+        function loadAddressDetails() {
+            const savedAddressJSON = localStorage.getItem('userAddress');
+            if (savedAddressJSON) {
+                const address = JSON.parse(savedAddressJSON);
+                const userName = localStorage.getItem('userName');
+                const user = { name: userName, address: address };
+                displayAddress(user);
+            } else {
+                initializeAddressSection();
+            }
         }
 
         async function loadUserDetails() {
@@ -231,7 +252,12 @@
                 });
                 showNotification(response.data.message || 'Address updated successfully!', 'success');
                 if (response.data.user) {
+                    // Save address and name to localStorage
+                    localStorage.setItem('userAddress', JSON.stringify(response.data.user.address));
+                    localStorage.setItem('userName', response.data.user.name);
+                    // Update UI
                     displayAddress(response.data.user);
+                    loadUserDetails(); // Refresh user name in profile card
                 }
             } catch (error) {
                 console.error('Error saving address:', error);
@@ -294,6 +320,7 @@
 
                 showNotification(response.data.message || 'COD Order Placed Successfully!', 'success');
                 localStorage.removeItem('cartItems');
+                localStorage.removeItem('userAddress'); // Clear address after order
                 setTimeout(() => { window.location.href = 'index.html'; }, 2000);
 
             } catch (error) {
@@ -346,6 +373,7 @@
 
                             showNotification(verificationResponse.data.msg || 'Payment successful!', 'success');
                             localStorage.removeItem('cartItems');
+                            localStorage.removeItem('userAddress'); // Clear address after order
                             setTimeout(() => { window.location.href = 'index.html'; }, 2000);
 
                         } catch (verifyError) {
@@ -368,7 +396,7 @@
                 rzp.open();
 
             } catch (error) {
-                showNotification(error.response?.data?.error || 'Failed to initiate payment.', 'error');
+                showNotification(error.response?.data?.error || 'Failed to initiate payment. Please ensure your address is saved.', 'error');
             } finally {
                  setLoadingState(document.getElementById('razorpayButton'), false, '<strong>Pay Online</strong><span>Cards, UPI, Netbanking via Razorpay</span>');
             }
