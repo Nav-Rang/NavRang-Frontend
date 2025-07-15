@@ -31,7 +31,6 @@
                 <div class="tab-link" onclick="switchTab('otp')">Use OTP</div>
             </div>
 
-            <!-- Password Login Form -->
             <div id="password-form" class="form-container active">
                 <form class="auth-form" id="loginFormPassword">
                     <div class="form-header">
@@ -50,7 +49,6 @@
                 </form>
             </div>
 
-            <!-- OTP Login Form -->
             <div id="otp-form" class="form-container">
                 <form class="auth-form" id="loginFormOtp">
                     <div class="form-header">
@@ -94,9 +92,7 @@
             
             setLoadingState(button, true, 'Logging In...');
             try {
-                // NOTE: The API doc has /api/verify-admin. This might be for admins only.
-                // Assuming it works for regular users for now. If there's a different user login endpoint, it should be used.
-                const response = await axios.post('https://navrang-backend.onrender.com/api/verify-admin', { email, password });
+                const response = await axios.post('https://navrang-backend.onrender.com/api/login', { email, password });
                 handleSuccessfulLogin(response.data.token, email);
             } catch (error) {
                 const errorMessage = error.response?.data?.message || 'Login failed. Please check your credentials.';
@@ -108,7 +104,7 @@
 
         // --- OTP Login Logic ---
         document.getElementById('sendOtpButton').addEventListener('submit', async (e) => {
-            e.preventDefault(); // Prevent form submission
+            e.preventDefault();
         });
         document.getElementById('sendOtpButton').addEventListener('click', async () => {
             const email = document.getElementById('email-otp').value;
@@ -154,8 +150,6 @@
             localStorage.setItem('authToken', token);
             localStorage.setItem('userLoggedIn', 'true');
             localStorage.setItem('userEmail', email);
-            // The API doesn't return the user's name on login.
-            // We'll derive it from the email as a fallback.
             const userName = email.split('@')[0];
             localStorage.setItem('userName', userName);
             
