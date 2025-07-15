@@ -20,27 +20,32 @@
         </div>
     </header>
 
-    <main class="container content-section">
-        <h1 class="section-title">Your Profile</h1>
-        <div id="user-details-container">
-            <p><strong>Name:</strong> <span id="user-name"></span></p>
-            <p><strong>Email:</strong> <span id="user-email"></span></p>
-            <p><strong>Phone:</strong> <span id="user-phone"></span></p>
+    <main class="container">
+        <div class="profile-card" id="user-details-container">
         </div>
     </main>
-
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const userName = localStorage.getItem('userName');
             const userEmail = localStorage.getItem('userEmail');
-            const userPhone = localStorage.getItem('userPhone'); // Note: Phone isn't stored in the current flow.
+            const container = document.getElementById('user-details-container');
 
             if (userName && userEmail) {
-                document.getElementById('user-name').textContent = userName;
-                document.getElementById('user-email').textContent = userEmail;
-                document.getElementById('user-phone').textContent = userPhone || 'Not provided';
+                const userInitial = (userName.charAt(0) || 'S').toUpperCase();
+                container.innerHTML = `
+                    <div class="profile-avatar">${userInitial}</div>
+                    <h1 class="section-title">Your Profile</h1>
+                    <div class="profile-details">
+                        <p><strong>Name:</strong> <span id="user-name">${userName}</span></p>
+                        <p><strong>Email:</strong> <span id="user-email">${userEmail}</span></p>
+                    </div>
+                `;
             } else {
-                document.getElementById('user-details-container').innerHTML = '<p>Please <a href="login.html">log in</a> to view your details.</p>';
+                container.innerHTML = `
+                    <h1 class="section-title">Access Denied</h1>
+                    <p>Please <a href="login.html">log in</a> to view your profile details.</p>
+                `;
             }
         });
     </script>

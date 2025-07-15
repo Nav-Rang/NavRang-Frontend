@@ -5,399 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NavRang | Sign Up</title>
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
-
-        :root {
-            --day1-yellow: #FFD700;
-            --day2-green: #228B22;
-            --day3-grey: #708090;
-            --day4-orange: #FF8C00;
-            --day5-white: #FFFFFF;
-            --day6-red: #DC143C;
-            --day7-blue: #4169E1;
-            --day8-pink: #FF69B4;
-            --day9-purple: #9932CC;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #2D1B69;
-        }
-
-        .auth-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            width: 100%;
-            max-width: 900px;
-            min-height: 600px;
-            display: flex;
-            animation: slideIn 0.6s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .auth-left {
-            flex: 1;
-            background: linear-gradient(135deg, var(--day9-purple), var(--day7-blue));
-            padding: 3rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .auth-left::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: float 20s linear infinite;
-        }
-
-        @keyframes float {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .subtle-wavy-underline {
-        position: relative;
-        display: inline-block;
-    }
-
-    .subtle-wavy-underline::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: -5px;
-        width: 100%;
-        height: 4px;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0,5 Q20,8 30,4 Q40,0 60,5 Q80,10 100,5' stroke='url(%23wavy-gradient)' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3ClinearGradient id='wavy-gradient' gradientUnits='userSpaceOnUse' x1='0' y1='0' x2='100' y2='0'%3E%3Cstop offset='0%25' stop-color='%23ff6b6b'/%3E%3Cstop offset='50%25' stop-color='%23a176ff'/%3E%3Cstop offset='100%25' stop-color='%234ecdc4'/%3E%3C/linearGradient%3E%3C/svg%3E");
-        background-size: 100% 100%;
-        opacity: 0.95;
-        filter: url('#roughpaper');
-    }
-
-        .sacred-logo {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .sacred-tagline {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .auth-illustration {
-            font-size: 6rem;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-        }
-
-        /* Right panel styles */
-        .auth-right {
-            flex: 1.2;
-            padding: 3rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .auth-form {
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .form-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .form-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            color: #2D1B69;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-        }
-
-        .form-subtitle {
-            font-size: 1rem;
-            color: #708090;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.9rem;
-            color: #2D1B69;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid #dcdcdc;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            color: #2D1B69;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .password-input-container {
-            position: relative;
-        }
-
-        .password-input-container .form-input {
-            padding-right: 3rem;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: #708090;
-            padding: 4px;
-            border-radius: 4px;
-            transition: color 0.3s ease;
-        }
-
-        .password-toggle:hover {
-            color: var(--day7-blue);
-        }
-
-        .password-toggle:focus {
-            outline: none;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--day7-blue);
-            box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.2);
-        }
-
-        .auth-button {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(90deg, var(--day9-purple), var(--day7-blue));
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .auth-button:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .auth-button:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
-
-        .form-footer {
-            text-align: center;
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #708090;
-        }
-
-        .form-footer a {
-            color: var(--day7-blue);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .form-footer a:hover {
-            text-decoration: underline;
-        }
-
-        .step-container {
-            display: none;
-        }
-
-        .step-container.active {
-            display: block;
-        }
-
-        /* Spinner for loading state */
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #fff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Notification styles */
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            z-index: 1000;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .notification.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .notification.success {
-            background-color: #28a745;
-        }
-
-        .notification.error {
-            background-color: #dc3545;
-        }
-    </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="auth.css">
 </head>
 <body>
     <div class="auth-container">
         <div class="auth-left">
-            <div class="auth-illustration"><img height="200px" style="border-radius: 15px;" src="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png" alt=""></div>
-            <h1 class="sacred-logo subtle-wavy-underline">NavRang</h1>
+            <img height="150px" style="border-radius: 15px;" src="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png" alt="NavRang Logo">
+            <h1 class="sacred-logo">NavRang</h1>
             <p class="sacred-tagline">Your Divine Shopping Destination</p>
         </div>
 
         <div class="auth-right">
-            <div class="auth-form">
+            <form class="auth-form" id="signupForm">
                 <div class="form-header">
                     <h2 class="form-title">Create Account</h2>
                     <p class="form-subtitle">Join our sacred community</p>
                 </div>
-
-                <div class="step-container active" id="signupStep">
-                    <form id="signupForm">
-                        <div class="form-group">
-                            <label class="form-label" for="email">Email Address</label>
-                            <input type="email" id="email" class="form-input" placeholder="Enter your email address" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="password">Password</label>
-                            <div class="password-input-container">
-                                <input type="password" id="password" class="form-input" placeholder="Create a password (min. 6 characters)" required>
-                                <button type="button" class="password-toggle" onclick="togglePassword()">
-                                    <span id="eyeIcon">👁️</span>
-                                </button>
-                            </div>
-                        </div>
-                        <button type="submit" class="auth-button">Create Account</button>
-                    </form>
+                <div class="form-group">
+                    <label class="form-label" for="name">Your Name</label>
+                    <input type="text" id="name" class="form-input" placeholder="Enter your full name" required>
                 </div>
-
-                <!-- OTP Step - Commented out for now -->
-                <!-- 
-                <div class="step-container" id="otpStep">
-                    <form id="otpForm">
-                        <p id="otp-message" class="form-subtitle" style="text-align:center; margin-bottom: 1rem;"></p>
-                        <div class="form-group">
-                             <label class="form-label" for="otp">OTP Code</label>
-                             <input type="text" id="otp" class="form-input" placeholder="Enter the 6-digit code" required>
-                        </div>
-                        <button type="submit" class="auth-button">Verify & Create Account</button>
-                    </form>
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
                 </div>
-                -->
-                
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <div class="password-input-container">
+                        <input type="password" id="password" class="form-input" placeholder="Create a password (min. 6 characters)" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
+                            <span id="eyeIcon">👁️</span>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="auth-button" id="signupButton">Create Account</button>
                 <div class="form-footer">
                     <p>Already have an account? <a href="login.html">Log In</a></p>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('signupForm').addEventListener('submit', handleSignupSubmit);
-            // OTP form event listener commented out
-            // document.getElementById('otpForm').addEventListener('submit', handleOtpSubmit);
-        });
 
-        async function handleSignupSubmit(e) {
+    <script>
+        const signupForm = document.getElementById('signupForm');
+        const signupButton = document.getElementById('signupButton');
+
+        signupForm.addEventListener('submit', handleSignup);
+
+        async function handleSignup(e) {
             e.preventDefault();
-            const button = e.target.querySelector('button');
+            const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
@@ -405,108 +63,51 @@
                 showNotification('Password must be at least 6 characters long.', 'error');
                 return;
             }
-
-            setLoadingState(button, true, 'Creating Account...');
-
-            try {
-                // Send signup request to backend
-                const response = await axios.post('https://navrang-backend.onrender.com/api/signup', { 
-                    email, 
-                    password 
-                });
-
-                // Handle successful registration
-                if (response.status === 201) {
-                    showNotification('Account created successfully! Welcome to NavRang. 🕉️', 'success');
-                    
-                    // Store user data in localStorage
-                    localStorage.setItem('userEmail', email);
-                    localStorage.setItem('userLoggedIn', 'true');
-                    
-                    // Redirect to main page after a brief delay
-                    setTimeout(() => { 
-                        window.location.href = 'index.html'; 
-                    }, 1500);
-                }
-
-            } catch (error) {
-                let errorMessage = 'Registration failed. Please try again.';
-                
-                if (error.response) {
-                    switch (error.response.status) {
-                        case 400:
-                            if (error.response.data.message === 'Email and password are required') {
-                                errorMessage = 'Email and password are required.';
-                            } else if (error.response.data.message === 'User already exists') {
-                                errorMessage = 'An account with this email already exists.';
-                            } else {
-                                errorMessage = error.response.data.message;
-                            }
-                            break;
-                        case 500:
-                            errorMessage = 'Server error. Please try again later.';
-                            break;
-                        default:
-                            errorMessage = error.response.data.message || errorMessage;
-                    }
-                }
-                
-                showNotification(errorMessage, 'error');
-            } finally {
-                setLoadingState(button, false, 'Create Account');
-            }
-        }
-
-        /* OTP Submit Handler - Commented out for now
-        async function handleOtpSubmit(e) {
-            e.preventDefault();
-            const button = e.target.querySelector('button');
-            const otp = document.getElementById('otp').value;
-            const email = localStorage.getItem('temp_user_email');
-
-            if (!email || !otp) {
-                showNotification('Something went wrong. Please try signing up again.', 'error');
-                return;
-            }
-
-            setLoadingState(button, true, 'Verifying...');
+            
+            setLoadingState(true);
 
             try {
-                const response = await axios.post('https://navrang-backend.onrender.com/api/verifyOTP', { email, otp });
-
+                // We assume the signup endpoint can accept a `name` field.
+                const response = await axios.post('https://navrang-backend.onrender.com/api/signup', { name, email, password });
                 const { token } = response.data;
-                const userName = localStorage.getItem('temp_user_name');
-
-                localStorage.setItem('authToken', token);
-                localStorage.setItem('userName', userName);
-                localStorage.setItem('userEmail', email);
-                localStorage.setItem('userLoggedIn', 'true');
-
-                localStorage.removeItem('temp_user_name');
-                localStorage.removeItem('temp_user_email');
-
+                
                 showNotification('Account created successfully! Welcome. 🕉️', 'success');
+                
+                localStorage.setItem('authToken', token);
+                localStorage.setItem('userLoggedIn', 'true');
+                localStorage.setItem('userEmail', email);
+                // Store the user-provided name instead of deriving it from the email.
+                localStorage.setItem('userName', name);
+                
                 setTimeout(() => { window.location.href = 'index.html'; }, 1500);
 
             } catch (error) {
-                const errorMessage = error.response?.data?.message || 'Invalid OTP. Please try again.';
+                const errorMessage = error.response?.data?.message || 'Registration failed. Please try again.';
                 showNotification(errorMessage, 'error');
             } finally {
-                setLoadingState(button, false, 'Verify & Create Account');
+                setLoadingState(false);
             }
         }
-        */
 
-        function setLoadingState(button, isLoading, loadingText) {
-            const originalText = button.dataset.originalText || button.textContent;
-            if(!button.dataset.originalText) button.dataset.originalText = originalText;
-            
+        function setLoadingState(isLoading) {
             if (isLoading) {
-                button.disabled = true;
-                button.innerHTML = `<span class="spinner"></span> ${loadingText}`;
+                signupButton.disabled = true;
+                signupButton.innerHTML = `<span class="spinner"></span> Creating Account...`;
             } else {
-                button.disabled = false;
-                button.innerHTML = originalText;
+                signupButton.disabled = false;
+                signupButton.innerHTML = 'Create Account';
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.textContent = '👁️';
             }
         }
 
@@ -520,19 +121,6 @@
                 notification.classList.remove('show');
                 setTimeout(() => notification.remove(), 500);
             }, 3000);
-        }
-
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeIcon.textContent = '🙈';
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.textContent = '👁️';
-            }
         }
     </script>
 </body>

@@ -5,603 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NavRang | Login</title>
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
-
-        :root {
-            --day1-yellow: #FFD700;
-            --day2-green: #228B22;
-            --day3-grey: #708090;
-            --day4-orange: #FF8C00;
-            --day5-white: #FFFFFF;
-            --day6-red: #DC143C;
-            --day7-blue: #4169E1;
-            --day8-pink: #FF69B4;
-            --day9-purple: #9932CC;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #2D1B69;
-        }
-
-        .auth-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            width: 100%;
-            max-width: 900px;
-            min-height: 600px;
-            display: flex;
-            animation: slideIn 0.6s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .auth-left {
-            flex: 1;
-            background: linear-gradient(135deg, var(--day9-purple), var(--day7-blue));
-            padding: 3rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .auth-left::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: float 20s linear infinite;
-        }
-
-        @keyframes float {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .subtle-wavy-underline {
-        position: relative;
-        display: inline-block;
-    }
-
-    .subtle-wavy-underline::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: -5px;
-        width: 100%;
-        height: 4px;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0,5 Q20,8 30,4 Q40,0 60,5 Q80,10 100,5' stroke='url(%23wavy-gradient)' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3ClinearGradient id='wavy-gradient' gradientUnits='userSpaceOnUse' x1='0' y1='0' x2='100' y2='0'%3E%3Cstop offset='0%25' stop-color='%23ff6b6b'/%3E%3Cstop offset='50%25' stop-color='%23a176ff'/%3E%3Cstop offset='100%25' stop-color='%234ecdc4'/%3E%3C/linearGradient%3E%3C/svg%3E");
-        background-size: 100% 100%;
-        opacity: 0.95;
-        filter: url('#roughpaper');
-    }
-
-        .sacred-logo {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .sacred-tagline {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .auth-illustration {
-            font-size: 6rem;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-        }
-
-        /* Right panel styles */
-        .auth-right {
-            flex: 1.2;
-            padding: 3rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .auth-form {
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .form-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .form-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            color: #2D1B69;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-        }
-
-        .form-subtitle {
-            font-size: 1rem;
-            color: #708090;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.9rem;
-            color: #2D1B69;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid #dcdcdc;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            color: #2D1B69;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--day7-blue);
-            box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.2);
-        }
-
-        /* Password input with eye icon */
-        .password-input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .password-input-wrapper .form-input {
-            padding-right: 3rem;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #708090;
-            font-size: 1.2rem;
-            padding: 4px;
-            border-radius: 4px;
-            transition: color 0.3s ease, background-color 0.3s ease;
-        }
-
-        .password-toggle:hover {
-            color: var(--day7-blue);
-            background-color: rgba(65, 105, 225, 0.1);
-        }
-
-        .password-toggle:focus {
-            outline: none;
-            color: var(--day7-blue);
-            background-color: rgba(65, 105, 225, 0.1);
-        }
-
-        .auth-button {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(90deg, var(--day9-purple), var(--day7-blue));
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .auth-button:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .auth-button:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
-
-        .form-footer {
-            text-align: center;
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #708090;
-        }
-
-        .form-footer a {
-            color: var(--day7-blue);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .form-footer a:hover {
-            text-decoration: underline;
-        }
-
-        .auth-options {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 2rem;
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            padding: 5px;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .auth-options button {
-            flex: 1;
-            padding: 0.8rem;
-            border: none;
-            background-color: transparent;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #708090;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .auth-options button.active {
-            background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            color: var(--day9-purple);
-        }
-
-        /* Spinner for loading state */
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #fff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Notification styles */
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            z-index: 1000;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .notification.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .notification.success {
-            background-color: #28a745;
-        }
-
-        .notification.error {
-            background-color: #dc3545;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .auth-container {
-                flex-direction: column;
-                max-width: 100%;
-                margin: 1rem;
-            }
-            
-            .auth-left {
-                padding: 2rem;
-            }
-            
-            .auth-right {
-                padding: 2rem;
-            }
-            
-            .sacred-logo {
-                font-size: 2rem;
-            }
-            
-            .form-title {
-                font-size: 1.8rem;
-            }
-        }
-    </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="auth.css">
 </head>
 <body>
     <div class="auth-container">
         <div class="auth-left">
-            <div class="auth-illustration"><img height="200px" style="border-radius: 15px;" src="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png" alt=""></div>
-            <h1 class="sacred-logo subtle-wavy-underline">NavRang</h1>
+            <img height="150px" style="border-radius: 15px;" src="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png" alt="NavRang Logo">
+            <h1 class="sacred-logo">NavRang</h1>
             <p class="sacred-tagline">Your Divine Shopping Destination</p>
         </div>
 
         <div class="auth-right">
-            <div class="auth-form">
+            <form class="auth-form" id="loginForm">
                 <div class="form-header">
                     <h2 class="form-title">Welcome Back</h2>
                     <p class="form-subtitle">Login to your sacred account</p>
                 </div>
-
-                <!-- OTP Login Section - Commented out for now -->
-                <!-- 
-                <div class="auth-options">
-                    <button id="otp-login-btn" class="active">Login with OTP</button>
-                    <button id="password-login-btn">Login with Password</button>
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
                 </div>
-
-                <div id="otp-login-form">
-                    <div id="otpRequestStep">
-                        <form id="otpRequestForm">
-                            <div class="form-group">
-                                <label class="form-label" for="otp-email">Email Address</label>
-                                <input type="email" id="otp-email" class="form-input" placeholder="Enter your registered email" required>
-                            </div>
-                            <button type="submit" class="auth-button">Send OTP</button>
-                        </form>
-                    </div>
-                    <div id="otpVerifyStep" style="display: none;">
-                        <form id="otpVerifyForm">
-                            <p class="form-subtitle" style="text-align:center; margin-bottom: 1rem;">An OTP has been sent to your email. Please enter it below.</p>
-                             <div class="form-group">
-                                 <label class="form-label" for="otp-code">OTP Code</label>
-                                 <input type="text" id="otp-code" class="form-input" placeholder="Enter the 6-digit OTP" required>
-                            </div>
-                            <button type="submit" class="auth-button">Verify & Login</button>
-                        </form>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <div class="password-input-container">
+                        <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
+                            <span id="eyeIcon">👁️</span>
+                        </button>
                     </div>
                 </div>
-                -->
-
-                <div id="password-login-form">
-                    <form id="passwordForm">
-                        <div class="form-group">
-                            <label class="form-label" for="password-email">Email Address</label>
-                            <input type="email" id="password-email" class="form-input" placeholder="Enter your email address" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="password">Password</label>
-                            <div class="password-input-wrapper">
-                                <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
-                                <button type="button" class="password-toggle" onclick="togglePassword()">
-                                    <span id="password-toggle-icon">👁️</span>
-                                </button>
-                            </div>
-                        </div>
-                        <button type="submit" class="auth-button">Login</button>
-                    </form>
-                </div>
-                
+                <button type="submit" class="auth-button" id="loginButton">Login</button>
                 <div class="form-footer">
                     <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // OTP functionality commented out for now
-            // const otpLoginBtn = document.getElementById('otp-login-btn');
-            // const passwordLoginBtn = document.getElementById('password-login-btn');
-            // const otpFormContainer = document.getElementById('otp-login-form');
-            // const passwordFormContainer = document.getElementById('password-login-form');
+        const loginForm = document.getElementById('loginForm');
+        const loginButton = document.getElementById('loginButton');
 
-            // otpLoginBtn.addEventListener('click', () => {
-            //     otpFormContainer.style.display = 'block';
-            //     passwordFormContainer.style.display = 'none';
-            //     otpLoginBtn.classList.add('active');
-            //     passwordLoginBtn.classList.remove('active');
-            // });
+        loginForm.addEventListener('submit', handleLogin);
 
-            // passwordLoginBtn.addEventListener('click', () => {
-            //     otpFormContainer.style.display = 'none';
-            //     passwordFormContainer.style.display = 'block';
-            //     otpLoginBtn.classList.remove('active');
-            //     passwordLoginBtn.classList.add('active');
-            // });
-
-            document.getElementById('passwordForm').addEventListener('submit', handlePasswordLogin);
-            // document.getElementById('otpRequestForm').addEventListener('submit', handleOtpRequest);
-            // document.getElementById('otpVerifyForm').addEventListener('submit', handleOtpVerify);
-        });
-
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggleIcon = document.getElementById('password-toggle-icon');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.textContent = '🙈';
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.textContent = '👁️';
-            }
-        }
-
-        async function handlePasswordLogin(e) {
+        async function handleLogin(e) {
             e.preventDefault();
-            const button = e.target.querySelector('button');
-            const email = document.getElementById('password-email').value;
+            const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            setLoadingState(button, true, 'Logging In...');
+            
+            setLoadingState(true);
 
             try {
                 const response = await axios.post('https://navrang-backend.onrender.com/api/login', { email, password });
-                const { token, message } = response.data;
+                const { token } = response.data;
                 
-                // Store token and mark user as logged in
                 localStorage.setItem('authToken', token);
                 localStorage.setItem('userLoggedIn', 'true');
                 localStorage.setItem('userEmail', email);
+
+                // NOTE: The user's full name is not returned from the login API.
+                // We derive a username from the email as a fallback.
+                // The full name provided at signup will be used until the user logs out.
+                const userName = email.split('@')[0];
+                localStorage.setItem('userName', userName);
                 
-                showNotification(message + ' 🕉️', 'success');
+                showNotification('Login successful! Welcome back. 🕉️', 'success');
                 setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+
             } catch (error) {
-                let errorMessage = 'Login failed. Please try again.';
-                
-                if (error.response) {
-                    // Handle different error status codes
-                    switch (error.response.status) {
-                        case 400:
-                            errorMessage = 'Email and password are required.';
-                            break;
-                        case 404:
-                            errorMessage = 'User not found. Please check your email or sign up.';
-                            break;
-                        case 401:
-                            errorMessage = 'Invalid password. Please try again.';
-                            break;
-                        case 500:
-                            errorMessage = 'Server error. Please try again later.';
-                            break;
-                        default:
-                            errorMessage = error.response.data?.message || 'Login failed. Please try again.';
-                    }
-                } else if (error.request) {
-                    errorMessage = 'Network error. Please check your connection.';
-                } else {
-                    errorMessage = 'Something went wrong. Please try again.';
-                }
-                
+                const errorMessage = error.response?.data?.message || 'Login failed. Please try again.';
                 showNotification(errorMessage, 'error');
             } finally {
-                setLoadingState(button, false, 'Login');
+                setLoadingState(false);
             }
         }
 
-        // OTP functions commented out for now
-        /*
-        async function handleOtpRequest(e) {
-            e.preventDefault();
-            const button = e.target.querySelector('button');
-            const email = document.getElementById('otp-email').value;
-            setLoadingState(button, true, 'Sending OTP...');
-
-            try {
-                await axios.post('https://navrang-backend.onrender.com/api/sendOTP', { email });
-                document.getElementById('otpRequestStep').style.display = 'none';
-                document.getElementById('otpVerifyStep').style.display = 'block';
-                showNotification(`OTP sent to ${email}`, 'success');
-            } catch (error) {
-                const errorMessage = error.response?.data?.message || 'Failed to send OTP. Make sure the email is registered.';
-                showNotification(errorMessage, 'error');
-            } finally {
-                setLoadingState(button, false, 'Send OTP');
-            }
-        }
-
-        async function handleOtpVerify(e) {
-            e.preventDefault();
-            const button = e.target.querySelector('button');
-            const email = document.getElementById('otp-email').value;
-            const otp = document.getElementById('otp-code').value;
-            setLoadingState(button, true, 'Verifying...');
-
-            try {
-                const response = await axios.post('https://navrang-backend.onrender.com/api/verify-login-otp', { email, otp });
-                const { token, user } = response.data;
-                loginSuccess(token, user.name, user.email);
-            } catch (error) {
-                const errorMessage = error.response?.data?.message || 'Invalid OTP. Please try again.';
-                showNotification(errorMessage, 'error');
-            } finally {
-                setLoadingState(button, false, 'Verify & Login');
-            }
-        }
-        */
-
-        // Remove the old loginSuccess function as it's no longer needed
-        // Login success is now handled directly in handlePasswordLogin function
-
-        function setLoadingState(button, isLoading, loadingText) {
-            const originalText = button.dataset.originalText || button.textContent;
-            if(!button.dataset.originalText) button.dataset.originalText = originalText;
-
+        function setLoadingState(isLoading) {
             if (isLoading) {
-                button.disabled = true;
-                button.innerHTML = `<span class="spinner"></span> ${loadingText}`;
+                loginButton.disabled = true;
+                loginButton.innerHTML = `<span class="spinner"></span> Logging In...`;
             } else {
-                button.disabled = false;
-                button.innerHTML = originalText;
+                loginButton.disabled = false;
+                loginButton.innerHTML = 'Login';
+            }
+        }
+        
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.textContent = '👁️';
             }
         }
 

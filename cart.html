@@ -22,21 +22,41 @@
         </div>
     </header>
 
-    <main class="container" style="padding: 40px 0;">
+    <main class="container" id="cart-page">
         <h1 class="section-title" style="text-align: center; margin-bottom: 40px;">Your Sacred Cart</h1>
-        <div id="cart-container">
-            </div>
+        <div id="cart-container"></div>
     </main>
 
     <footer>
         <div class="container">
+            <div class="footer-content">
+                 <div class="footer-section">
+                    <h3>NavRang</h3>
+                    <p>Celebrating divine traditions with premium quality and spiritual significance.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#products">Collection</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>📧 hello@navrang.com</p>
+                    <p>📞 +91 98765 43210</p>
+                </div>
             </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 NavRang. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            renderCart();
-        });
+        document.addEventListener('DOMContentLoaded', renderCart);
 
         function renderCart() {
             const cartContainer = document.getElementById('cart-container');
@@ -45,10 +65,10 @@
             if (cartItems.length === 0) {
                 cartContainer.innerHTML = `
                     <div class="empty-cart">
-                        <p>Your cart is currently empty.</p>
-                        <a href="index.html#products" class="cta-primary">Explore Collection</a>
-                    </div>
-                `;
+                        <h2>Your cart is currently empty.</h2>
+                        <p>Explore our divine collection to find something you love.</p>
+                        <a href="index.html#products" class="cta-primary" style="margin-top: 20px;">Explore Collection</a>
+                    </div>`;
                 return;
             }
 
@@ -66,32 +86,30 @@
                     </div>
                     <p class="cart-item-total">₹${(item.quantity * item.price).toLocaleString()}</p>
                     <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">Remove</button>
-                </div>
-            `).join('');
+                </div>`).join('');
 
             const subtotal = cartItems.reduce((total, item) => total + (item.quantity * item.price), 0);
 
             cartContainer.innerHTML = `
-                <div class="cart-items-list">
-                    ${itemsHtml}
-                </div>
-                <div class="cart-summary">
-                    <h2>Order Summary</h2>
-                    <div class="summary-row">
-                        <span>Subtotal</span>
-                        <span>₹${subtotal.toLocaleString()}</span>
+                <div class="cart-grid">
+                    <div class="cart-items-list">${itemsHtml}</div>
+                    <div class="cart-summary">
+                        <h2>Order Summary</h2>
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span>₹${subtotal.toLocaleString()}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping</span>
+                            <span>Free</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span>₹${subtotal.toLocaleString()}</span>
+                        </div>
+                        <button class="checkout-btn" onclick="handleCheckout()">Proceed to Checkout</button>
                     </div>
-                    <div class="summary-row">
-                        <span>Shipping</span>
-                        <span>Free</span>
-                    </div>
-                    <div class="summary-row total">
-                        <span>Total</span>
-                        <span>₹${subtotal.toLocaleString()}</span>
-                    </div>
-                    <button class="cta-primary checkout-btn">Proceed to Checkout</button>
-                </div>
-            `;
+                </div>`;
         }
 
         function updateQuantity(id, change) {
@@ -112,6 +130,19 @@
             cartItems = cartItems.filter(i => i.id !== id);
             localStorage.setItem('cartItems', JSON.stringify(cartItems));
             renderCart();
+        }
+
+        function handleCheckout() {
+            // This is a simulated checkout process for demonstration purposes.
+            // In a real application, this would integrate with a payment gateway.
+            localStorage.removeItem('cartItems');
+            const cartContainer = document.getElementById('cart-container');
+            cartContainer.innerHTML = `
+                <div class="empty-cart">
+                    <h2>Thank you for your order! 🙏</h2>
+                    <p>Your sacred items are being prepared. You will be redirected to the homepage shortly.</p>
+                </div>`;
+            setTimeout(() => { window.location.href = 'index.html'; }, 4000);
         }
     </script>
 </body>
