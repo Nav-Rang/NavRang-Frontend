@@ -7,6 +7,15 @@
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="auth.css">
+    <style>
+        .auth-tabs { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 1.5rem; }
+        .tab-link { flex: 1; padding: 1rem; text-align: center; cursor: pointer; background: #f9f9f9; color: #777; font-weight: 600; border-bottom: 3px solid transparent; }
+        .tab-link.active { color: var(--day9-purple); border-bottom-color: var(--day9-purple); background: white; }
+        .form-container { display: none; }
+        .form-container.active { display: block; }
+        .otp-input-group { display: flex; gap: 10px; }
+        .otp-input-group .form-input { text-align: center; }
+    </style>
 </head>
 <body>
     <div class="auth-container">
@@ -17,90 +26,146 @@
         </div>
 
         <div class="auth-right">
-            <form class="auth-form" id="loginForm">
-                <div class="form-header">
-                    <h2 class="form-title">Welcome Back</h2>
-                    <p class="form-subtitle">Login to your sacred account</p>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="email">Email Address</label>
-                    <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="password">Password</label>
-                    <div class="password-input-container">
-                        <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
-                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
-                            <span id="eyeIcon">👁️</span>
-                        </button>
+            <div class="auth-tabs">
+                <div class="tab-link active" onclick="switchTab('password')">Use Password</div>
+                <div class="tab-link" onclick="switchTab('otp')">Use OTP</div>
+            </div>
+
+            <!-- Password Login Form -->
+            <div id="password-form" class="form-container active">
+                <form class="auth-form" id="loginFormPassword">
+                    <div class="form-header">
+                        <h2 class="form-title">Welcome Back</h2>
+                        <p class="form-subtitle">Login with your password</p>
                     </div>
-                </div>
-                <button type="submit" class="auth-button" id="loginButton">Login</button>
-                <div class="form-footer">
-                    <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label class="form-label" for="email-password">Email Address</label>
+                        <input type="email" id="email-password" class="form-input" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="auth-button" id="loginButtonPassword">Login</button>
+                </form>
+            </div>
+
+            <!-- OTP Login Form -->
+            <div id="otp-form" class="form-container">
+                <form class="auth-form" id="loginFormOtp">
+                    <div class="form-header">
+                        <h2 class="form-title">OTP Login</h2>
+                        <p class="form-subtitle">Get a one-time code to log in</p>
+                    </div>
+                    <div class="form-group" id="otp-email-group">
+                        <label class="form-label" for="email-otp">Email Address</label>
+                        <input type="email" id="email-otp" class="form-input" placeholder="Enter your email" required>
+                        <button type="button" class="auth-button" id="sendOtpButton" style="margin-top: 1rem;">Send OTP</button>
+                    </div>
+                    <div class="form-group" id="otp-verify-group" style="display: none;">
+                        <label class="form-label" for="otp">Enter OTP</label>
+                        <input type="text" id="otp" class="form-input" placeholder="Enter 6-digit OTP" required>
+                        <button type="submit" class="auth-button" id="verifyOtpButton" style="margin-top: 1rem;">Verify OTP & Login</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="form-footer">
+                <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+            </div>
         </div>
     </div>
 
     <script>
-        const loginForm = document.getElementById('loginForm');
-        const loginButton = document.getElementById('loginButton');
-
-        loginForm.addEventListener('submit', handleLogin);
-
-        async function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-link').forEach(tab => tab.classList.remove('active'));
+            document.querySelector(`.tab-link[onclick="switchTab('${tabName}')"]`).classList.add('active');
             
-            setLoadingState(true);
+            document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
+            document.getElementById(`${tabName}-form`).classList.add('active');
+        }
 
+        // --- Password Login Logic ---
+        document.getElementById('loginFormPassword').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email-password').value;
+            const password = document.getElementById('password').value;
+            const button = document.getElementById('loginButtonPassword');
+            
+            setLoadingState(button, true, 'Logging In...');
             try {
-                const response = await axios.post('https://navrang-backend.onrender.com/api/login', { email, password });
-                const { token } = response.data;
-                
-                localStorage.setItem('authToken', token);
-                localStorage.setItem('userLoggedIn', 'true');
-                localStorage.setItem('userEmail', email);
-
-                // NOTE: The user's full name is not returned from the login API.
-                // We derive a username from the email as a fallback.
-                // The full name provided at signup will be used until the user logs out.
-                const userName = email.split('@')[0];
-                localStorage.setItem('userName', userName);
-                
-                showNotification('Login successful! Welcome back. 🕉️', 'success');
-                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
-
+                // NOTE: The API doc has /api/verify-admin. This might be for admins only.
+                // Assuming it works for regular users for now. If there's a different user login endpoint, it should be used.
+                const response = await axios.post('https://navrang-backend.onrender.com/api/verify-admin', { email, password });
+                handleSuccessfulLogin(response.data.token, email);
             } catch (error) {
-                const errorMessage = error.response?.data?.message || 'Login failed. Please try again.';
+                const errorMessage = error.response?.data?.message || 'Login failed. Please check your credentials.';
                 showNotification(errorMessage, 'error');
             } finally {
-                setLoadingState(false);
+                setLoadingState(button, false, 'Login');
             }
+        });
+
+        // --- OTP Login Logic ---
+        document.getElementById('sendOtpButton').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent form submission
+        });
+        document.getElementById('sendOtpButton').addEventListener('click', async () => {
+            const email = document.getElementById('email-otp').value;
+            if (!email) {
+                showNotification('Please enter your email address.', 'error');
+                return;
+            }
+            const button = document.getElementById('sendOtpButton');
+            setLoadingState(button, true, 'Sending...');
+            try {
+                await axios.post('https://navrang-backend.onrender.com/api/sendOTP', { email });
+                showNotification('OTP sent to your email!', 'success');
+                document.getElementById('otp-email-group').style.display = 'none';
+                document.getElementById('otp-verify-group').style.display = 'block';
+            } catch (error) {
+                const errorMessage = error.response?.data?.message || 'Failed to send OTP.';
+                showNotification(errorMessage, 'error');
+            } finally {
+                setLoadingState(button, false, 'Send OTP');
+            }
+        });
+
+        document.getElementById('loginFormOtp').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email-otp').value;
+            const otp = document.getElementById('otp').value;
+            const button = document.getElementById('verifyOtpButton');
+
+            setLoadingState(button, true, 'Verifying...');
+            try {
+                const response = await axios.post('https://navrang-backend.onrender.com/api/verifyOTP', { email, otp });
+                handleSuccessfulLogin(response.data.token, email);
+            } catch (error) {
+                const errorMessage = error.response?.data?.message || 'Invalid OTP. Please try again.';
+                showNotification(errorMessage, 'error');
+            } finally {
+                setLoadingState(button, false, 'Verify OTP & Login');
+            }
+        });
+
+        // --- COMMON FUNCTIONS ---
+        function handleSuccessfulLogin(token, email) {
+            localStorage.setItem('authToken', token);
+            localStorage.setItem('userLoggedIn', 'true');
+            localStorage.setItem('userEmail', email);
+            // The API doesn't return the user's name on login.
+            // We'll derive it from the email as a fallback.
+            const userName = email.split('@')[0];
+            localStorage.setItem('userName', userName);
+            
+            showNotification('Login successful! Welcome back. 🕉️', 'success');
+            setTimeout(() => { window.location.href = 'index.html'; }, 1500);
         }
 
-        function setLoadingState(isLoading) {
-            if (isLoading) {
-                loginButton.disabled = true;
-                loginButton.innerHTML = `<span class="spinner"></span> Logging In...`;
-            } else {
-                loginButton.disabled = false;
-                loginButton.innerHTML = 'Login';
-            }
-        }
-        
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeIcon.textContent = '🙈';
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.textContent = '👁️';
-            }
+        function setLoadingState(button, isLoading, loadingText) {
+            button.disabled = isLoading;
+            button.innerHTML = isLoading ? `<span class="spinner"></span> ${loadingText}` : button.textContent;
         }
 
         function showNotification(message, type = 'success') {

@@ -4,59 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NavRang | Checkout</title>
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
+    <!-- Main stylesheet -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="auth.css">
-    <style>
-        /* Additional styles for checkout page layout */
-        .checkout-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 40px;
-            margin-top: 40px;
-            align-items: flex-start;
-        }
-        .checkout-details-column {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-        .order-summary-column {
-            position: sticky;
-            top: 120px;
-        }
-        .saved-address p {
-            margin: 4px 0;
-            line-height: 1.5;
-        }
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-            z-index: 3000;
-        }
-        .notification.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -10px);
-        }
-        .notification.error {
-            background-color: #dc3545;
-        }
-        @media (max-width: 900px) {
-            .checkout-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <!-- Page-specific stylesheet for checkout -->
+    <link rel="stylesheet" href="userDetials.css">
+    <!-- Axios for API calls -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <header>
@@ -77,19 +31,25 @@
             <!-- Left Column: User Details & Address -->
             <div class="checkout-details-column">
                 <!-- User Profile Section -->
-                <div class="profile-card" id="user-details-container" style="margin: 0;"></div>
+                <div class="profile-card" id="user-details-container">
+                    <!-- User details will be rendered here by JS -->
+                </div>
                 
                 <!-- Address Section -->
-                <div class="address-section-container profile-card" style="margin: 0;">
+                <div class="address-section-container profile-card">
                     <h2 class="section-title">Shipping Address</h2>
-                    <div id="address-display" style="text-align: left;"></div>
+                    <div id="address-display">
+                        <!-- Saved address will be rendered here by JS -->
+                    </div>
                     <div id="address-form-container" style="display: none;">
                         <form id="addressForm">
-                            <div class="form-group"><input type="text" id="address-line1" class="form-input" placeholder="Address Line 1" required></div>
-                            <div class="form-group"><input type="text" id="address-line2" class="form-input" placeholder="Address Line 2 (Optional)"></div>
+                            <!-- Form fields now match the API documentation -->
+                            <div class="form-group"><input type="text" id="building" class="form-input" placeholder="Building, Apartment, etc." required></div>
+                            <div class="form-group"><input type="text" id="address" class="form-input" placeholder="Street Address" required></div>
+                            <div class="form-group"><input type="text" id="nearTo" class="form-input" placeholder="Nearby Landmark (Optional)"></div>
+                            <div class="form-group"><input type="text" id="pinCode" class="form-input" placeholder="Pincode" required></div>
                             <div class="form-group"><input type="text" id="city" class="form-input" placeholder="City" required></div>
                             <div class="form-group"><input type="text" id="state" class="form-input" placeholder="State" required></div>
-                            <div class="form-group"><input type="text" id="pincode" class="form-input" placeholder="Pincode" required></div>
                             <button type="submit" class="cta-primary" style="width:100%;">Save Address</button>
                         </form>
                     </div>
@@ -99,7 +59,7 @@
             <!-- Right Column: Order Summary -->
             <div class="order-summary-column">
                 <div class="cart-summary" id="order-summary">
-                    <!-- Order summary will be rendered here -->
+                    <!-- Order summary will be rendered here by JS -->
                 </div>
             </div>
         </div>
@@ -107,16 +67,38 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('userLoggedIn') !== 'true') {
+            // Check for login token
+            const authToken = localStorage.getItem('authToken');
+            if (!authToken) {
                 showNotification('Please log in to proceed with checkout.', 'error');
                 setTimeout(() => { window.location.href = 'login.html'; }, 2000);
                 return;
             }
-
+            
+            // Initial setup
             renderUserProfile();
-            renderAddressSection();
             renderOrderSummary();
+            // Fetch and render user data, including address
+            fetchUserData(authToken);
         });
+
+        // --- USER & ADDRESS FUNCTIONS ---
+
+        async function fetchUserData(token) {
+            // NOTE: The provided API doc doesn't have a GET /user endpoint.
+            // This function assumes user details (name, email) are in localStorage,
+            // and we need to fetch address details separately.
+            // If an endpoint to get all user data exists, it should be used here.
+            
+            // For now, we simulate fetching by checking localStorage.
+            // A real app might have a GET /api/me or GET /api/user endpoint.
+            const userAddress = JSON.parse(localStorage.getItem('userAddress'));
+            if (userAddress) {
+                renderAddressSection(userAddress);
+            } else {
+                showAddressForm(false); // Show form if no address is saved
+            }
+        }
 
         function renderUserProfile() {
             const userName = localStorage.getItem('userName');
@@ -132,16 +114,17 @@
                 </div>`;
         }
 
-        function renderAddressSection() {
-            const savedAddress = JSON.parse(localStorage.getItem('userAddress'));
+        function renderAddressSection(address) {
             const addressDisplay = document.getElementById('address-display');
             const addressFormContainer = document.getElementById('address-form-container');
 
-            if (savedAddress && savedAddress.line1) {
+            if (address && address.address) { // Check for a key field like 'address'
                 addressDisplay.innerHTML = `
                     <div class="saved-address">
-                        <p>${savedAddress.line1}${savedAddress.line2 ? `, ${savedAddress.line2}` : ''}</p>
-                        <p>${savedAddress.city}, ${savedAddress.state} - ${savedAddress.pincode}</p>
+                        <p>${address.building}</p>
+                        <p>${address.address}</p>
+                        ${address.nearTo ? `<p>Near: ${address.nearTo}</p>` : ''}
+                        <p>${address.city}, ${address.state} - ${address.pinCode}</p>
                     </div>
                     <button onclick="showAddressForm(true)" class="cta-primary" style="margin-top: 15px; background: var(--day6-red);">Change Address</button>
                 `;
@@ -153,35 +136,52 @@
         }
 
         function showAddressForm(isEditing) {
-            const addressDisplay = document.getElementById('address-display');
-            const addressFormContainer = document.getElementById('address-form-container');
-            addressDisplay.style.display = 'none';
-            addressFormContainer.style.display = 'block';
+            document.getElementById('address-display').style.display = 'none';
+            document.getElementById('address-form-container').style.display = 'block';
 
             if (isEditing) {
                 const savedAddress = JSON.parse(localStorage.getItem('userAddress'));
                 if (savedAddress) {
-                    document.getElementById('address-line1').value = savedAddress.line1 || '';
-                    document.getElementById('address-line2').value = savedAddress.line2 || '';
+                    document.getElementById('building').value = savedAddress.building || '';
+                    document.getElementById('address').value = savedAddress.address || '';
+                    document.getElementById('nearTo').value = savedAddress.nearTo || '';
+                    document.getElementById('pinCode').value = savedAddress.pinCode || '';
                     document.getElementById('city').value = savedAddress.city || '';
                     document.getElementById('state').value = savedAddress.state || '';
-                    document.getElementById('pincode').value = savedAddress.pincode || '';
                 }
             }
         }
 
-        document.getElementById('addressForm').addEventListener('submit', (e) => {
+        document.getElementById('addressForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const address = {
-                line1: document.getElementById('address-line1').value,
-                line2: document.getElementById('address-line2').value,
+            const authToken = localStorage.getItem('authToken');
+            const addressData = {
+                building: document.getElementById('building').value,
+                address: document.getElementById('address').value,
+                nearTo: document.getElementById('nearTo').value,
+                pinCode: document.getElementById('pinCode').value,
                 city: document.getElementById('city').value,
                 state: document.getElementById('state').value,
-                pincode: document.getElementById('pincode').value,
             };
-            localStorage.setItem('userAddress', JSON.stringify(address));
-            renderAddressSection();
+
+            try {
+                const response = await axios.patch('https://navrang-backend.onrender.com/api/update-address', addressData, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                // Save the updated address to localStorage for persistence
+                const updatedUser = response.data.user;
+                localStorage.setItem('userAddress', JSON.stringify(updatedUser.address));
+                
+                showNotification('Address saved successfully!', 'success');
+                renderAddressSection(updatedUser.address);
+            } catch (error) {
+                const errorMessage = error.response?.data?.message || 'Failed to save address.';
+                showNotification(errorMessage, 'error');
+            }
         });
+
+        // --- ORDER FUNCTIONS ---
 
         function renderOrderSummary() {
             const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -218,24 +218,55 @@
             `;
         }
 
-        function placeOrder() {
+        async function placeOrder() {
+            const authToken = localStorage.getItem('authToken');
             const savedAddress = JSON.parse(localStorage.getItem('userAddress'));
-            if (!savedAddress || !savedAddress.line1) {
+
+            if (!savedAddress || !savedAddress.address) {
                 showNotification('Please save a shipping address before placing your order.', 'error');
                 return;
             }
-            
-            localStorage.removeItem('cartItems');
-            
-            const mainContainer = document.getElementById('checkout-page');
-            mainContainer.innerHTML = `
-                <div class="empty-cart" style="grid-column: 1 / -1; text-align: center; padding: 60px;">
-                    <h2>Thank you for your order! 🙏</h2>
-                    <p>Your divine items are on their way. You will be redirected to the homepage shortly.</p>
-                </div>`;
 
-            setTimeout(() => { window.location.href = 'index.html'; }, 4000);
+            const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            if (cartItems.length === 0) {
+                showNotification('Your cart is empty.', 'error');
+                return;
+            }
+
+            // Format cart items for the backend API
+            const productDetails = cartItems.map(item => ({
+                productId: item.id,
+                quantity: item.quantity
+            }));
+
+            const orderData = {
+                productDetails: productDetails,
+                isCOD: true // Assuming Cash on Delivery
+            };
+
+            try {
+                const response = await axios.post('https://navrang-backend.onrender.com/api/create-order', orderData, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                localStorage.removeItem('cartItems'); // Clear cart on successful order
+                
+                const mainContainer = document.getElementById('checkout-page');
+                mainContainer.innerHTML = `
+                    <div class="empty-cart" style="grid-column: 1 / -1; text-align: center; padding: 60px;">
+                        <h2>Thank you for your order! 🙏</h2>
+                        <p>Your order with ID ${response.data.orderId} has been placed. You will be redirected to the homepage shortly.</p>
+                    </div>`;
+
+                setTimeout(() => { window.location.href = 'index.html'; }, 5000);
+
+            } catch (error) {
+                const errorMessage = error.response?.data?.error || 'Failed to place order.';
+                showNotification(errorMessage, 'error');
+            }
         }
+
+        // --- UTILITY FUNCTIONS ---
 
         function showNotification(message, type = 'success') {
             const notification = document.createElement('div');

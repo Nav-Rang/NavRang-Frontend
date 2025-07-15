@@ -7,6 +7,13 @@
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="auth.css">
+    <style>
+        .auth-tabs { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 1.5rem; }
+        .tab-link { flex: 1; padding: 1rem; text-align: center; cursor: pointer; background: #f9f9f9; color: #777; font-weight: 600; border-bottom: 3px solid transparent; }
+        .tab-link.active { color: var(--day9-purple); border-bottom-color: var(--day9-purple); background: white; }
+        .form-container { display: none; }
+        .form-container.active { display: block; }
+    </style>
 </head>
 <body>
     <div class="auth-container">
@@ -17,98 +24,158 @@
         </div>
 
         <div class="auth-right">
-            <form class="auth-form" id="signupForm">
-                <div class="form-header">
-                    <h2 class="form-title">Create Account</h2>
-                    <p class="form-subtitle">Join our sacred community</p>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="name">Your Name</label>
-                    <input type="text" id="name" class="form-input" placeholder="Enter your full name" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="email">Email Address</label>
-                    <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="password">Password</label>
-                    <div class="password-input-container">
-                        <input type="password" id="password" class="form-input" placeholder="Create a password (min. 6 characters)" required>
-                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
-                            <span id="eyeIcon">👁️</span>
-                        </button>
+             <div class="auth-tabs">
+                <div class="tab-link active" onclick="switchTab('password')">Use Password</div>
+                <div class="tab-link" onclick="switchTab('otp')">Use OTP</div>
+            </div>
+
+            <!-- Password Signup Form -->
+            <div id="password-form" class="form-container active">
+                <form class="auth-form" id="signupFormPassword">
+                    <div class="form-header">
+                        <h2 class="form-title">Create Account</h2>
+                        <p class="form-subtitle">Join with a secure password</p>
                     </div>
-                </div>
-                <button type="submit" class="auth-button" id="signupButton">Create Account</button>
-                <div class="form-footer">
-                    <p>Already have an account? <a href="login.html">Log In</a></p>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label class="form-label" for="name-password">Your Name</label>
+                        <input type="text" id="name-password" class="form-input" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="email-password">Email Address</label>
+                        <input type="email" id="email-password" class="form-input" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <input type="password" id="password" class="form-input" placeholder="Create a password" required>
+                    </div>
+                    <button type="submit" class="auth-button" id="signupButtonPassword">Create Account</button>
+                </form>
+            </div>
+
+            <!-- OTP Signup Form -->
+            <div id="otp-form" class="form-container">
+                 <form class="auth-form" id="signupFormOtp">
+                    <div class="form-header">
+                        <h2 class="form-title">OTP Signup</h2>
+                        <p class="form-subtitle">Verify your email to create an account</p>
+                    </div>
+                    <div id="otp-details-group">
+                        <div class="form-group">
+                            <label class="form-label" for="name-otp">Your Name</label>
+                            <input type="text" id="name-otp" class="form-input" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="email-otp">Email Address</label>
+                            <input type="email" id="email-otp" class="form-input" placeholder="Enter your email" required>
+                        </div>
+                        <button type="button" class="auth-button" id="sendOtpButton">Send OTP</button>
+                    </div>
+                    <div class="form-group" id="otp-verify-group" style="display: none;">
+                        <label class="form-label" for="otp">Enter OTP</label>
+                        <input type="text" id="otp" class="form-input" placeholder="Enter 6-digit OTP" required>
+                        <button type="submit" class="auth-button" id="verifyOtpButton" style="margin-top: 1rem;">Verify OTP & Create Account</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-footer">
+                <p>Already have an account? <a href="login.html">Log In</a></p>
+            </div>
         </div>
     </div>
 
     <script>
-        const signupForm = document.getElementById('signupForm');
-        const signupButton = document.getElementById('signupButton');
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-link').forEach(tab => tab.classList.remove('active'));
+            document.querySelector(`.tab-link[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            
+            document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
+            document.getElementById(`${tabName}-form`).classList.add('active');
+        }
 
-        signupForm.addEventListener('submit', handleSignup);
-
-        async function handleSignup(e) {
+        // --- Password Signup Logic ---
+        document.getElementById('signupFormPassword').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
+            const name = document.getElementById('name-password').value;
+            const email = document.getElementById('email-password').value;
             const password = document.getElementById('password').value;
+            const button = document.getElementById('signupButtonPassword');
 
-            if (password.length < 6) {
-                showNotification('Password must be at least 6 characters long.', 'error');
+            // NOTE: The API doc doesn't have a password-based signup.
+            // This is a placeholder. A real endpoint like /api/signup-password would be needed.
+            // For now, this will show an alert.
+            showNotification('Password signup is not yet available. Please use OTP.', 'error');
+            // setLoadingState(button, true, 'Creating...');
+            // try {
+            //     const response = await axios.post('https://navrang-backend.onrender.com/api/signup-with-password', { name, email, password });
+            //     handleSuccessfulLogin(response.data.token, email, name);
+            // } catch (error) {
+            //     showNotification(error.response?.data?.message || 'Signup failed.', 'error');
+            // } finally {
+            //     setLoadingState(button, false, 'Create Account');
+            // }
+        });
+
+        // --- OTP Signup Logic ---
+        document.getElementById('sendOtpButton').addEventListener('click', async () => {
+            const email = document.getElementById('email-otp').value;
+            const name = document.getElementById('name-otp').value;
+            if (!email || !name) {
+                showNotification('Please enter your name and email.', 'error');
                 return;
             }
-            
-            setLoadingState(true);
-
+            const button = document.getElementById('sendOtpButton');
+            setLoadingState(button, true, 'Sending...');
             try {
-                // We assume the signup endpoint can accept a `name` field.
-                const response = await axios.post('https://navrang-backend.onrender.com/api/signup', { name, email, password });
-                const { token } = response.data;
-                
-                showNotification('Account created successfully! Welcome. 🕉️', 'success');
-                
-                localStorage.setItem('authToken', token);
-                localStorage.setItem('userLoggedIn', 'true');
-                localStorage.setItem('userEmail', email);
-                // Store the user-provided name instead of deriving it from the email.
-                localStorage.setItem('userName', name);
-                
-                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
-
+                await axios.post('https://navrang-backend.onrender.com/api/sendOTP', { email });
+                showNotification('OTP sent to your email!', 'success');
+                document.getElementById('otp-details-group').style.display = 'none';
+                document.getElementById('otp-verify-group').style.display = 'block';
             } catch (error) {
-                const errorMessage = error.response?.data?.message || 'Registration failed. Please try again.';
-                showNotification(errorMessage, 'error');
+                showNotification(error.response?.data?.message || 'Failed to send OTP.', 'error');
             } finally {
-                setLoadingState(false);
+                setLoadingState(button, false, 'Send OTP');
             }
+        });
+
+        document.getElementById('signupFormOtp').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email-otp').value;
+            const name = document.getElementById('name-otp').value;
+            const otp = document.getElementById('otp').value;
+            const button = document.getElementById('verifyOtpButton');
+
+            setLoadingState(button, true, 'Verifying...');
+            try {
+                const response = await axios.post('https://navrang-backend.onrender.com/api/verifyOTP', { email, otp });
+                // After OTP is verified, we have a token. Now we can update the user's name.
+                const token = response.data.token;
+                await axios.patch('https://navrang-backend.onrender.com/api/update-user-details', 
+                    { email, name, phone: "" }, // Phone is optional
+                    { headers: { 'Authorization': `Bearer ${token}` } }
+                );
+                handleSuccessfulLogin(token, email, name);
+            } catch (error) {
+                showNotification(error.response?.data?.message || 'Invalid OTP.', 'error');
+            } finally {
+                setLoadingState(button, false, 'Verify OTP & Create Account');
+            }
+        });
+
+        // --- COMMON FUNCTIONS ---
+        function handleSuccessfulLogin(token, email, name) {
+            localStorage.setItem('authToken', token);
+            localStorage.setItem('userLoggedIn', 'true');
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userName', name);
+            
+            showNotification('Account created successfully! Welcome. 🕉️', 'success');
+            setTimeout(() => { window.location.href = 'index.html'; }, 1500);
         }
 
-        function setLoadingState(isLoading) {
-            if (isLoading) {
-                signupButton.disabled = true;
-                signupButton.innerHTML = `<span class="spinner"></span> Creating Account...`;
-            } else {
-                signupButton.disabled = false;
-                signupButton.innerHTML = 'Create Account';
-            }
-        }
-
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeIcon.textContent = '🙈';
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.textContent = '👁️';
-            }
+        function setLoadingState(button, isLoading, loadingText) {
+            button.disabled = isLoading;
+            button.innerHTML = isLoading ? `<span class="spinner"></span> ${loadingText}` : button.textContent;
         }
 
         function showNotification(message, type = 'success') {
