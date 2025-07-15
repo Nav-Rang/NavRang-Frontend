@@ -107,7 +107,7 @@
                             <span>Total</span>
                             <span>₹${subtotal.toLocaleString()}</span>
                         </div>
-                        <button class="checkout-btn" onclick="handleCheckout()">Proceed to Checkout</button>
+                        <button class="checkout-btn" onclick="proceedToAddAddress()">Proceed to Add Address</button>
                     </div>
                 </div>`;
         }
@@ -123,6 +123,7 @@
             }
             localStorage.setItem('cartItems', JSON.stringify(cartItems));
             renderCart();
+            updateCartCount(); // Ensure header count is updated
         }
 
         function removeFromCart(id) {
@@ -130,19 +131,22 @@
             cartItems = cartItems.filter(i => i.id !== id);
             localStorage.setItem('cartItems', JSON.stringify(cartItems));
             renderCart();
+            updateCartCount(); // Ensure header count is updated
         }
 
-        function handleCheckout() {
-            // This is a simulated checkout process for demonstration purposes.
-            // In a real application, this would integrate with a payment gateway.
-            localStorage.removeItem('cartItems');
-            const cartContainer = document.getElementById('cart-container');
-            cartContainer.innerHTML = `
-                <div class="empty-cart">
-                    <h2>Thank you for your order! 🙏</h2>
-                    <p>Your sacred items are being prepared. You will be redirected to the homepage shortly.</p>
-                </div>`;
-            setTimeout(() => { window.location.href = 'index.html'; }, 4000);
+        function proceedToAddAddress() {
+            // Redirect to the user details page to handle address and final checkout
+            window.location.href = 'userDetails.html';
+        }
+
+        function updateCartCount() {
+            // This function might be on other pages, but good to have for consistency
+            const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const count = cartItems.reduce((total, item) => total + item.quantity, 0);
+            const cartCountElement = document.querySelector('.cart-count');
+            if (cartCountElement) {
+                cartCountElement.textContent = count;
+            }
         }
     </script>
 </body>

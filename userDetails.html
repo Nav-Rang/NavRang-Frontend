@@ -3,8 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NavRang | User Details</title>
+    <title>NavRang | Checkout</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <style>
+        /* Additional styles for checkout page layout */
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+            align-items: flex-start;
+        }
+        .checkout-details-column {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .order-summary-column {
+            position: sticky;
+            top: 120px;
+        }
+        .saved-address p {
+            margin: 4px 0;
+            line-height: 1.5;
+        }
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            z-index: 3000;
+        }
+        .notification.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -10px);
+        }
+        .notification.error {
+            background-color: #dc3545;
+        }
+        @media (max-width: 900px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -20,34 +72,182 @@
         </div>
     </header>
 
-    <main class="container">
-        <div class="profile-card" id="user-details-container">
+    <main class="container" id="checkout-page">
+        <div class="checkout-grid">
+            <!-- Left Column: User Details & Address -->
+            <div class="checkout-details-column">
+                <!-- User Profile Section -->
+                <div class="profile-card" id="user-details-container" style="margin: 0;"></div>
+                
+                <!-- Address Section -->
+                <div class="address-section-container profile-card" style="margin: 0;">
+                    <h2 class="section-title">Shipping Address</h2>
+                    <div id="address-display" style="text-align: left;"></div>
+                    <div id="address-form-container" style="display: none;">
+                        <form id="addressForm">
+                            <div class="form-group"><input type="text" id="address-line1" class="form-input" placeholder="Address Line 1" required></div>
+                            <div class="form-group"><input type="text" id="address-line2" class="form-input" placeholder="Address Line 2 (Optional)"></div>
+                            <div class="form-group"><input type="text" id="city" class="form-input" placeholder="City" required></div>
+                            <div class="form-group"><input type="text" id="state" class="form-input" placeholder="State" required></div>
+                            <div class="form-group"><input type="text" id="pincode" class="form-input" placeholder="Pincode" required></div>
+                            <button type="submit" class="cta-primary" style="width:100%;">Save Address</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Order Summary -->
+            <div class="order-summary-column">
+                <div class="cart-summary" id="order-summary">
+                    <!-- Order summary will be rendered here -->
+                </div>
+            </div>
         </div>
     </main>
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('userLoggedIn') !== 'true') {
+                showNotification('Please log in to proceed with checkout.', 'error');
+                setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+                return;
+            }
+
+            renderUserProfile();
+            renderAddressSection();
+            renderOrderSummary();
+        });
+
+        function renderUserProfile() {
             const userName = localStorage.getItem('userName');
             const userEmail = localStorage.getItem('userEmail');
             const container = document.getElementById('user-details-container');
+            const userInitial = (userName?.charAt(0) || 'S').toUpperCase();
+            container.innerHTML = `
+                <div class="profile-avatar">${userInitial}</div>
+                <h1 class="section-title" style="font-size: 1.8rem;">Confirm Details</h1>
+                <div class="profile-details">
+                    <p><strong>Name:</strong> <span>${userName}</span></p>
+                    <p><strong>Email:</strong> <span>${userEmail}</span></p>
+                </div>`;
+        }
 
-            if (userName && userEmail) {
-                const userInitial = (userName.charAt(0) || 'S').toUpperCase();
-                container.innerHTML = `
-                    <div class="profile-avatar">${userInitial}</div>
-                    <h1 class="section-title">Your Profile</h1>
-                    <div class="profile-details">
-                        <p><strong>Name:</strong> <span id="user-name">${userName}</span></p>
-                        <p><strong>Email:</strong> <span id="user-email">${userEmail}</span></p>
+        function renderAddressSection() {
+            const savedAddress = JSON.parse(localStorage.getItem('userAddress'));
+            const addressDisplay = document.getElementById('address-display');
+            const addressFormContainer = document.getElementById('address-form-container');
+
+            if (savedAddress && savedAddress.line1) {
+                addressDisplay.innerHTML = `
+                    <div class="saved-address">
+                        <p>${savedAddress.line1}${savedAddress.line2 ? `, ${savedAddress.line2}` : ''}</p>
+                        <p>${savedAddress.city}, ${savedAddress.state} - ${savedAddress.pincode}</p>
                     </div>
+                    <button onclick="showAddressForm(true)" class="cta-primary" style="margin-top: 15px; background: var(--day6-red);">Change Address</button>
                 `;
+                addressDisplay.style.display = 'block';
+                addressFormContainer.style.display = 'none';
             } else {
-                container.innerHTML = `
-                    <h1 class="section-title">Access Denied</h1>
-                    <p>Please <a href="login.html">log in</a> to view your profile details.</p>
-                `;
+                showAddressForm(false);
             }
+        }
+
+        function showAddressForm(isEditing) {
+            const addressDisplay = document.getElementById('address-display');
+            const addressFormContainer = document.getElementById('address-form-container');
+            addressDisplay.style.display = 'none';
+            addressFormContainer.style.display = 'block';
+
+            if (isEditing) {
+                const savedAddress = JSON.parse(localStorage.getItem('userAddress'));
+                if (savedAddress) {
+                    document.getElementById('address-line1').value = savedAddress.line1 || '';
+                    document.getElementById('address-line2').value = savedAddress.line2 || '';
+                    document.getElementById('city').value = savedAddress.city || '';
+                    document.getElementById('state').value = savedAddress.state || '';
+                    document.getElementById('pincode').value = savedAddress.pincode || '';
+                }
+            }
+        }
+
+        document.getElementById('addressForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const address = {
+                line1: document.getElementById('address-line1').value,
+                line2: document.getElementById('address-line2').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                pincode: document.getElementById('pincode').value,
+            };
+            localStorage.setItem('userAddress', JSON.stringify(address));
+            renderAddressSection();
         });
+
+        function renderOrderSummary() {
+            const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const summaryContainer = document.getElementById('order-summary');
+
+            if (cartItems.length === 0) {
+                summaryContainer.innerHTML = '<h2>Your cart is empty.</h2><p>Add items to your cart to place an order.</p>';
+                return;
+            }
+
+            const subtotal = cartItems.reduce((total, item) => total + (item.quantity * item.price), 0);
+            const gst = subtotal * 0.18; // 18% GST
+            const grandTotal = subtotal + gst;
+
+            summaryContainer.innerHTML = `
+                <h2>Order Summary</h2>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>₹${subtotal.toLocaleString('en-IN')}</span>
+                </div>
+                <div class="summary-row">
+                    <span>GST (18%)</span>
+                    <span>₹${gst.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                </div>
+                 <div class="summary-row">
+                    <span>Shipping</span>
+                    <span style="color: var(--day2-green);">Free</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Grand Total</span>
+                    <span>₹${grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                </div>
+                <button class="checkout-btn" onclick="placeOrder()">Place Order</button>
+            `;
+        }
+
+        function placeOrder() {
+            const savedAddress = JSON.parse(localStorage.getItem('userAddress'));
+            if (!savedAddress || !savedAddress.line1) {
+                showNotification('Please save a shipping address before placing your order.', 'error');
+                return;
+            }
+            
+            localStorage.removeItem('cartItems');
+            
+            const mainContainer = document.getElementById('checkout-page');
+            mainContainer.innerHTML = `
+                <div class="empty-cart" style="grid-column: 1 / -1; text-align: center; padding: 60px;">
+                    <h2>Thank you for your order! 🙏</h2>
+                    <p>Your divine items are on their way. You will be redirected to the homepage shortly.</p>
+                </div>`;
+
+            setTimeout(() => { window.location.href = 'index.html'; }, 4000);
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => { notification.classList.add('show'); }, 10);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
     </script>
 </body>
 </html>
