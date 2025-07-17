@@ -169,10 +169,10 @@
             setLoadingState(button, true, 'Creating Account...');
             try {
                 // Step 1: Create the user account
-                await axios.post(`${backendUrl}/signup`, { email, password });
+                await axios.post(`${backendUrl}/signup`, {name, email, password });
                 
                 // Step 2: Log the new user in to get a token
-                const loginResponse = await axios.post(`${backendUrl}/login`, { email, password });
+                const loginResponse = await axios.post(`${backendUrl}/login`, {name, email, password });
                 const token = loginResponse.data.token;
                 
                 // Step 3: Use the token to update the user's name
@@ -208,7 +208,7 @@
             const button = document.getElementById('sendOtpButton');
             setLoadingState(button, true, 'Sending...');
             try {
-                await axios.post(`${backendUrl}/sendOTP`, { email });
+                await axios.post(`${backendUrl}/sendOTP`, {name, email });
                 showNotification('OTP sent to your email!', 'success');
                 document.getElementById('otp-details-group').style.display = 'none';
                 document.getElementById('otp-verify-group').style.display = 'block';
