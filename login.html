@@ -75,6 +75,8 @@
     </div>
 
     <script>
+        const backendUrl = 'https://navrang-backend.onrender.com/api';
+
         function switchTab(tabName) {
             document.querySelectorAll('.tab-link').forEach(tab => tab.classList.remove('active'));
             document.querySelector(`.tab-link[onclick="switchTab('${tabName}')"]`).classList.add('active');
@@ -83,7 +85,6 @@
             document.getElementById(`${tabName}-form`).classList.add('active');
         }
 
-        // --- Password Login Logic ---
         document.getElementById('loginFormPassword').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email-password').value;
@@ -92,8 +93,8 @@
             
             setLoadingState(button, true, 'Logging In...');
             try {
-                const response = await axios.post('https://navrang-backend.onrender.com/api/login', { email, password });
-                handleSuccessfulLogin(response.data.token, email);
+                const response = await axios.post(`${backendUrl}/login`, { email, password });
+                handleSuccessfulLogin(response.data.token, response.data.user);
             } catch (error) {
                 const errorMessage = error.response?.data?.message || 'Login failed. Please check your credentials.';
                 showNotification(errorMessage, 'error');
@@ -102,10 +103,6 @@
             }
         });
 
-        // --- OTP Login Logic ---
-        document.getElementById('sendOtpButton').addEventListener('submit', async (e) => {
-            e.preventDefault();
-        });
         document.getElementById('sendOtpButton').addEventListener('click', async () => {
             const email = document.getElementById('email-otp').value;
             if (!email) {
@@ -115,7 +112,7 @@
             const button = document.getElementById('sendOtpButton');
             setLoadingState(button, true, 'Sending...');
             try {
-                await axios.post('https://navrang-backend.onrender.com/api/sendOTP', { email });
+                await axios.post(`${backendUrl}/sendOTP`, { email });
                 showNotification('OTP sent to your email!', 'success');
                 document.getElementById('otp-email-group').style.display = 'none';
                 document.getElementById('otp-verify-group').style.display = 'block';
@@ -135,8 +132,8 @@
 
             setLoadingState(button, true, 'Verifying...');
             try {
-                const response = await axios.post('https://navrang-backend.onrender.com/api/verifyOTP', { email, otp });
-                handleSuccessfulLogin(response.data.token, email);
+                const response = await axios.post(`${backendUrl}/verifyOTP`, { email, otp });
+                handleSuccessfulLogin(response.data.token, response.data.user);
             } catch (error) {
                 const errorMessage = error.response?.data?.message || 'Invalid OTP. Please try again.';
                 showNotification(errorMessage, 'error');
@@ -145,13 +142,11 @@
             }
         });
 
-        // --- COMMON FUNCTIONS ---
-        function handleSuccessfulLogin(token, email) {
+        function handleSuccessfulLogin(token, user) {
             localStorage.setItem('authToken', token);
             localStorage.setItem('userLoggedIn', 'true');
-            localStorage.setItem('userEmail', email);
-            const userName = email.split('@')[0];
-            localStorage.setItem('userName', userName);
+            localStorage.setItem('userEmail', user.email);
+            localStorage.setItem('userName', user.name);
             
             showNotification('Login successful! Welcome back. 🕉️', 'success');
             setTimeout(() => { window.location.href = 'index.html'; }, 1500);
@@ -159,7 +154,11 @@
 
         function setLoadingState(button, isLoading, loadingText) {
             button.disabled = isLoading;
-            button.innerHTML = isLoading ? `<span class="spinner"></span> ${loadingText}` : button.textContent;
+            const originalText = button.getAttribute('data-original-text') || button.textContent;
+            if (!isLoading && !button.getAttribute('data-original-text')) {
+                button.setAttribute('data-original-text', originalText);
+            }
+            button.innerHTML = isLoading ? `<span class="spinner"></span> ${loadingText}` : originalText;
         }
 
         function showNotification(message, type = 'success') {

@@ -13,25 +13,9 @@
         .tab-link.active { color: var(--day9-purple); border-bottom-color: var(--day9-purple); background: white; }
         .form-container { display: none; }
         .form-container.active { display: block; }
-        
-        /* --- Styles for Password Validation Feedback --- */
-        #password-rules {
-            font-size: 0.8rem;
-            color: #708090;
-            margin-top: -1rem;
-            margin-bottom: 1.5rem;
-            padding-left: 1rem;
-        }
-        #password-rules li {
-            list-style-type: '○ ';
-            padding-left: 0.5rem;
-            transition: color 0.3s ease;
-        }
-        #password-rules li.valid {
-            color: #28a745; /* Success Green */
-            list-style-type: '● ';
-            font-weight: 500;
-        }
+        #password-rules { font-size: 0.8rem; color: #708090; margin-top: -1rem; margin-bottom: 1.5rem; padding-left: 1rem; }
+        #password-rules li { list-style-type: '✗ '; padding-left: 0.5rem; transition: color 0.3s ease; }
+        #password-rules li.valid { color: #28a745; list-style-type: '✓ '; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -120,7 +104,6 @@
             document.getElementById(`${tabName}-form`).classList.add('active');
         }
 
-        // --- NEW: Password Validation Logic ---
         const passwordInput = document.getElementById('password');
         const rules = {
             length: document.getElementById('rule-length'),
@@ -130,29 +113,23 @@
         };
 
         function validatePassword(password) {
-            // Regular expressions for each rule
             const hasCapital = /[A-Z]/.test(password);
             const hasNumber = /[0-9]/.test(password);
             const hasSpecial = /[!@#$%^&*]/.test(password);
             const hasLength = password.length >= 8;
 
-            // Update UI feedback
             rules.length.classList.toggle('valid', hasLength);
             rules.capital.classList.toggle('valid', hasCapital);
             rules.number.classList.toggle('valid', hasNumber);
             rules.special.classList.toggle('valid', hasSpecial);
 
-            // Return overall validity
             return hasLength && hasCapital && hasNumber && hasSpecial;
         }
 
-        // Add event listener for real-time validation
         passwordInput.addEventListener('input', () => {
             validatePassword(passwordInput.value);
         });
 
-
-        // --- Password Signup Logic (Updated) ---
         document.getElementById('signupFormPassword').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email-password').value;
@@ -160,35 +137,15 @@
             const name = document.getElementById('name-password').value;
             const button = document.getElementById('signupButtonPassword');
 
-            // --- VALIDATION CHECK ---
             if (!validatePassword(password)) {
                 showNotification('Password does not meet all requirements.', 'error');
-                return; // Stop submission
+                return;
             }
 
             setLoadingState(button, true, 'Creating Account...');
             try {
-                // Step 1: Create the user account
-                await axios.post(`${backendUrl}/signup`, {name, email, password });
-                
-                // Step 2: Log the new user in to get a token
-                const loginResponse = await axios.post(`${backendUrl}/login`, {name, email, password });
-                const token = loginResponse.data.token;
-                
-                // Step 3: Use the token to update the user's name
-                try {
-                    await axios.patch(`${backendUrl}/update-user-details`, 
-                        { email, name, phone: "" },
-                        { headers: { 'Authorization': `Bearer ${token}` } }
-                    );
-                } catch (updateError) {
-                    console.error("Post-signup name update failed:", updateError.response?.data?.message || updateError.message);
-                    // Non-critical error, we can still proceed with login
-                }
-
-                // Step 4: Finalize the login on the frontend
-                handleSuccessfulLogin(token, email, name);
-
+                const response = await axios.post(`${backendUrl}/signup`, { name, email, password });
+                handleSuccessfulLogin(response.data.token, response.data.user);
             } catch (error) {
                 const errorMessage = error.response?.data?.message || 'Signup failed.';
                 showNotification(errorMessage, 'error');
@@ -197,7 +154,6 @@
             }
         });
 
-        // --- OTP Signup Logic ---
         document.getElementById('sendOtpButton').addEventListener('click', async () => {
             const email = document.getElementById('email-otp').value;
             const name = document.getElementById('name-otp').value;
@@ -229,18 +185,8 @@
             setLoadingState(button, true, 'Verifying...');
 
             try {
-                const verifyResponse = await axios.post(`${backendUrl}/verifyOTP`, { email, otp });
-                const token = verifyResponse.data.token;
-
-                if (!token) throw new Error('Verification failed, no token received.');
-
-                await axios.patch(`${backendUrl}/update-user-details`, 
-                    { email, name, phone: "" },
-                    { headers: { 'Authorization': `Bearer ${token}` } }
-                );
-
-                handleSuccessfulLogin(token, email, name);
-
+                const response = await axios.post(`${backendUrl}/verifyOTPSignup`, { email, name, otp });
+                handleSuccessfulLogin(response.data.token, response.data.user);
             } catch (error) {
                 const errorMessage = error.response?.data?.message || 'Invalid OTP or signup failed.';
                 showNotification(errorMessage, 'error');
@@ -249,14 +195,13 @@
             }
         });
 
-        // --- COMMON FUNCTIONS ---
-        function handleSuccessfulLogin(token, email, name) {
+        function handleSuccessfulLogin(token, user) {
             localStorage.setItem('authToken', token);
             localStorage.setItem('userLoggedIn', 'true');
-            localStorage.setItem('userEmail', email);
-            localStorage.setItem('userName', name);
+            localStorage.setItem('userEmail', user.email);
+            localStorage.setItem('userName', user.name);
             
-            showNotification('Account created successfully! Welcome. 🕉️', 'success');
+            showNotification('Account created successfully! Welcome. 🎉', 'success');
             setTimeout(() => { window.location.href = 'index.html'; }, 1500);
         }
 
