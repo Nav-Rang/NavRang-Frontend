@@ -24,21 +24,21 @@
                 </ul>
                 <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
                     <div class="user-section">
-                        <div class="auth-buttons">
-                            <a href="login.html" class="login-btn">Login</a>
-                            <a href="signup.html" class="signup-btn">Sign Up</a>
+                        <div class="auth-buttons" id="auth-buttons">
+                            <a href="login.html" class="login-btn" style="text-decoration: none;">Login</a>
+                            <a href="signup.html" class="signup-btn" style="text-decoration: none;">Sign Up</a>
                         </div>
-                        <div class="user-info" style="display: none;">
+                        <div class="user-info" id="user-info" style="display: none;">
                             <div class="user-dropdown">
-                                <button class="user-menu-btn" onclick="toggleUserMenu()">
-                                    <span class="user-initial" id="userInitial">S</span>
-                                    <span id="userNameDisplay">Sacred Soul</span>
+                                <button class="user-menu-btn" id="user-menu-btn">
+                                    <span class="user-initial" id="userInitial"></span>
+                                    <span id="userNameDisplay"></span>
                                 </button>
                                 <div class="user-dropdown-menu" id="userDropdownMenu">
                                      <a href="userDetails.html" class="dropdown-item">
                                        <span class="item-icon">👤</span> My Profile
                                    </a>
-                                    <a href="#" class="dropdown-item" onclick="logout()">
+                                    <a href="#" class="dropdown-item" id="logout-btn">
                                        <span class="item-icon">🚪</span> Logout
                                    </a>
                                 </div>
@@ -69,6 +69,7 @@
                 <h2 class="section-title">Divine Collection</h2>
             </div>
             <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded here -->
             </div>
         </div>
     </section>
@@ -101,16 +102,7 @@
         </div>
     </footer>
 
-    <div class="modal-overlay" id="productModalOverlay">
-        <div class="modal-content" id="productModalContent" onclick="event.stopPropagation()">
-            
-        </div>
-    </div>
-
-
-        <script>
-        let allProducts = []; // 1. Store all products here
-
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             checkUserLogin();
             fetchProducts();
@@ -120,18 +112,32 @@
         function checkUserLogin() {
             const userLoggedIn = localStorage.getItem('userLoggedIn');
             const userName = localStorage.getItem('userName');
-            const authToken = localStorage.getItem('authToken');
-
-            const authButtons = document.querySelector('.auth-buttons');
-            const userInfo = document.querySelector('.user-info');
+            
+            const authButtons = document.getElementById('auth-buttons');
+            const userInfo = document.getElementById('user-info');
+            const userMenuBtn = document.getElementById('user-menu-btn');
+            const userDropdownMenu = document.getElementById('userDropdownMenu');
+            const logoutBtn = document.getElementById('logout-btn');
             const cartIcon = document.querySelector('.cart-icon');
 
-            if (userLoggedIn === 'true' && authToken) {
+            if (userLoggedIn === 'true' && userName) {
                 authButtons.style.display = 'none';
                 userInfo.style.display = 'flex';
                 cartIcon.style.display = 'inline-block';
-                document.getElementById('userNameDisplay').textContent = userName || 'Sacred Soul';
-                document.getElementById('userInitial').textContent = (userName?.charAt(0) || 'S').toUpperCase();
+                document.getElementById('userNameDisplay').textContent = userName;
+                document.getElementById('userInitial').textContent = (userName.charAt(0) || 'U').toUpperCase();
+
+                // Event Listeners for logged-in user
+                userMenuBtn.addEventListener('click', () => {
+                    userDropdownMenu.style.display = userDropdownMenu.style.display === 'block' ? 'none' : 'block';
+                });
+
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.clear();
+                    window.location.reload();
+                });
+
             } else {
                 authButtons.style.display = 'flex';
                 userInfo.style.display = 'none';
@@ -139,34 +145,16 @@
             }
         }
 
-        function toggleUserMenu() {
-            const dropdown = document.getElementById('userDropdownMenu');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function logout() {
-            localStorage.removeItem('userLoggedIn');
-            localStorage.removeItem('userName');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('cartItems');
-            localStorage.removeItem('userAddress');
-            checkUserLogin();
-            updateCartCount();
-            showNotification('Logged out successfully! 🕉️', 'success');
-            setTimeout(() => { window.location.reload(); }, 1000);
-        }
-
         async function fetchProducts() {
             const grid = document.getElementById('productsGrid');
-            grid.innerHTML = '<p>Loading divine collection... 🕉️</p>';
+            grid.innerHTML = '<p class="loading">Loading divine collection... 🕉️</p>';
             try {
                 const response = await axios.get('https://navrang-backend.onrender.com/api/get-items');
-                allProducts = response.data; // 2. Populate the global array
-                renderProducts(allProducts);
+                // Store products in localStorage for the product page to use
+                localStorage.setItem('allProducts', JSON.stringify(response.data));
+                renderProducts(response.data);
             } catch (error) {
-                grid.innerHTML = `<p>Unable to load products. Please try again.</p>`;
-                showNotification('Failed to load products.', 'error');
+                grid.innerHTML = `<p class="error-state">Unable to load products. Please try again.</p>`;
             }
         }
 
@@ -179,39 +167,44 @@
             grid.innerHTML = products.map(product => {
                 const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
                 
-                // 3. Change onclick to pass only the ID
+                // UPDATED: Wrap card in an <a> tag to link to product.html
                 return `
-                <div class="product-card" onclick="openProductModalById('${product._id}')">
-                    <div class="product-image">
-                        <img src="${product.images[0]}" alt="${product.name}" loading="lazy"/>
-                        ${product.originalPrice > product.price ? `<span class="discount-badge">${discount}% OFF</span>` : ''}
-                    </div>
-                    <div class="product-details">
-                        <h3 class="product-name">${product.name}</h3>
-                        <p class="product-description">${product.shortDescription}</p>
-                        <div class="product-pricing">
-                            <span class="current-price">₹${product.price.toLocaleString()}</span>
-                            ${product.originalPrice > product.price ? `<del class="original-price">₹${product.originalPrice.toLocaleString()}</del>` : ''}
+                <a href="product.html?id=${product._id}" class="product-link">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="${product.images[0]}" alt="${product.name}" loading="lazy"/>
+                            ${product.originalPrice > product.price ? `<span class="discount-badge">${discount}% OFF</span>` : ''}
                         </div>
-                        <div class="product-action">
-                            ${product.quantity > 0
-                                ? `<button class="add-to-cart" onclick="handleAddToCart(event, this)"
-                                    data-id="${product._id}"
-                                    data-name="${product.name}"
-                                    data-price="${product.price}"
-                                    data-image="${product.images[0]}">
-                                    Add to Sacred Cart
-                                </button>`
-                                : `<div class="out-of-stock">Out of Stock</div>`
-                            }
+                        <div class="product-details">
+                            <h3 class="product-name">${product.name}</h3>
+                            <p class="product-description">${product.shortDescription}</p>
+                            <div class="product-pricing">
+                                <span class="current-price">₹${product.price.toLocaleString()}</span>
+                                ${product.originalPrice > product.price ? `<del class="original-price">₹${product.originalPrice.toLocaleString()}</del>` : ''}
+                            </div>
+                            <div class="product-action">
+                                ${product.quantity > 0
+                                    ? `<button class="add-to-cart" onclick="handleAddToCart(event, this)"
+                                        data-id="${product._id}"
+                                        data-name="${product.name}"
+                                        data-price="${product.price}"
+                                        data-image="${product.images[0]}">
+                                        Add to Sacred Cart
+                                    </button>`
+                                    : `<div class="out-of-stock">Out of Stock</div>`
+                                }
+                            </div>
                         </div>
                     </div>
-                </div>`
+                </a>`
             }).join('');
         }
         
+        // This function needs to prevent the link navigation when the button is clicked
         function handleAddToCart(event, button) {
-            event.stopPropagation(); // This is correct, it stops the modal from opening when you click the button.
+            event.preventDefault(); // Stop the <a> tag from navigating
+            event.stopPropagation(); // Stop event bubbling
+
             if (localStorage.getItem('userLoggedIn') !== 'true') {
                 showNotification('Please log in to add items to your cart.', 'error');
                 setTimeout(() => { window.location.href = 'login.html'; }, 1500);
@@ -254,75 +247,17 @@
             notification.className = `notification ${type}`;
             notification.textContent = message;
             document.body.appendChild(notification);
-            setTimeout(() => { notification.classList.add('show'); }, 10);
+            
+            // Force a reflow before adding the 'show' class to trigger the animation
+            notification.getBoundingClientRect();
+            notification.classList.add('show');
+
             setTimeout(() => {
                 notification.classList.remove('show');
-                setTimeout(() => notification.remove(), 500);
+                // Remove the element after the transition is complete
+                notification.addEventListener('transitionend', () => notification.remove(), { once: true });
             }, 3000);
         }
-
-        // 4. New function to find the product by ID
-        function openProductModalById(productId) {
-            const product = allProducts.find(p => p._id === productId);
-            if (product) {
-                openProductModal(product); // Pass the full product object
-            }
-        }
-        
-        // 5. Modify this function to accept an object, not a string
-        function openProductModal(product) { 
-            const modalOverlay = document.getElementById('productModalOverlay');
-            const modalContent = document.getElementById('productModalContent');
-            const fullDescription = product.fullDescription || product.shortDescription;
-
-            modalContent.innerHTML = `
-                <button class="modal-close-btn" onclick="closeProductModal(event)">×</button>
-                <div class="modal-product-layout">
-                    <div class="modal-product-image">
-                        <img src="${product.images[0]}" alt="${product.name}" />
-                    </div>
-                    <div class="modal-product-details">
-                        <h2 class="modal-product-name">${product.name}</h2>
-                        <div class="modal-product-pricing">
-                            <span class="modal-current-price">₹${product.price.toLocaleString()}</span>
-                            ${product.originalPrice > product.price ? `<del class="modal-original-price">₹${product.originalPrice.toLocaleString()}</del>` : ''}
-                        </div>
-                        <p class="modal-product-description">${fullDescription}</p>
-                        <div class="modal-product-action">
-                            ${product.quantity > 0
-                                ? `<button class="add-to-cart" onclick="handleAddToCart(event, this)"
-                                    data-id="${product._id}"
-                                    data-name="${product.name}"
-                                    data-price="${product.price}"
-                                    data-image="${product.images[0]}">
-                                    Add to Sacred Cart
-                                </button>`
-                                : `<div class="out-of-stock">Out of Stock</div>`
-                            }
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            modalOverlay.style.display = 'flex';
-            setTimeout(() => modalOverlay.classList.add('active'), 10);
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeProductModal(event) {
-            if (event) event.stopPropagation();
-            const modalOverlay = document.getElementById('productModalOverlay');
-            modalOverlay.classList.remove('active');
-             setTimeout(() => {
-                modalOverlay.style.display = 'none';
-            }, 300);
-            document.body.style.overflow = 'auto';
-        }
-
-        // Add event listener to overlay to close modal when clicking outside the content
-        document.getElementById('productModalOverlay').addEventListener('click', closeProductModal);
-
     </script>
-    
 </body>
 </html>

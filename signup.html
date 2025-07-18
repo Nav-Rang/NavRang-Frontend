@@ -208,7 +208,7 @@
             const button = document.getElementById('sendOtpButton');
             setLoadingState(button, true, 'Sending...');
             try {
-                await axios.post(`${backendUrl}/sendOTP`, {name, email });
+                await axios.post(`${backendUrl}/sendOTP`, { email });
                 showNotification('OTP sent to your email!', 'success');
                 document.getElementById('otp-details-group').style.display = 'none';
                 document.getElementById('otp-verify-group').style.display = 'block';

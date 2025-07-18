@@ -1,0 +1,124 @@
+/* Styles for the Product Details Page */
+#product-details-page {
+    padding: 40px 0;
+}
+
+.loading-state, .error-state {
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 5rem 0;
+    color: #666;
+}
+
+.product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: flex-start;
+}
+
+/* Gallery Styles */
+.product-gallery {
+    position: sticky;
+    top: 100px;
+}
+
+.main-image-container {
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+}
+
+#main-product-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+#main-product-image:hover {
+    transform: scale(1.05);
+}
+
+.thumbnail-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.thumbnail-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.thumbnail-image:hover {
+    opacity: 1;
+    border-color: var(--day7-blue);
+}
+
+.thumbnail-image.active {
+    opacity: 1;
+    border-color: var(--day9-purple);
+    box-shadow: 0 0 10px rgba(153, 50, 204, 0.4);
+}
+
+/* Product Info Styles */
+.product-info {
+    padding-left: 20px;
+}
+
+.product-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--day9-purple);
+    margin-bottom: 1rem;
+}
+
+.product-info .product-pricing {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: baseline;
+    gap: 15px;
+    font-size: 1.8rem;
+}
+
+.product-full-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #555;
+    margin-bottom: 2rem;
+}
+
+.add-to-cart-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .product-layout {
+        grid-template-columns: 1fr;
+    }
+    .product-gallery {
+        position: static;
+    }
+    .product-info {
+        padding-left: 0;
+        margin-top: 30px;
+    }
+    .product-title {
+        font-size: 2rem;
+    }
+}
