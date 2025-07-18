@@ -5,7 +5,545 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NavRang | Contact Us</title>
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --day1-yellow: #FFD700;
+            --day2-green: #228B22;
+            --day3-grey: #708090;
+            --day4-orange: #FF8C00;
+            --day5-white: #FFFFFF;
+            --day6-red: #DC143C;
+            --day7-blue: #4169E1;
+            --day8-pink: #FF69B4;
+            --day9-purple: #9932CC;
+            
+            --gradient-primary: linear-gradient(135deg, var(--day1-yellow), var(--day4-orange), var(--day6-red));
+            --gradient-secondary: linear-gradient(135deg, var(--day7-blue), var(--day9-purple), var(--day8-pink));
+            --gradient-divine: linear-gradient(45deg, var(--day1-yellow), var(--day2-green), var(--day4-orange), var(--day6-red), var(--day7-blue), var(--day8-pink), var(--day9-purple));
+            --gradient-royal: linear-gradient(135deg, var(--day9-purple), var(--day6-red), var(--day1-yellow));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #2D1B69;
+            background-color: #FFFFFF;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        a {
+            color: var(--day9-purple);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--day6-red);
+        }
+
+        /* --- Header --- */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(153, 50, 204, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--day9-purple);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2D1B69;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--day6-red);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background: var(--day6-red);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Hero Section for Contact Page */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 248, 220, 0.9) 50%, rgba(255, 240, 245, 0.9) 100%),
+                        url('https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_contact_hero_phtj2i.jpg') no-repeat center center/cover; /* Placeholder, consider a more suitable image */
+            background-blend-mode: overlay; /* Blends gradient with image */
+            color: #2D1B69; /* Text color for hero */
+            box-shadow: inset 0 -5px 15px rgba(0,0,0,0.05); /* Soft shadow for depth */
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: var(--gradient-divine);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Main Content Section */
+        .content-page-section {
+            padding: 60px 0;
+            background-color: #fcfcfc; /* Slightly off-white for depth */
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Stack on small screens */
+            gap: 40px;
+            background-color: #fff;
+            border-radius: 15px; /* Softer rounded corners */
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1); /* More prominent shadow */
+            padding: 50px; /* Increased padding */
+            align-items: center; /* Vertically align items in grid */
+        }
+
+        @media (min-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1.5fr 1fr; /* Form takes more space on larger screens */
+            }
+        }
+
+        .contact-form-container, .contact-details-container {
+            padding: 20px; /* Internal padding for containers */
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            color: var(--day9-purple); /* Using your brand color */
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+            width: 70px; /* Wider underline */
+            height: 4px; /* Thicker underline */
+            background-color: var(--day6-red); /* Accent color for underline */
+            border-radius: 2px;
+        }
+
+        .contact-form-container .section-title,
+        .contact-details-container .section-title {
+            text-align: left; /* Align titles within their columns */
+        }
+
+        .contact-form-container .section-title::after,
+        .contact-details-container .section-title::after {
+            left: 0;
+            transform: translateX(0);
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 28px; /* More space between form elements */
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #444; /* Slightly softer label color */
+            font-size: 1rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 18px; /* Increased padding for better feel */
+            border: 1px solid #e0e0e0; /* Lighter border */
+            border-radius: 10px; /* More rounded */
+            font-size: 1em;
+            color: #333;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            background-color: #fdfdfd; /* Subtle background for inputs */
+        }
+
+        .form-input::placeholder {
+            color: #bbb;
+        }
+
+        .form-input:focus {
+            border-color: var(--day9-purple);
+            box-shadow: 0 0 0 4px rgba(153, 50, 204, 0.15); /* Softer, wider shadow */
+            outline: none;
+            background-color: #fff;
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 140px; /* Taller textarea */
+        }
+
+        .cta-primary {
+            display: block;
+            width: 100%;
+            padding: 16px 30px; /* More substantial button */
+            background: var(--day9-purple); /* Your primary button color */
+            color: #fff;
+            border: none;
+            border-radius: 30px; /* Pill-shaped button */
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(153, 50, 204, 0.3); /* Button shadow */
+        }
+
+        .cta-primary:hover {
+            background: var(--day6-red); /* Accent color on hover */
+            transform: translateY(-3px); /* More pronounced lift */
+            box-shadow: 0 10px 25px rgba(220, 20, 60, 0.35); /* Stronger shadow on hover */
+        }
+
+        /* Contact Details Styling */
+        .contact-details-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #f9f4ff; /* Light purple background for details */
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: inset 0 0 15px rgba(153, 50, 204, 0.05); /* Inner shadow for subtle depth */
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center; /* Vertically align icon and text */
+            margin-bottom: 30px; /* More space between items */
+            gap: 20px;
+        }
+
+        .detail-item .icon {
+            font-size: 2.2em; /* Larger icons */
+            color: var(--day9-purple); /* Icon color */
+            width: 40px; /* Fixed width for alignment */
+            text-align: center;
+            flex-shrink: 0; /* Prevent icon from shrinking */
+        }
+
+        .detail-item p {
+            margin: 0;
+            font-size: 1.05em;
+            color: #333;
+        }
+
+        .detail-item p strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #222;
+            font-size: 1.1em;
+        }
+
+        .detail-item a {
+            font-weight: 500;
+            color: var(--day9-purple);
+        }
+
+        .social-links {
+            margin-top: 40px; /* More space above social links */
+            text-align: left;
+            display: flex; /* Arrange icons in a row */
+            gap: 15px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px; /* Larger social icons */
+            height: 50px;
+            background-color: var(--day9-purple);
+            color: #fff; /* White icons on colored background */
+            border-radius: 50%;
+            font-size: 1.5em; /* Larger icon font size */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(153, 50, 204, 0.2);
+        }
+
+        .social-links a:hover {
+            background-color: var(--day6-red); /* Accent color on hover */
+            transform: translateY(-4px) scale(1.05); /* More distinct hover effect */
+            box-shadow: 0 8px 15px rgba(220, 20, 60, 0.3);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: linear-gradient(135deg, var(--day9-purple), var(--day7-blue)); /* Footer gradient */
+            color: white;
+            padding: 60px 0 30px;
+            font-size: 0.95em;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem; /* Slightly larger footer titles */
+            margin-bottom: 20px;
+            color: var(--day1-yellow); /* Yellow accent for footer titles */
+            font-weight: 700;
+        }
+
+        .footer-section p, .footer-section a {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            opacity: 0.9;
+            color: rgba(255, 255, 255, 0.85); /* Slightly transparent white for text */
+            text-decoration: none;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--day1-yellow);
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 25px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Notification Styling */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: -350px; /* Start off-screen */
+            padding: 1rem 1.8rem;
+            border-radius: 8px;
+            color: white;
+            z-index: 3000;
+            transition: right 0.6s ease-in-out; /* Slower, smoother transition */
+            width: 320px; /* Wider notification */
+            box-shadow: 0 5px 20px rgba(0,0,0,0.25); /* Stronger shadow */
+            font-weight: 500;
+        }
+
+        .notification.show {
+            right: 30px; /* Slide in */
+        }
+        
+        .notification.success { background-color: #28a745; }
+        .notification.error { background-color: #dc3545; }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                padding: 0 25px;
+            }
+            .nav-links {
+                gap: 1.5rem;
+            }
+            .hero h1 {
+                font-size: clamp(2rem, 5vw, 3.5rem);
+            }
+            .hero p {
+                font-size: 1em;
+            }
+            .contact-grid {
+                padding: 40px;
+            }
+            .section-title {
+                font-size: 2em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+            nav {
+                flex-wrap: wrap;
+                gap: 15px;
+                justify-content: center; /* Center nav items when wrapped */
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: space-around;
+                gap: 1rem;
+                margin-top: 15px; /* Space between logo/cart and nav links */
+            }
+
+            .logo {
+                order: 1;
+                font-size: 1.6rem;
+            }
+            .cart-icon {
+                order: 2;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                padding: 30px;
+            }
+
+            .section-title {
+                font-size: 1.9em;
+                text-align: center;
+            }
+
+            .contact-form-container .section-title::after,
+            .contact-details-container .section-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .detail-item {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+            .detail-item .icon {
+                margin-bottom: 10px;
+            }
+
+            .social-links {
+                text-align: center;
+                justify-content: center; /* Center social icons */
+                margin-top: 30px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero {
+                padding: 50px 0;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .hero p {
+                font-size: 0.95em;
+            }
+            .cta-primary {
+                padding: 14px 25px;
+                font-size: 1em;
+            }
+            .contact-grid {
+                padding: 20px;
+            }
+            .form-input {
+                padding: 12px 15px;
+            }
+            .notification {
+                width: 90%;
+                left: 5%;
+                right: auto;
+                transform: translateX(0);
+            }
+            .notification.show {
+                right: auto;
+                left: 5%;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -30,32 +568,44 @@
     </section>
 
     <section class="container content-page-section">
-        <div class="content-card">
-            <div class="contact-container">
-                <div class="contact-form-container">
-                    <h2 class="section-title">Get in Touch</h2>
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" id="name" name="name" class="form-input" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" id="email" name="email" class="form-input" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="message" class="form-label">Message</label>
-                            <textarea id="message" name="message" class="form-input" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="cta-primary" style="width: 100%;">Send Message</button>
-                    </form>
-                </div>
-                <div class="contact-details-container" style="text-align:center;">
-                     <h2 class="section-title">Our Details</h2>
+        <div class="contact-grid">
+            <div class="contact-form-container">
+                <h2 class="section-title">Get in Touch</h2>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea id="message" name="message" class="form-input" rows="5" placeholder="Your message here..." required></textarea>
+                    </div>
+                    <button type="submit" class="cta-primary">Send Message</button>
+                </form>
+            </div>
+            <div class="contact-details-container">
+                 <h2 class="section-title">Our Details</h2>
+                 <div class="detail-item">
+                     <i class="fas fa-envelope icon"></i>
                      <p><strong>Email:</strong><br> <a href="mailto:hello@navrang.com">hello@navrang.com</a></p>
+                 </div>
+                 <div class="detail-item">
+                     <i class="fas fa-phone-alt icon"></i>
                      <p><strong>Phone:</strong><br> +91 98765 43210</p>
+                 </div>
+                 <div class="detail-item">
+                     <i class="fas fa-map-marker-alt icon"></i>
                      <p><strong>Address:</strong><br> 123 Divine Lane, Celebration City, India</p>
-                </div>
+                 </div>
+                 <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                 </div>
             </div>
         </div>
     </section>
@@ -101,10 +651,12 @@
             notification.className = `notification ${type}`;
             notification.textContent = message;
             document.body.appendChild(notification);
+            // Force reflow for animation
+            void notification.offsetWidth;
             setTimeout(() => { notification.classList.add('show'); }, 10);
             setTimeout(() => {
                 notification.classList.remove('show');
-                setTimeout(() => notification.remove(), 500);
+                setTimeout(() => notification.remove(), 600);
             }, 3000);
         }
     </script>
