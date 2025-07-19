@@ -258,7 +258,7 @@
 
             setLoadingState(button, true, 'Saving...');
             try {
-                const response = await axios.post(`${backendUrl}/update-address`, addressData, {
+                const response = await axios.patch(`${backendUrl}/update-user-details`, addressData, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 showNotification(response.data.message || 'Address updated successfully!', 'success');
