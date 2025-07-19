@@ -6,6 +6,257 @@
     <title>NavRang | Your Sacred Cart</title>
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Cart Page Specific Styles */
+        #cart-page {
+            padding: 60px 0;
+            min-height: calc(100vh - 250px); /* Adjust based on header/footer height */
+            background-color: #fcfafa; /* Light background for the cart area */
+        }
+
+        #cart-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 80px 20px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+
+        .empty-cart h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--day9-purple);
+            margin-bottom: 15px;
+        }
+
+        .empty-cart p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .cart-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* Cart items list on left, summary on right */
+            gap: 40px;
+            align-items: flex-start; /* Align items to the top */
+        }
+
+        .cart-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            gap: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .cart-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0; /* Prevent image from shrinking */
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--day9-purple);
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            font-size: 1rem;
+            color: #777;
+            font-weight: 500;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 20px;
+        }
+
+        .cart-item-quantity button {
+            background: var(--day9-purple);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .cart-item-quantity button:hover {
+            background: var(--day6-red);
+        }
+
+        .cart-item-quantity span {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2D1B69;
+        }
+
+        .cart-item-total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--day6-red);
+            margin-left: auto; /* Push total to the right */
+            flex-shrink: 0;
+        }
+
+        .cart-item-remove {
+            background: none;
+            border: none;
+            color: #dc3545;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background 0.3s ease, color 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .cart-item-remove:hover {
+            background: rgba(220, 53, 69, 0.1);
+            color: #a72332;
+        }
+
+        .cart-summary {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            position: sticky;
+            top: 100px; /* Stick below the header */
+        }
+
+        .cart-summary h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--day9-purple);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .summary-row span:first-child {
+            font-weight: 500;
+        }
+
+        .summary-row.total {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-top: 20px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--day9-purple);
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: var(--day9-purple);
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(153, 50, 204, 0.3);
+        }
+
+        .checkout-btn:hover {
+            background: var(--day6-red);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(153, 50, 204, 0.4);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .cart-grid {
+                grid-template-columns: 1fr; /* Stack on smaller screens */
+            }
+
+            .cart-summary {
+                position: static; /* Remove sticky positioning */
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: center;
+            }
+
+            .cart-item-image {
+                margin-bottom: 15px;
+                width: 120px;
+                height: 120px;
+            }
+
+            .cart-item-details {
+                text-align: center;
+                width: 100%;
+            }
+
+            .cart-item-quantity {
+                margin: 15px auto;
+                justify-content: center;
+            }
+
+            .cart-item-total {
+                margin-left: unset;
+                margin-top: 10px;
+            }
+
+            .cart-item-remove {
+                width: 100%;
+                margin-top: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -30,7 +281,7 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                 <div class="footer-section">
+                   <div class="footer-section">
                     <h3>NavRang</h3>
                     <p>Celebrating divine traditions with premium quality and spiritual significance.</p>
                 </div>
