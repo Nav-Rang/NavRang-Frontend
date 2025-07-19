@@ -78,10 +78,9 @@
 }
 
 .product-title {
-    font-family: 'Playfair Display', serif;
+    /* font-family: 'Playfair Display', serif; */
     font-size: 2.8rem;
     font-weight: 700;
-    color: var(--day9-purple);
     margin-bottom: 1rem;
 }
 
@@ -121,4 +120,131 @@
     .product-title {
         font-size: 2rem;
     }
+}
+
+
+
+
+
+
+
+
+
+
+.add-to-cart-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    border: none;
+    background: linear-gradient(to right, #a64ac9, #5d3fd3);
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(93, 63, 211, 0.3);
+    transition: all 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+    background: linear-gradient(to right, #5d3fd3, #a64ac9);
+    transform: scale(1.02);
+}
+
+/* Related products styling */
+.related-products {
+    margin-top: 80px;
+}
+
+.related-heading {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: var(--day9-purple);
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30%, 30%));
+    gap: 25px;
+}
+
+.related-card {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+}
+
+.related-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.related-card img {
+    width: 100%;
+    height: 70%;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.related-card h4 {
+    font-size: 1.1rem;
+    margin: 10px 0 5px;
+    color: #333;
+}
+
+.related-card p {
+    color: #000000;
+}
+
+.product-pricing {
+    gap: 10px;
+    flex-wrap: wrap;
+    font-weight: bold;
+    color: #000000;
+}
+
+.related-card h4.related-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.related-description {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.related-pricing {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.related-price {
+    color: #000000;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.related-original {
+    color: #999999;
+    font-size: 0.95rem;
+    text-decoration: line-through;
+}
+
+.related-discount {
+    background: #edffeb;
+    color: #42d32f;
+    padding: 3px 6px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    font-weight: 600;
 }

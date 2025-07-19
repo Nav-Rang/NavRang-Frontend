@@ -142,10 +142,10 @@
                     <div class="product-info">
                         <h1 class="product-title">${product.name}</h1>
                         <div class="product-pricing">
-                            <span class="current-price">₹${product.price.toLocaleString()}</span>
-                            ${product.originalPrice > product.price ? `<del class="original-price">₹${product.originalPrice.toLocaleString()}</del>` : ''}
-                            ${product.originalPrice > product.price ? `<span class="discount-badge">${discount}% OFF</span>` : ''}
-                        </div>
+    <span class="current-price">₹${product.price.toLocaleString()}</span>
+    ${product.originalPrice > product.price ? `<del class="original-price">₹${product.originalPrice.toLocaleString()}</del><span class="discount-badge">${discount}% OFF</span>` : ''}
+</div>
+
                         <p class="product-full-description">${product.fullDescription || product.shortDescription}</p>
                         
                         <div class="product-action">
@@ -163,7 +163,42 @@
                     </div>
                 </div>
             `;
+            renderRelatedProducts(product._id);
+
         }
+
+function renderRelatedProducts(currentProductId) {
+    const allProducts = JSON.parse(localStorage.getItem('allProducts')) || [];
+    const relatedContainer = document.createElement('div');
+    relatedContainer.className = 'related-products';
+
+    const filtered = allProducts.filter(p => p._id !== currentProductId).slice(0, 4);
+
+    if (filtered.length > 0) {
+        let cardsHTML = filtered.map(product => `
+    <div class="related-card" onclick="location.href='product.html?id=${product._id}'">
+        <img src="${product.images[0]}" alt="${product.name}" />
+        <h4 class="related-name">${product.name}</h4>
+        <p class="related-description">${product.shortDescription}</p>
+        <div class="related-pricing">
+            <span class="related-price">₹${product.price.toLocaleString()}</span>
+            ${product.originalPrice > product.price ? `<del class="related-original">₹${product.originalPrice.toLocaleString()}</del><span class="related-discount">${Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF</span>` : ''}
+        </div>
+    </div>
+`).join('');
+
+
+        relatedContainer.innerHTML = `
+            <h2 class="related-heading">You may also like</h2>
+            <div class="related-grid">
+                ${cardsHTML}
+            </div>
+        `;
+
+        document.getElementById('product-details-page').appendChild(relatedContainer);
+    }
+}
+
 
         function changeMainImage(src, clickedThumbnail) {
             document.getElementById('main-product-image').src = src;

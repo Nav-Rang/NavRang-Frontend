@@ -266,14 +266,12 @@
             }
         }
 
-        // --- MODIFIED FUNCTION ---
         function renderOrderSummary() {
             let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
             const orderSummaryItemsDiv = document.getElementById('orderSummaryItems');
             orderSummaryItemsDiv.innerHTML = '';
             let subtotal = 0;
 
-            // Select display elements
             const subtotalAmountEl = document.getElementById('subtotalAmount');
             const gstAmountEl = document.getElementById('gstAmount');
             const totalAmountEl = document.getElementById('totalAmount');
@@ -282,7 +280,7 @@
                 orderSummaryItemsDiv.innerHTML = '<p>Your cart is empty.</p>';
                 subtotalAmountEl.textContent = '₹0.00';
                 gstAmountEl.textContent = '₹0.00';
-                totalAmountEl.textContent = '₹0.00'; // Total is zero if cart is empty
+                totalAmountEl.textContent = '₹0.00'; 
                 return;
             }
 
@@ -299,30 +297,23 @@
             });
 
             const shippingCost = 50; 
-            const gstRate = 0.18; // 18% GST
+            const gstRate = 0.18; 
 
             const gstAmount = subtotal * gstRate;
             const total = subtotal + gstAmount + shippingCost;
 
-            // Update the display elements with calculated values
             subtotalAmountEl.textContent = `₹${subtotal.toFixed(2)}`;
             gstAmountEl.textContent = `₹${gstAmount.toFixed(2)}`;
             totalAmountEl.textContent = `₹${total.toFixed(2)}`;
         }
 
         async function handleCashOnDelivery() {
-            // ... (rest of the functions are unchanged)
-            // Ensure this function reads the final total from `totalAmount`
         }
         async function handleRazorpayPayment() {
-            // ...
-            // Ensure this function reads the final total from `totalAmount`
         }
         function setLoadingState(button, isLoading, loadingText) {
-            // ...
         }
         function showNotification(message, type = 'success') {
-            // ...
         }
     </script>
 </body>
