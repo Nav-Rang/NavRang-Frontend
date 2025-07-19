@@ -41,6 +41,7 @@
                     <div style="font-family:sans-serif; font-weight: bold;margin-top: -15px;">Delivery Address</div>
                     <div id="savedAddress" class="saved-address" style="display:none;">
                         <p id="addressName"></p>
+                        <p id="addressPhone"></p>
                         <p id="addressDetails"></p>
                         <p id="addressCityStatePin"></p>
                         <p id="addressNearTo"></p>
@@ -49,6 +50,10 @@
                     <button id="changeAddressBtn" class="auth-button" style="margin-top: 1rem; display:none;">Change Address</button>
                     
                     <form id="addressForm" class="address-form" style="display:none; margin-top: 20px;">
+                         <div class="form-group">
+                            <label for="phone">Enter Your Contact Number</label>
+                            <input type="text" id="phone" class="form-input" placeholder="Contact Number" required>
+                        </div>
                         <div class="form-group">
                             <label for="building">Building/House No.</label>
                             <input type="text" id="building" class="form-input" placeholder="Flat, House no., Building" required>
@@ -107,7 +112,7 @@
                     </div>
                     <div class="summary-row">
                         <span>Shipping:</span>
-                        <span>₹50.00</span> </div>
+                        <span><del>₹50.00</del></span></div>
                     <div class="summary-row total">
                         <span>Total:</span>
                         <span id="totalAmount">₹0.00</span>
@@ -145,7 +150,7 @@
         </div>
     </footer>
 
-    <script>
+     <script>
         const backendUrl = 'https://navrang-backend.onrender.com/api';
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -157,7 +162,7 @@
             }
 
             loadUserDetails();
-            loadAddressDetails(); 
+            loadAddressDetails(); // Changed from initializeAddressSection
             renderOrderSummary();
 
             document.getElementById('changeAddressBtn').addEventListener('click', () => {
@@ -186,10 +191,13 @@
 
             if (address && address.building) {
                 document.getElementById('addressName').textContent = user.name || localStorage.getItem('userName');
+                document.getElementById('addressPhone').textContent = `Phone: ${address.phone}`;
                 document.getElementById('addressDetails').textContent = `${address.building}, ${address.address}`;
                 document.getElementById('addressCityStatePin').textContent = `${address.city}, ${address.state} - ${address.pinCode}`;
                 document.getElementById('addressNearTo').textContent = address.nearTo ? `Landmark: ${address.nearTo}` : '';
                 
+                // Pre-fill form for editing
+                document.getElementById('phone').value = address.phone || '';
                 document.getElementById('building').value = address.building || '';
                 document.getElementById('address').value = address.address || '';
                 document.getElementById('nearTo').value = address.nearTo || '';
@@ -239,6 +247,7 @@
             const button = event.target.querySelector('button[type="submit"]');
 
             const addressData = {
+                phone: document.getElementById('phone').value,
                 building: document.getElementById('building').value,
                 address: document.getElementById('address').value,
                 nearTo: document.getElementById('nearTo').value,
@@ -249,17 +258,20 @@
 
             setLoadingState(button, true, 'Saving...');
             try {
-                const response = await axios.patch(`${backendUrl}/update-address`, addressData, {
+                const response = await axios.post(`${backendUrl}/update-address`, addressData, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 showNotification(response.data.message || 'Address updated successfully!', 'success');
                 if (response.data.user) {
+                    // Save address and name to localStorage
                     localStorage.setItem('userAddress', JSON.stringify(response.data.user.address));
                     localStorage.setItem('userName', response.data.user.name);
+                    // Update UI
                     displayAddress(response.data.user);
-                    loadUserDetails();
+                    loadUserDetails(); // Refresh user name in profile card
                 }
             } catch (error) {
+                console.error('Error saving address:', error);
                 showNotification(error.response?.data?.message || 'Failed to save address.', 'error');
             } finally {
                 setLoadingState(button, false, 'Save Address');
@@ -272,15 +284,10 @@
             orderSummaryItemsDiv.innerHTML = '';
             let subtotal = 0;
 
-            const subtotalAmountEl = document.getElementById('subtotalAmount');
-            const gstAmountEl = document.getElementById('gstAmount');
-            const totalAmountEl = document.getElementById('totalAmount');
-
             if (cartItems.length === 0) {
                 orderSummaryItemsDiv.innerHTML = '<p>Your cart is empty.</p>';
-                subtotalAmountEl.textContent = '₹0.00';
-                gstAmountEl.textContent = '₹0.00';
-                totalAmountEl.textContent = '₹0.00'; 
+                document.getElementById('totalAmount').textContent = '₹0.00';
+                document.getElementById('subtotalAmount').textContent = '₹0.00';
                 return;
             }
 
@@ -297,23 +304,136 @@
             });
 
             const shippingCost = 50; 
-            const gstRate = 0.18; 
+            const total = subtotal + shippingCost;
 
-            const gstAmount = subtotal * gstRate;
-            const total = subtotal + gstAmount + shippingCost;
-
-            subtotalAmountEl.textContent = `₹${subtotal.toFixed(2)}`;
-            gstAmountEl.textContent = `₹${gstAmount.toFixed(2)}`;
-            totalAmountEl.textContent = `₹${total.toFixed(2)}`;
+            document.getElementById('subtotalAmount').textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('totalAmount').textContent = `₹${total.toFixed(2)}`;
         }
 
         async function handleCashOnDelivery() {
+            const codButton = document.getElementById('codButton');
+            setLoadingState(codButton, true, 'Placing Order...');
+            try {
+                const token = localStorage.getItem('authToken');
+                const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+                
+                if (cartItems.length === 0) {
+                    showNotification('Your cart is empty.', 'error');
+                    setLoadingState(codButton, false, 'Cash on Delivery');
+                    return;
+                }
+
+                const productDetails = cartItems.map(item => ({ productId: item.id, quantity: item.quantity }));
+
+                const response = await axios.post(`${backendUrl}/create-order`, { productDetails, isCOD: true }, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                showNotification(response.data.message || 'COD Order Placed Successfully!', 'success');
+                localStorage.removeItem('cartItems');
+                localStorage.removeItem('userAddress'); // Clear address after order
+                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+
+            } catch (error) {
+                showNotification(error.response?.data?.error || 'Failed to place order. Please ensure your address is saved.', 'error');
+            } finally {
+                setLoadingState(document.getElementById('codButton'), false, '<strong>Cash on Delivery</strong><span>Pay at your doorstep</span>');
+            }
         }
+
         async function handleRazorpayPayment() {
+            const razorpayButton = document.getElementById('razorpayButton');
+            setLoadingState(razorpayButton, true, 'Initiating...');
+
+            try {
+                const token = localStorage.getItem('authToken');
+                const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+                
+                if (cartItems.length === 0) {
+                    showNotification('Your cart is empty.', 'error');
+                    setLoadingState(razorpayButton, false, 'Pay with Razorpay');
+                    return;
+                }
+                const productDetails = cartItems.map(item => ({ productId: item.id, quantity: item.quantity }));
+                
+                const orderResponse = await axios.post(`${backendUrl}/create-order`, { productDetails, isCOD: false }, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const { razorpayOrder, orderId } = orderResponse.data;
+
+                var options = {
+                    "key": "rzp_test_wLxVTVeMK5c4nU", 
+                    "amount": razorpayOrder.amount,
+                    "currency": razorpayOrder.currency,
+                    "name": "NavRang",
+                    "description": "Purchase from NavRang",
+                    "image": "https://res.cloudinary.com/dm26lxw7u/image/upload/v1751883905/NavRang_zzk8rf.png",
+                    "order_id": razorpayOrder.id,
+                    "handler": async function (response) {
+                        setLoadingState(razorpayButton, true, 'Verifying...');
+                        try {
+                            const verificationResponse = await axios.post(`${backendUrl}/verify-payment`, {
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                orderId: orderId
+                            }, {
+                                headers: { 'Authorization': `Bearer ${token}` }
+                            });
+
+                            showNotification(verificationResponse.data.msg || 'Payment successful!', 'success');
+                            localStorage.removeItem('cartItems');
+                            localStorage.removeItem('userAddress'); // Clear address after order
+                            setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+
+                        } catch (verifyError) {
+                            showNotification(verifyError.response?.data?.error || 'Payment verification failed.', 'error');
+                        } finally {
+                             setLoadingState(document.getElementById('razorpayButton'), false, '<strong>Pay Online</strong><span>Cards, UPI, Netbanking via Razorpay</span>');
+                        }
+                    },
+                    "prefill": {
+                        "name": localStorage.getItem('userName'),
+                        "email": localStorage.getItem('userEmail'),
+                    },
+                    "theme": { "color": "#9932CC" }
+                };
+
+                var rzp = new Razorpay(options);
+                rzp.on('payment.failed', function (response){
+                    showNotification(`Payment failed: ${response.error.description}.`, 'error');
+                });
+                rzp.open();
+
+            } catch (error) {
+                showNotification(error.response?.data?.error || 'Failed to initiate payment. Please ensure your address is saved.', 'error');
+            } finally {
+                 setLoadingState(document.getElementById('razorpayButton'), false, '<strong>Pay Online</strong><span>Cards, UPI, Netbanking via Razorpay</span>');
+            }
         }
+
         function setLoadingState(button, isLoading, loadingText) {
+            if (button) {
+                button.disabled = isLoading;
+                if(isLoading) {
+                    button.innerHTML = `<span class="spinner"></span> ${loadingText}`;
+                } else {
+                    button.innerHTML = loadingText;
+                }
+            }
         }
+
         function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => { notification.classList.add('show'); }, 10);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
         }
     </script>
 </body>
