@@ -162,7 +162,7 @@
             }
 
             loadUserDetails();
-            loadAddressDetails(); // Changed from initializeAddressSection
+            loadAddressDetails();
             renderOrderSummary();
 
             document.getElementById('changeAddressBtn').addEventListener('click', () => {
@@ -255,24 +255,28 @@
                 city: document.getElementById('city').value,
                 state: document.getElementById('state').value
             };
+            
+            // Save address to local storage immediately
+            localStorage.setItem('userAddress', JSON.stringify(addressData));
 
             setLoadingState(button, true, 'Saving...');
             try {
-                const response = await axios.patch(`${backendUrl}/update-user-details`, addressData, {
+                const response = await axios.patch(`${backendUrl}/update-address`, addressData, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 showNotification(response.data.message || 'Address updated successfully!', 'success');
                 if (response.data.user) {
-                    // Save address and name to localStorage
+                    // Re-save the definitive address from the backend
                     localStorage.setItem('userAddress', JSON.stringify(response.data.user.address));
                     localStorage.setItem('userName', response.data.user.name);
+                    
                     // Update UI
                     displayAddress(response.data.user);
-                    loadUserDetails(); // Refresh user name in profile card
+                    loadUserDetails();
                 }
             } catch (error) {
                 console.error('Error saving address:', error);
-                showNotification(error.response?.data?.message || 'Failed to save address.', 'error');
+                showNotification(error.response?.data?.message || 'Failed to save address. Your details are saved locally.', 'error');
             } finally {
                 setLoadingState(button, false, 'Save Address');
             }
